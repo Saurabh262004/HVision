@@ -6,7 +6,7 @@ def addHome(window: pgx.Window):
 
   bgSurface: pg.Surface = pg.Surface((1000, 1000))
 
-  pg.draw.rect(bgSurface, (128, 64, 200), (0, 0, 1000, 1000))
+  pg.draw.rect(bgSurface, (20, 10, 20), (0, 0, 1000, 1000))
 
   homeBG: pgx.Section = pgx.Section(
     {
