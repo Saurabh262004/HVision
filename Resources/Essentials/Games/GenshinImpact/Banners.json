@@ -1,0 +1,11 @@
+{
+  "LimitedCharacterBanner": {
+    "title": "LimitedCharacterBanner"
+  },
+  "LimitedWeaponBanner": {
+    "title": "LimitedWeaponBanner"
+  },
+  "StandardBanner": {
+    "title": "StandardBanner"
+  }
+}

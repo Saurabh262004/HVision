@@ -1,0 +1,4 @@
+pygame-ce
+pyperclip
+requests
+bs4
