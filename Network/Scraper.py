@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 from Network import navigate
 
 def scrapeLayouts(layoutSources: List[str]):
-  scrapedData = []
+  scrapedData = {}
+  failedURLs = []
 
   for layoutSRC in layoutSources:
 
@@ -18,9 +19,9 @@ def scrapeLayouts(layoutSources: List[str]):
       layoutData = json.load(layoutFile)
 
       for pageKey in layoutData:
-        page = layoutData[pageKey]
-
         sleep(2)
+
+        page = layoutData[pageKey]
 
         url = page['URL']
 
@@ -30,6 +31,9 @@ def scrapeLayouts(layoutSources: List[str]):
 
         if not (response.status_code == 200):
           print(f'Error with URL: {url}\nError code: {response.status_code}')
+
+          failedURLs.append(url)
+
           continue
 
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -44,4 +48,4 @@ def scrapeLayouts(layoutSources: List[str]):
             "data": navigate(layout, soup)
           }
 
-  return scrapedData
+  return scrapedData, failedURLs
