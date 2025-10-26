@@ -1,5 +1,5 @@
 {
-  "location": "./Resources/Essentials/",
+  "location": "./Resources/Essentials/DataBase/",
   "pages": [
     "GenshinCharactersListPage",
     "GenshinWeaponsListPage"
