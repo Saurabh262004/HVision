@@ -18,8 +18,8 @@ def scrapeLayouts(layoutSources: List[str]):
     with open(layoutSRC, 'rb') as layoutFile:
       layoutData = orjson.loads(layoutFile.read())
 
-      for pageKey in layoutData:
-        sleep(2)
+      for i in range(len(layoutData)):
+        pageKey = layoutData[i]
 
         page = layoutData[pageKey]
 
@@ -28,6 +28,9 @@ def scrapeLayouts(layoutSources: List[str]):
         del page['URL']
 
         response = requests.get(url)
+
+        if i != len(layoutData) - 1:
+          sleep(2)
 
         if not (response.status_code == 200):
           print(f'Error with URL: {url}\nError code: {response.status_code}')
