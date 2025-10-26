@@ -1,8 +1,11 @@
 import os
+import time
 import orjson
 from Network import scrapeLayouts
 
 def makeDB(layoutSourcesURL: str, dbStructureURL: str):
+  startTime = time.time()
+
   with open(layoutSourcesURL, 'rb') as layoutSourcesFile:
     layoutSources = orjson.loads(layoutSourcesFile.read())
 
@@ -23,13 +26,13 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   dbFilePath = os.path.join(dbLocation, 'db.json')
   rawFilePath = os.path.join(dbLocation, 'raw.json')
 
-  def handleStructure(structure):
+  def createObject(structure):
     nonlocal pages, scrapedData
     parent = {}
 
     for key in structure:
       if structure[key]['_type_'] == 'object':
-        parent[key] = handleStructure(structure[key]['_structure_'])
+        parent[key] = createObject(structure[key]['_structure_'])
       elif structure[key]['_type_'] == 'list':
         data = {}
 
@@ -75,10 +78,21 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
 
     return parent
 
-  db = handleStructure(structure)
+  db = createObject(structure)
+
+  db['_metadata_'] = {
+    "creationEpoch": int(time.time()),
+    "failedURLs": failedURLs
+  }
 
   with open(dbFilePath, 'wb') as dbFile:
     dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
 
   with open(rawFilePath, 'wb') as rawFile:
     rawFile.write(orjson.dumps(scrapedData, option=orjson.OPT_INDENT_2))
+
+  endTime = time.time()
+  stallTime = len(scrapedData) * 2
+  processingTime = (endTime - startTime) - stallTime
+
+  print(f"Created DB in {processingTime:.2f} seconds (excluding {stallTime} seconds of stall time).")

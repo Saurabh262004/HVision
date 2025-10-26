@@ -1,6 +1,17 @@
 from bs4 import BeautifulSoup
 from typing import List, Union
 
+def formatTextFromSoup(soup: BeautifulSoup) -> str:
+  html = str(soup)
+
+  html = html.replace("<br>", "\n").replace("<br/>", "\n")
+
+  soup = BeautifulSoup(html, "html.parser")
+
+  text = soup.get_text().strip()
+
+  return text
+
 def navigate(layout: List[List[Union[str, int]]], soupData: BeautifulSoup) -> List[str]:
   results = []
 
@@ -21,19 +32,19 @@ def navigate(layout: List[List[Union[str, int]]], soupData: BeautifulSoup) -> Li
         try:
           soupData = soupData.find_all(step[1])[step[2]]
         except:
-          results.append('N/A')
+          results.append(f'N/A : {step[1]} at index {step[2]}')
           return results
 
     elif step[0] == 'attr':
       try:
         results.append(soupData[step[1]])
       except:
-        results.append('N/A')
+        results.append(f'N/A : attribute {step[1]}')
 
     elif step[0] == 'text':
       try:
-        results.append(soupData.get_text())
+        results.append(formatTextFromSoup(soupData))
       except:
-        results.append('N/A')
+        results.append('N/A : text')
 
   return results
