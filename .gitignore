@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+pg_extended/
+tests/
+ScraperLayouts/
+db.json
+raw.json
