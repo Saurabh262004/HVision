@@ -1,7 +1,7 @@
 from typing import List
 from time import sleep
 import os
-import json
+import orjson
 import requests
 from bs4 import BeautifulSoup
 from Network import navigate
@@ -15,8 +15,8 @@ def scrapeLayouts(layoutSources: List[str]):
     if not os.path.isfile(layoutSRC):
       pass
 
-    with open(layoutSRC, 'r') as layoutFile:
-      layoutData = json.load(layoutFile)
+    with open(layoutSRC, 'rb') as layoutFile:
+      layoutData = orjson.loads(layoutFile.read())
 
       for pageKey in layoutData:
         sleep(2)

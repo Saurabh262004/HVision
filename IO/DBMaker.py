@@ -1,13 +1,13 @@
 import os
-import json
+import orjson
 from Network import scrapeLayouts
 
 def makeDB(layoutSourcesURL: str, dbStructureURL: str):
-  with open(layoutSourcesURL, 'r') as layoutSourcesFile:
-    layoutSources = json.load(layoutSourcesFile)
+  with open(layoutSourcesURL, 'rb') as layoutSourcesFile:
+    layoutSources = orjson.loads(layoutSourcesFile.read())
 
-  with open(dbStructureURL, 'r') as dbStructureFile:
-    dbStructure = json.load(dbStructureFile)
+  with open(dbStructureURL, 'rb') as dbStructureFile:
+    dbStructure = orjson.loads(dbStructureFile.read())
 
   scrapedData, failedURLs = scrapeLayouts(layoutSources)
 
@@ -77,8 +77,8 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
 
   db = handleStructure(structure)
 
-  with open(dbFilePath, 'w') as dbFile:
-    json.dump(db, dbFile, indent=2)
+  with open(dbFilePath, 'wb') as dbFile:
+    dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
 
-  with open(rawFilePath, 'w') as rawFile:
-    json.dump(scrapedData, rawFile)
+  with open(rawFilePath, 'wb') as rawFile:
+    rawFile.write(orjson.dumps(scrapedData, option=orjson.OPT_INDENT_2))
