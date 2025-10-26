@@ -43,7 +43,7 @@ def createObject(structure, pages, scrapedData):
           try:
             item[valueKey] = requiredDataArrays[valueKey][i]
           except IndexError:
-            item[valueKey] = None
+            item[valueKey] = f'N/A : data array length mismatch for key {valueKey}'
           except Exception as e:
             print(f"Error processing {valueKey} at index {i}: {e}")
             item[valueKey] = None
