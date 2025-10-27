@@ -80,14 +80,34 @@
                 "Element": [0, "CharacterElement"],
                 "WeaponType": [0, "CharacterWeapon"],
                 "ReleaseDate": [0, "CharacterReleaseDate"],
-                "ReleaseVersion": [0, "CharacterReleaseVersion"],
-                "IconURL": [0, "CharacterIconURL"]
+                "ReleaseVersion": [0, "CharacterReleaseVersion"]
               }
             },
             "LimitedCharacters": {
               "_type_": "list",
               "_structure_": [0, "LimitedCharacterName"]
             }
+          }
+        }
+      }
+    },
+    "ImageCollectorManifestData": {
+      "_type_": "object",
+      "_structure_": {
+        "GenshinCharacters": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [0, "CharacterName"],
+            "URL": [0, "CharacterIconURL"]
+          }
+        },
+        "GenshinWeapons": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [1, "WeaponName"],
+            "URL": [1, "WeaponIconURL"]
           }
         }
       }

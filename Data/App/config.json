@@ -1,3 +1,5 @@
 {
-  "DBLocation": "./Resources/Essentials/DataBase/DB.json"
+  "DBStructureLocation": "./Resources/Essentials/DataBase/Structure.json",
+  "imageDBLocation": "./Resources/Assets/GameAssets/",
+  "layoutSourcesLocation": "./Resources/Essentials/LayoutSources.json"
 }
