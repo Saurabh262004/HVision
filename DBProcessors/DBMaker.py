@@ -1,7 +1,7 @@
 import os
 import time
 import orjson
-from Network import scrapeLayouts
+from DBProcessors import scrapeLayouts
 
 def creatreDictList(itemStructure: dict | list, itemKey: str, pages: list[str], scrapedData: dict) -> dict:
   lst = {}
@@ -100,12 +100,12 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   dbFilePath = os.path.join(dbLocation, 'DB.json')
   rawFilePath = os.path.join(dbLocation, 'Raw.json')
 
-  db = createObject(structure, pages, scrapedData)
-
   db['_metadata_'] = {
     "creationEpoch": int(time.time()),
     "failedURLs": failedURLs
   }
+
+  db = createObject(structure, pages, scrapedData)
 
   with open(dbFilePath, 'wb') as dbFile:
     dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
