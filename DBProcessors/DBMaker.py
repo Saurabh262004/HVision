@@ -100,12 +100,14 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   dbFilePath = os.path.join(dbLocation, 'DB.json')
   rawFilePath = os.path.join(dbLocation, 'Raw.json')
 
-  db['_metadata_'] = {
+  metadata = {
     "creationEpoch": int(time.time()),
     "failedURLs": failedURLs
   }
 
   db = createObject(structure, pages, scrapedData)
+
+  db['_metadata_'] = metadata
 
   with open(dbFilePath, 'wb') as dbFile:
     dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
