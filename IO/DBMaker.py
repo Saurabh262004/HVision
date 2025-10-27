@@ -3,54 +3,77 @@ import time
 import orjson
 from Network import scrapeLayouts
 
-def createObject(structure, pages, scrapedData):
+def creatreDictList(itemStructure: dict | list, itemKey: str, pages: list[str], scrapedData: dict) -> dict:
+  lst = {}
+
+  requiredDataArrays = {}
+
+  for valueKey in itemStructure:
+    valueLoc = itemStructure[valueKey]
+
+    pageKey = pages[valueLoc[0]]
+
+    layoutKey = valueLoc[1]
+
+    requiredDataArrays[valueKey] = scrapedData[pageKey][layoutKey]['data']
+
+  maxItemsPossible = 0
+
+  for dataArray in requiredDataArrays.values():
+    if len(dataArray) > maxItemsPossible:
+      maxItemsPossible = len(dataArray)
+
+  for i in range(maxItemsPossible):
+    item = {}
+
+    for valueKey in itemStructure:
+      if valueKey == itemKey:
+        continue
+
+      try:
+        item[valueKey] = requiredDataArrays[valueKey][i]
+      except IndexError:
+        item[valueKey] = f'N/A : data array length mismatch for key {valueKey}'
+      except Exception as e:
+        print(f"Error processing {valueKey} at index {i}: {e}")
+        item[valueKey] = None
+
+    lst[requiredDataArrays[itemKey][i]] = item
+
+  return lst
+
+def createList(itemStructure: list[int, str], pages: list[str], scrapedData: dict) -> list:
+  lst = []
+
+  pageKey = pages[itemStructure[0]]
+
+  layoutKey = itemStructure[1]
+
+  dataArray = scrapedData[pageKey][layoutKey]['data']
+
+  for item in dataArray:
+    lst.append(item)
+
+  return lst
+
+def createObject(structure: dict | list, pages: list[str], scrapedData: dict) -> dict:
   parent = {}
 
   for key in structure:
-    if structure[key]['_type_'] == 'object':
+    structureType = structure[key].get('_type_')
+    itemStructure = structure[key].get('_structure_')
+
+    if structureType is None or itemStructure is None:
+      continue
+
+    if structureType == 'object':
       parent[key] = createObject(structure[key]['_structure_'], pages, scrapedData)
-    elif structure[key]['_type_'] == 'list':
-      lst = {}
-
-      itemStructure = structure[key]['_structure_']
-
+    elif structureType == 'dictList':
       itemKey = structure[key]['_key_']
 
-      requiredDataArrays = {}
-
-      for valueKey in itemStructure:
-        valueLoc = itemStructure[valueKey]
-
-        pageKey = pages[valueLoc[0]]
-
-        layoutKey = valueLoc[1]
-
-        requiredDataArrays[valueKey] = scrapedData[pageKey][layoutKey]['data']
-
-      maxItemsPossible = 0
-
-      for dataArray in requiredDataArrays.values():
-        if len(dataArray) > maxItemsPossible:
-          maxItemsPossible = len(dataArray)
-
-      for i in range(maxItemsPossible):
-        item = {}
-
-        for valueKey in itemStructure:
-          if valueKey == itemKey:
-            continue
-
-          try:
-            item[valueKey] = requiredDataArrays[valueKey][i]
-          except IndexError:
-            item[valueKey] = f'N/A : data array length mismatch for key {valueKey}'
-          except Exception as e:
-            print(f"Error processing {valueKey} at index {i}: {e}")
-            item[valueKey] = None
-
-        lst[requiredDataArrays[itemKey][i]] = item
-
-      parent[key] = lst
+      parent[key] = creatreDictList(itemStructure, itemKey, pages, scrapedData)
+    elif structureType == 'list':
+      parent[key] = createList(itemStructure, pages, scrapedData)
 
   return parent
 
@@ -74,8 +97,8 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   if not os.path.exists(dbLocation):
     os.makedirs(dbLocation)
 
-  dbFilePath = os.path.join(dbLocation, 'db.json')
-  rawFilePath = os.path.join(dbLocation, 'raw.json')
+  dbFilePath = os.path.join(dbLocation, 'DB.json')
+  rawFilePath = os.path.join(dbLocation, 'Raw.json')
 
   db = createObject(structure, pages, scrapedData)
 

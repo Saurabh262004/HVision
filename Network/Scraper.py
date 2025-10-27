@@ -1,4 +1,3 @@
-from typing import List
 from time import sleep
 import os
 import orjson
@@ -6,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from Network import navigate
 
-def scrapeLayouts(layoutSources: List[str]):
+def scrapeLayouts(layoutSources: list[str]):
   scrapedData = {}
   failedURLs = []
 

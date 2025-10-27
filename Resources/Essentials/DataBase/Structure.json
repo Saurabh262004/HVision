@@ -15,7 +15,7 @@
               "_type_": "object",
               "_structure_": {
                 "Swords": {
-                  "_type_": "list",
+                  "_type_": "dictList",
                   "_key_": "Name",
                   "_structure_": {
                     "Name": [1, "SwordName"],
@@ -26,7 +26,7 @@
                   }
                 },
                 "Claymores": {
-                  "_type_": "list",
+                  "_type_": "dictList",
                   "_key_": "Name",
                   "_structure_": {
                     "Name": [1, "ClaymoreName"],
@@ -37,7 +37,7 @@
                   }
                 },
                 "Polearms": {
-                  "_type_": "list",
+                  "_type_": "dictList",
                   "_key_": "Name",
                   "_structure_": {
                     "Name": [1, "PolearmName"],
@@ -48,7 +48,7 @@
                   }
                 },
                 "Catalysts": {
-                  "_type_": "list",
+                  "_type_": "dictList",
                   "_key_": "Name",
                   "_structure_": {
                     "Name": [1, "CatalystName"],
@@ -59,7 +59,7 @@
                   }
                 },
                 "Bows": {
-                  "_type_": "list",
+                  "_type_": "dictList",
                   "_key_": "Name",
                   "_structure_": {
                     "Name": [1, "BowName"],
@@ -72,7 +72,7 @@
               }
             },
             "Characters": {
-              "_type_": "list",
+              "_type_": "dictList",
               "_key_": "Name",
               "_structure_": {
                 "Name": [0, "CharacterName"],
@@ -80,20 +80,13 @@
                 "Element": [0, "CharacterElement"],
                 "WeaponType": [0, "CharacterWeapon"],
                 "ReleaseDate": [0, "CharacterReleaseDate"],
-                "ReleaseVersion": [0, "CharacterReleaseVersion"]
+                "ReleaseVersion": [0, "CharacterReleaseVersion"],
+                "IconURL": [0, "CharacterIconURL"]
               }
             },
             "LimitedCharacters": {
               "_type_": "list",
-              "_key_": "Name",
-              "_structure_": {
-                "Name": [0, "LimitedCharacterName"],
-                "Rarity": [0, "LimitedCharacterRarity"],
-                "Element": [0, "LimitedCharacterElement"],
-                "WeaponType": [0, "LimitedCharacterWeapon"],
-                "ReleaseDate": [0, "LimitedCharacterReleaseDate"],
-                "ReleaseVersion": [0, "LimitedCharacterReleaseVersion"]
-              }
+              "_structure_": [0, "LimitedCharacterName"]
             }
           }
         }

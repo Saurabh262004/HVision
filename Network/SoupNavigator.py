@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from typing import List, Union
 
 def formatTextFromSoup(soup: BeautifulSoup) -> str:
   html = str(soup)
@@ -12,7 +11,7 @@ def formatTextFromSoup(soup: BeautifulSoup) -> str:
 
   return text
 
-def navigate(layout: List[List[Union[str, int]]], soupData: BeautifulSoup) -> List[str]:
+def navigate(layout: list[list[str | int]], soupData: BeautifulSoup) -> list[str]:
   results = []
 
   for i in range(len(layout)):
