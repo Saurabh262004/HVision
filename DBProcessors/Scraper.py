@@ -12,12 +12,20 @@ def scrapeLayouts(layoutSources: list[str]):
   for layoutSRC in layoutSources:
 
     if not os.path.isfile(layoutSRC):
-      pass
+      print(f'Layout file: "{layoutSRC}" does not exist')
+      continue
+
+    print(f'Scraping layout file "{layoutSRC}"...')
 
     with open(layoutSRC, 'rb') as layoutFile:
-      layoutData = orjson.loads(layoutFile.read())
+      try:
+        layoutData = orjson.loads(layoutFile.read())
+      except Exception as e:
+        print(f'Failed to parse json data form file: "{layoutSRC}"\n{e}')
+        continue
 
       pageCount = 0
+
       for pageKey in layoutData:
         page = layoutData[pageKey]
 
@@ -25,15 +33,16 @@ def scrapeLayouts(layoutSources: list[str]):
 
         del page['URL']
 
-        response = requests.get(url)
+        print(f'Requesting page: "{url}"')
 
-        if pageCount != len(layoutData) - 1:
-          sleep(2)
-
-        pageCount += 1
+        try:
+          response = requests.get(url)
+        except Exception as e:
+          print(f'Failed to get request for URL: "{url}"\n{e}')
+          continue
 
         if not (response.status_code == 200):
-          print(f'Error with URL: {url}\nError code: {response.status_code}')
+          print(f'Error with URL: "{url}"\nError code: {response.status_code}')
 
           failedURLs.append(url)
 
@@ -43,6 +52,8 @@ def scrapeLayouts(layoutSources: list[str]):
 
         scrapedData[pageKey] = {}
 
+        print(f'Extracting {len(page)} layouts from the page')
+
         for layoutKey in page:
           layout = page[layoutKey]
 
@@ -50,5 +61,13 @@ def scrapeLayouts(layoutSources: list[str]):
             "source": url,
             "data": navigate(layout, soup)
           }
+
+        print(f'Extraction successful')
+
+        if pageCount < len(layoutData) - 1:
+          print('waiting for 2 seconds before next request')
+          sleep(2)
+
+        pageCount += 1
 
   return scrapedData, failedURLs

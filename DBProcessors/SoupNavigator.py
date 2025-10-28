@@ -19,13 +19,23 @@ def navigate(layout: list[list[str | int]], soupData: BeautifulSoup) -> list[str
 
     if step[0] == 'tag':
       if step[2] == '~':
-        elements = soupData.find_all(step[1])
+        elements = soupData.find_all(step[1], recursive=step[3])
         partialLayout = layout[i+1:]
 
-        for element in elements:
-          results.extend(navigate(partialLayout, element))
+        if len(step) > 4 and step[4]:
+          arr = []
 
-        return results
+          for element in elements:
+            arr.extend(navigate(partialLayout, element))
+
+          results.append(arr)
+
+          return results
+        else:
+          for element in elements:
+            results.extend(navigate(partialLayout, element))
+
+          return results
 
       else:
         try:

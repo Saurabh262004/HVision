@@ -2,7 +2,9 @@
   "location": "./Resources/Essentials/DataBase/",
   "pages": [
     "GenshinCharactersListPage",
-    "GenshinWeaponsListPage"
+    "GenshinWeaponsListPage",
+    "ZenlessAgentsListPage",
+    "ZenlessWEnginesListPage"
   ],
   "structure": {
     "GenshinImpact": {
@@ -11,6 +13,22 @@
         "Items": {
           "_type_": "object",
           "_structure_": {
+            "Characters": {
+              "_type_": "dictList",
+              "_key_": "Name",
+              "_structure_": {
+                "Name": [0, "CharacterName"],
+                "Rarity": [0, "CharacterRarity"],
+                "Element": [0, "CharacterElement"],
+                "WeaponType": [0, "CharacterWeapon"],
+                "ReleaseDate": [0, "CharacterReleaseDate"],
+                "ReleaseVersion": [0, "CharacterReleaseVersion"]
+              }
+            },
+            "LimitedCharacters": {
+              "_type_": "list",
+              "_structure_": [0, "LimitedCharacterName"]
+            },
             "Weapons": {
               "_type_": "object",
               "_structure_": {
@@ -70,22 +88,44 @@
                   }
                 }
               }
-            },
-            "Characters": {
+            }
+          }
+        }
+      }
+    },
+    "ZenlessZoneZero": {
+      "_type_": "object",
+      "_structure_": {
+        "Items": {
+          "_type_": "object",
+          "_structure_": {
+            "Agents": {
               "_type_": "dictList",
               "_key_": "Name",
               "_structure_": {
-                "Name": [0, "CharacterName"],
-                "Rarity": [0, "CharacterRarity"],
-                "Element": [0, "CharacterElement"],
-                "WeaponType": [0, "CharacterWeapon"],
-                "ReleaseDate": [0, "CharacterReleaseDate"],
-                "ReleaseVersion": [0, "CharacterReleaseVersion"]
+                "Name": [2, "AgentName"],
+                "Rank": [2, "AgentRank"],
+                "Attribute": [2, "AgentAttribute"],
+                "Speciality": [2, "AgentSpeciality"],
+                "AttackType": [2, "AgentAttackType"],
+                "Faction": [2, "AgentFaction"],
+                "ReleaseDate": [2, "AgentReleaseDate"]
               }
             },
-            "LimitedCharacters": {
-              "_type_": "list",
-              "_structure_": [0, "LimitedCharacterName"]
+            "WEngines": {
+              "_type_": "dictList",
+              "_key_": "Name",
+              "_structure_": {
+                "Name": [3, "WEngineName"],
+                "Rank": [3, "WEngineRank"],
+                "Spaciality": [3, "WEngineSpaciality"],
+                "Attribute": [3, "WEngineAttribute"],
+                "Exclusive": [3, "WEngineExclusive"],
+                "BaseStat": [3, "WEngineBaseStat"],
+                "AdvancedStat": [3, "WEngineAdvancedStat"],
+                "Effect": [3, "WEngineEffect"],
+                "Version": [3, "WEngineVersion"]
+              }
             }
           }
         }
@@ -108,6 +148,22 @@
           "_structure_": {
             "Name": [1, "WeaponName"],
             "URL": [1, "WeaponIconURL"]
+          }
+        },
+        "ZenlessAgents": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [2, "AgentName"],
+            "URL": [2, "AgentIconURL"]
+          }
+        },
+        "ZenlessWEngines": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [3, "WEngineName"],
+            "URL": [3, "WEngineIconURL"]
           }
         }
       }

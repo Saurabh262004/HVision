@@ -86,6 +86,8 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   with open(dbStructureURL, 'rb') as dbStructureFile:
     dbStructure = orjson.loads(dbStructureFile.read())
 
+  print(f'Building database.')
+
   scrapedData, failedURLs = scrapeLayouts(layoutSources)
 
   db = {}
@@ -100,20 +102,18 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   dbFilePath = os.path.join(dbLocation, 'DB.json')
   rawFilePath = os.path.join(dbLocation, 'Raw.json')
 
-  metadata = {
+  with open(rawFilePath, 'wb') as rawFile:
+    rawFile.write(orjson.dumps(scrapedData, option=orjson.OPT_INDENT_2))
+
+  db = createObject(structure, pages, scrapedData)
+
+  db['_metadata_'] = {
     "creationEpoch": int(time.time()),
     "failedURLs": failedURLs
   }
 
-  db = createObject(structure, pages, scrapedData)
-
-  db['_metadata_'] = metadata
-
   with open(dbFilePath, 'wb') as dbFile:
     dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
-
-  with open(rawFilePath, 'wb') as rawFile:
-    rawFile.write(orjson.dumps(scrapedData, option=orjson.OPT_INDENT_2))
 
   endTime = time.time()
   stallTime = len(scrapedData) * 2
