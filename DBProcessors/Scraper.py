@@ -1,4 +1,4 @@
-from time import sleep
+import time
 import os
 import orjson
 import requests
@@ -8,6 +8,10 @@ from DBProcessors import navigate
 def scrapeLayouts(layoutSources: list[str]):
   scrapedData = {}
   failedURLs = []
+  stallTime = 0
+  waitingTime = 0
+
+  session = requests.Session()
 
   for layoutSRC in layoutSources:
 
@@ -35,11 +39,15 @@ def scrapeLayouts(layoutSources: list[str]):
 
         print(f'Requesting page: "{url}"')
 
+        waitingStart = time.time()
+
         try:
-          response = requests.get(url)
+          response = session.get(url)
         except Exception as e:
           print(f'Failed to get request for URL: "{url}"\n{e}')
           continue
+
+        waitingTime += (time.time() - waitingStart)
 
         if not (response.status_code == 200):
           print(f'Error with URL: "{url}"\nError code: {response.status_code}')
@@ -66,8 +74,9 @@ def scrapeLayouts(layoutSources: list[str]):
 
         if pageCount < len(layoutData) - 1:
           print('waiting for 2 seconds before next request')
-          sleep(2)
+          time.sleep(2)
+          stallTime += 2
 
         pageCount += 1
 
-  return scrapedData, failedURLs
+  return scrapedData, failedURLs, stallTime, waitingTime

@@ -2,7 +2,7 @@ import requests
 import os
 import time
 
-def saveImage(url: str, location: str, imageName: str) -> bool:
+def saveImage(url: str, location: str, imageName: str, session: requests.Session = None) -> bool:
   if not os.path.isdir(location):
     os.makedirs(location)
 
@@ -11,7 +11,10 @@ def saveImage(url: str, location: str, imageName: str) -> bool:
   print(f'Collecting image from URL: "{url}"...')
 
   try:
-    response = requests.get(url)
+    if session:
+      response = session.get(url)
+    else:
+      response = requests.get(url)
   except Exception as e:
     print(f'Failed request. Error: {e}')
     return False
@@ -29,11 +32,13 @@ def saveImage(url: str, location: str, imageName: str) -> bool:
 def saveImagesBulk(manifest: dict, location: str) -> dict:
   failedImages = {}
 
+  session = requests.Session()
+
   imageCount = 0
   for imageName in manifest:
     imageURL = manifest[imageName]
 
-    success = saveImage(imageURL, location, imageName)
+    success = saveImage(imageURL, location, imageName, session)
 
     if imageCount < len(manifest) - 1:
       time.sleep(2)

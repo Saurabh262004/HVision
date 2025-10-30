@@ -88,7 +88,7 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
 
   print(f'Building database.')
 
-  scrapedData, failedURLs = scrapeLayouts(layoutSources)
+  scrapedData, failedURLs, stallTime, waitingTime = scrapeLayouts(layoutSources)
 
   db = {}
 
@@ -115,8 +115,10 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   with open(dbFilePath, 'wb') as dbFile:
     dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
 
-  endTime = time.time()
-  stallTime = len(scrapedData) * 2
-  processingTime = (endTime - startTime) - stallTime
+  totalTime = time.time() - startTime
+  processingTime = totalTime - (stallTime + waitingTime)
 
-  print(f"Created DB in {processingTime:.2f} seconds (excluding {stallTime} seconds of stall time).")
+  print(f'Stall time: {stallTime:.2f}')
+  print(f'Requests response time: {waitingTime:.2f}')
+  print(f'Processing time: {processingTime:.2f}')
+  print(f'Total time: {totalTime:.2f}')
