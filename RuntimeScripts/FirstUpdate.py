@@ -1,41 +1,51 @@
-import orjson
-import time
-import os
-from DBProcessors import makeDB, processDB
+from multiprocessing import Process
+import pg_extended as pgx
+from UI import Cards
+from RuntimeScripts.DBProtocols import DBProtocols
 import sharedAssets
 
-def firstUpdate():
-  window = sharedAssets.app
+# implement error messages in the future
+def firstUpdate() -> bool | None:
+  configSuccess = DBProtocols.loadConfig()
 
-  with open('./Data/App/config.json', 'rb') as f:
-    sharedAssets.config = orjson.loads(f.read())
+  if not configSuccess:
+    print('failed to load config')
+    return False
 
-  with open(sharedAssets.config['DBStructureLocation'], 'rb') as f:
-    dbStructure = orjson.loads(f.read())
+  dbStructure = DBProtocols.loadDBStructure()
 
-  if not os.path.isdir(dbStructure['location']):
-    os.makedirs(dbStructure['location'])
+  if dbStructure is None:
+    print('failed to load db structure')
+    return False
+
+  loadDBSuccess = DBProtocols.loadDB(dbStructure['location'])
+
+  # can't proceed if we don't have the DB. User will have to wait till it's generated
+  if not loadDBSuccess:
+    print('failed to load db, generating a new one...')
+    if not DBProtocols.verifyAndLoadDB(dbStructure):
+      print('failed to generate new db')
+      return False
   else:
-    print('Database location exists')
+    # if we do have the db, proceed and have a different process varify and update it if needed
+    print('varifying db in background')
+    dbProcess = Process(target=DBProtocols.verifyAndLoadDB, kwargs={'dbStructure': dbStructure})
+    dbProcess.start()
 
-  dbLocation = os.path.join(dbStructure['location'], 'DB.json')
+  cards = ['Sangonomiya Kokomi', 'Furina', 'Klee', 'Faruzan']
 
-  if not os.path.isfile(dbLocation):
-    makeDB(sharedAssets.config['layoutSourcesLocation'], sharedAssets.config['DBStructureLocation'])
-    processDB(dbLocation)
-  else:
-    print('DB.json file exists')
+  for i in range(len(cards)):
+    sharedAssets.app.systems['home'].addElements(
+        Cards.GenshinCharacter.generate(
+        cards[i],
+        {
+          'x': pgx.DynamicValue('number', 50),
+          'y': pgx.DynamicValue('number', (44 * i) + 50),
+          'width': pgx.DynamicValue('number', 600),
+          'height': pgx.DynamicValue('number', 40)
+        },
+        'list'
+      )
+    )
 
-  with open(dbLocation, 'rb') as f:
-    sharedAssets.db = orjson.loads(f.read())
-
-  dbAge = int(time.time()) - sharedAssets.db['_metadata_']['creationEpoch']
-
-  if dbAge > 3600:
-    makeDB(sharedAssets.config['layoutSourcesLocation'], sharedAssets.config['DBStructureLocation'])
-    processDB(dbLocation)
-
-    with open(dbLocation, 'rb') as f:
-      sharedAssets.db = orjson.loads(f.read())
-  else:
-    print('DB isn\'t old enough. It won\'t be updated')
+  print('first update finished')

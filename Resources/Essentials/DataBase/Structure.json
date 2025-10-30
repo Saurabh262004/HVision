@@ -21,6 +21,7 @@
                 "Rarity": [0, "CharacterRarity"],
                 "Element": [0, "CharacterElement"],
                 "WeaponType": [0, "CharacterWeapon"],
+                "Model": [0, "CharacterModel"],
                 "ReleaseDate": [0, "CharacterReleaseDate"],
                 "ReleaseVersion": [0, "CharacterReleaseVersion"]
               }
