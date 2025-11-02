@@ -1,5 +1,4 @@
 {
-  "location": "./Resources/Essentials/DataBase/",
   "pages": [
     "GenshinCharactersListPage",
     "GenshinWeaponsListPage",
@@ -20,7 +19,7 @@
                 "Name": [0, "CharacterName"],
                 "Rarity": [0, "CharacterRarity"],
                 "Element": [0, "CharacterElement"],
-                "WeaponType": [0, "CharacterWeapon"],
+                "WeaponClass": [0, "CharacterWeapon"],
                 "Model": [0, "CharacterModel"],
                 "ReleaseDate": [0, "CharacterReleaseDate"],
                 "ReleaseVersion": [0, "CharacterReleaseVersion"]
