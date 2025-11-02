@@ -62,6 +62,8 @@ def scrapeLayouts(layoutSources: list[str]):
 
         print(f'Extracting {len(page)} layouts from the page')
 
+        extractionStart = time.time()
+
         for layoutKey in page:
           layout = page[layoutKey]
 
@@ -70,7 +72,7 @@ def scrapeLayouts(layoutSources: list[str]):
             "data": navigate(layout, soup)
           }
 
-        print(f'Extraction successful')
+        print(f'Extraction successful in : {time.time() - extractionStart} S.')
 
         if pageCount < len(layoutData) - 1:
           print('waiting for 2 seconds before next request')
