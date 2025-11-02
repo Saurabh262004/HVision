@@ -1,17 +1,24 @@
-import os
-import orjson
 import time
-import sharedAssets
-from DBProcessors.ImageCollector import updateImageDB
 
-def processDB(DBLocation: str) -> bool:
+def deleteKeyRecursive(obj, targetKey):
+  if isinstance(obj, dict):
+    keys_to_delete = [key for key in obj if key.startswith(targetKey)]
+
+    for key in keys_to_delete:
+      del obj[key]
+
+    for value in list(obj.values()):
+      deleteKeyRecursive(value, targetKey)
+
+  elif isinstance(obj, list):
+    for item in obj:
+      deleteKeyRecursive(item, targetKey)
+
+def processDB(db: dict) -> dict:
   startTime = time.time()
 
-  if not os.path.exists(DBLocation):
-    return False
-
-  with open(DBLocation, 'rb') as dbFile:
-    db = orjson.loads(dbFile.read())
+  # remove all the N/A data
+  deleteKeyRecursive(db, 'N/A')
 
   # create a proper manifest for image collector
   manifest = {}
@@ -20,10 +27,6 @@ def processDB(DBLocation: str) -> bool:
     manifestPart = db['ImageCollectorManifestData'][manifestName]
 
     for itemName in manifestPart:
-      # remove errored data
-      if itemName.startswith('N/A'):
-        continue
-
       # remove query parameters from image URLs
       url: str = manifestPart[itemName]['URL']
 
@@ -37,14 +40,9 @@ def processDB(DBLocation: str) -> bool:
 
   db['ImageCollectorManifest'] = manifest
 
-  with open(DBLocation, 'wb') as dbFile:
-    dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
-
   endTime = time.time()
   processingTime = endTime - startTime
 
   print(f"Done post-processing DataBase in {processingTime:.2f} seconds.")
 
-  updateImageDB(sharedAssets.config['imageDBLocation'], manifest)
-
-  return True
+  return db

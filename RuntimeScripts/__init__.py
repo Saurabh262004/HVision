@@ -1,4 +1,4 @@
-from RuntimeScripts.DBProtocols import DBProtocols
+from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
 from RuntimeScripts.CustomLoopProcess import customLoopProcess
 from RuntimeScripts.FirstUpdate import firstUpdate
 from RuntimeScripts.ClosingSeq import closingSeq

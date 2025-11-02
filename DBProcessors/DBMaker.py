@@ -77,7 +77,9 @@ def createObject(structure: dict | list, pages: list[str], scrapedData: dict) ->
 
   return parent
 
-def makeDB(layoutSourcesURL: str, dbStructureURL: str):
+def makeDB(layoutSourcesURL: str, dbStructureURL: str) -> tuple[dict, dict]:
+  print(f'Building database.')
+
   startTime = time.time()
 
   with open(layoutSourcesURL, 'rb') as layoutSourcesFile:
@@ -86,34 +88,18 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   with open(dbStructureURL, 'rb') as dbStructureFile:
     dbStructure = orjson.loads(dbStructureFile.read())
 
-  print(f'Building database.')
-
   scrapedData, failedURLs, stallTime, waitingTime = scrapeLayouts(layoutSources)
 
-  db = {}
-
-  dbLocation = dbStructure['location']
   pages = dbStructure['pages']
   structure = dbStructure['structure']
-
-  if not os.path.exists(dbLocation):
-    os.makedirs(dbLocation)
-
-  dbFilePath = os.path.join(dbLocation, 'DB.json')
-  rawFilePath = os.path.join(dbLocation, 'Raw.json')
-
-  with open(rawFilePath, 'wb') as rawFile:
-    rawFile.write(orjson.dumps(scrapedData, option=orjson.OPT_INDENT_2))
 
   db = createObject(structure, pages, scrapedData)
 
   db['_metadata_'] = {
     "creationEpoch": int(time.time()),
-    "failedURLs": failedURLs
+    "failedURLs": failedURLs,
+    "safe": True
   }
-
-  with open(dbFilePath, 'wb') as dbFile:
-    dbFile.write(orjson.dumps(db, option=orjson.OPT_INDENT_2))
 
   totalTime = time.time() - startTime
   processingTime = totalTime - (stallTime + waitingTime)
@@ -122,3 +108,5 @@ def makeDB(layoutSourcesURL: str, dbStructureURL: str):
   print(f'Requests response time: {waitingTime:.2f}')
   print(f'Processing time: {processingTime:.2f}')
   print(f'Total time: {totalTime:.2f}')
+
+  return db, scrapedData
