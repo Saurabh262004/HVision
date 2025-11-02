@@ -1,5 +1,9 @@
 {
-  "DBStructureLocation": "./Resources/Essentials/DataBase/Structure.json",
-  "imageDBLocation": "./Resources/Assets/GameAssets/",
-  "layoutSourcesLocation": "./Resources/Essentials/LayoutSources.json"
+  "DBLocation": "./Resources/Essentials/DataBase/",
+  "ImageDBLocation": "./Resources/Assets/GameAssets/",
+  "layoutSourcesFileLocation": "./Resources/Essentials/LayoutSources.json",
+  "DBFileName": "DB.json",
+  "RawDBFileName": "Raw.json",
+  "DBStructureFileName": "Structure.json",
+  "MaxDBAge": 3600
 }
