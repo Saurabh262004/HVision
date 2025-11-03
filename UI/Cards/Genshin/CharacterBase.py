@@ -10,7 +10,7 @@ class CharacterBase:
       pgx.Section(
         cardDim,
         pg.Color(255, 255, 255, 64),
-        5,
+        7,
         'squish',
         'center_right'
       ),

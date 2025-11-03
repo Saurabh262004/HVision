@@ -1,7 +1,7 @@
-import os
 import pg_extended as pgx
 from UI.Cards.Genshin.CharacterResources import CharacterResources
 from UI.Cards.Genshin.CharacterBase import CharacterBase
+from Utility import Searcher
 import sharedAssets
 
 class CharacterList:
@@ -80,11 +80,21 @@ class CharacterList:
     if index < 0 or index >= self.maxListLength:
       return False
 
-    base = self.listCards[index]
-
     characterDetails = sharedAssets.db['GenshinImpact']['Items']['Characters'][character]
 
     rarity = int(characterDetails['Rarity'][0])
+
+    element = characterDetails['Element']
+
+    weaponClass = characterDetails['WeaponClass']
+
+    if rarity < 4 or rarity > 5:
+      return False
+
+    if 'N/A' in element or 'N/A' in weaponClass:
+      return False
+
+    base = self.listCards[index]
 
     base[f'{index}_cardSection'].section.background = self.basicAssets[f'RarityBack{rarity}']
 
@@ -94,9 +104,9 @@ class CharacterList:
 
     base[f'{index}_nameTextBox'].text = character
 
-    base[f'{index}_elementSection'].background = self.basicAssets[f'Element_{characterDetails['Element']}']
+    base[f'{index}_elementSection'].background = self.basicAssets[f'Element_{element}']
 
-    base[f'{index}_weaponTypeSection'].background = self.basicAssets[f'WeaponClass_{characterDetails['WeaponClass']}']
+    base[f'{index}_weaponTypeSection'].background = self.basicAssets[f'WeaponClass_{weaponClass}']
 
     base[f'{index}_raritySection'].background = self.basicAssets[f'RarityStars{rarity}']
 
@@ -106,3 +116,30 @@ class CharacterList:
       base[elementKey].update()
 
     return True
+
+  def displayCharacters(self, characters: tuple[str] | list[str]):
+    validChars = []
+
+    for char in characters:
+      if char in self.characters:
+        validChars.append(char)
+
+    totalCards = min(self.maxListLength, len(validChars))
+
+    activeCards = range(totalCards)
+
+    deactiveCards = range(totalCards, self.maxListLength)
+
+    self.setActiveCards(activeCards)
+    self.deactivateCards(deactiveCards)
+
+    index = 0
+    for char in validChars:
+      if not self.applyCharacterToBase(char, index):
+        continue
+
+      index += 1
+
+  def displaySearch(self, searchInput: str):
+    foundChars = Searcher.search(self.characters, searchInput)
+    self.displayCharacters(foundChars)

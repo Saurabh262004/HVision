@@ -13,16 +13,11 @@ def addCList():
       'y': pgx.DynamicValue('number', 130),
       'width': pgx.DynamicValue('number', 600),
       'height': pgx.DynamicValue('number', 50)
-    }
+    }, maxListLength=10
   )
 
   for card in cList.listCards:
     sharedAssets.app.systems['home'].addElements(card)
-
-  cList.setActiveCards([0, 1])
-
-  cList.applyCharacterToBase('Furina', 0)
-  cList.applyCharacterToBase('Faruzan', 1)
 
   charInput = pgx.TextInput(
     pgx.Section(
@@ -34,13 +29,15 @@ def addCList():
       }, pg.Color(250, 250, 250)
     ), 'Arial', pg.Color(0, 0, 0), placeholder='Character Name',
     onChangeInfo={
-      'callable': cList.applyCharacterToBase,
-      'params': 0,
+      'callable': cList.displaySearch,
+      'params': None,
       'sendValue': True
     }
   )
 
   sharedAssets.app.systems['home'].addElement(charInput, 'charInput')
+
+  cList.displaySearch('')
 
   print('first update finished')
 
