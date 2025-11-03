@@ -142,6 +142,13 @@ class CharacterList:
 
       index += 1
 
-  def displaySearch(self, searchInput: str):
+  def displaySearchName(self, searchInput: str):
     foundChars = Searcher.search(self.characters, searchInput)
+    self.displayCharacters(foundChars)
+
+  def displaySearchAll(self, searchInput: str):
+    charDicts = sharedAssets.db['GenshinImpact']['Items']['Characters']
+
+    foundChars = Searcher.seachDicts(charDicts, searchInput, True)
+
     self.displayCharacters(foundChars)

@@ -29,7 +29,7 @@ def addCList():
       }, pg.Color(250, 250, 250)
     ), 'Arial', pg.Color(0, 0, 0), placeholder='Character Name',
     onChangeInfo={
-      'callable': cList.displaySearch,
+      'callable': cList.displaySearchAll,
       'params': None,
       'sendValue': True
     }
@@ -37,7 +37,7 @@ def addCList():
 
   sharedAssets.app.systems['home'].addElement(charInput, 'charInput')
 
-  cList.displaySearch('')
+  cList.displaySearchName('')
 
   print('first update finished')
 
