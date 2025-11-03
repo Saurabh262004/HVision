@@ -1,4 +1,3 @@
-import os
 import time
 import orjson
 from DBProcessors import scrapeLayouts
