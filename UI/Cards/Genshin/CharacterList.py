@@ -15,7 +15,11 @@ class CharacterList:
 
     self.characters: list[str] = []
 
+    self.activeList: list[str] = []
+
     self.listCards: list[dict[str, pgx.UIElement]] = []
+
+    self.listPosition: int = 0
 
     self.imageDBPath = sharedAssets.config['ImageDBLocation']
 
@@ -42,7 +46,7 @@ class CharacterList:
 
       self.listCards.append(CharacterBase.getCardBase(newCardDim, f'{str(i)}_'))
 
-    self.deactivateCards('all')
+    self.setActiveCards(0)
 
   def setLazyCards(self, lazyUpdate: bool):
     for card in self.listCards:
@@ -50,28 +54,19 @@ class CharacterList:
         element = card[elementKey]
         element.lazyUpdate = lazyUpdate
 
-  def setActiveCards(self, indices: list[int]):
-    for index in indices:
-      if index < 0 or index >= self.maxListLength:
-        return False
+  def setActiveCards(self, length: int):
+    for i in range(self.maxListLength):
+      if i >= self.maxListLength:
+        return None
 
-      elements = self.listCards[index].values()
+      elements = self.listCards[i].values()
 
-      for element in elements:
-        element.active = True
-
-  def deactivateCards(self, indices: list[int] | str):
-    if indices == 'all':
-      indices = range(self.maxListLength)
-
-    for index in indices:
-      if index < 0 or index >= self.maxListLength:
-        return False
-
-      elements = self.listCards[index].values()
-
-      for element in elements:
-        element.active = False
+      if i < length:
+        for element in elements:
+          element.active = True
+      else:
+        for element in elements:
+          element.active = False
 
   def applyCharacterToBase(self, character: str, index: int) -> bool:
     if character not in self.characters:
@@ -119,28 +114,44 @@ class CharacterList:
 
     return True
 
-  def displayCharacters(self, characters: tuple[str] | list[str]):
-    validChars = []
+  def displayCharacters(self, characters: tuple[str] | list[str] | str):
+    if characters == 'prev':
+      pass
+    elif characters == 'all':
+      self.activeList = self.characters
+    else:
+      validChars = []
 
-    for char in characters:
-      if char in self.characters:
-        validChars.append(char)
+      for char in characters:
+        if char in self.characters:
+          validChars.append(char)
 
-    totalCards = min(self.maxListLength, len(validChars))
+      self.activeList = validChars
 
-    activeCards = range(totalCards)
+    self.setActiveCards(self.maxListLength)
 
-    deactiveCards = range(totalCards, self.maxListLength)
+    totalActive = len(self.activeList)
 
-    self.setActiveCards(activeCards)
-    self.deactivateCards(deactiveCards)
+    activatedCards = 0
+    cardIndex = self.listPosition
 
-    index = 0
-    for char in validChars:
-      if not self.applyCharacterToBase(char, index):
+    for _ in range(totalActive):
+      if activatedCards >= self.maxListLength or cardIndex >= totalActive:
+        break
+
+      char = self.activeList[cardIndex]
+
+      if not self.applyCharacterToBase(char, activatedCards):
+        cardIndex += 1
         continue
 
-      index += 1
+      cardIndex += 1
+      activatedCards += 1
+
+    self.setActiveCards(activatedCards)
+
+  def updateListPosition(self, listPosition: int = 0):
+    self.listPosition = listPosition
 
   def displaySearchName(self, searchInput: str):
     foundChars = Searcher.search(self.characters, searchInput)

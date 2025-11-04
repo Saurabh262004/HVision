@@ -1,7 +1,10 @@
 import pygame as pg
 import pg_extended as pgx
+import sharedAssets
 
-def addHome(window: pgx.Window):
+def addHome():
+  window: pgx.Window = sharedAssets.app
+
   home: pgx.UI.System = pgx.UI.System()
 
   homeBG: pgx.Section = pgx.Section(

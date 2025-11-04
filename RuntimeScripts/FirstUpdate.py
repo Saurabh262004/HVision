@@ -1,45 +1,6 @@
-from multiprocessing import Process
-import pygame as pg
-import pg_extended as pgx
 from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
+from UI.Systems.DatabaseSystems import DatabaseSystems
 import sharedAssets
-
-def addCList():
-  from UI.Cards.Genshin.CharacterList import CharacterList
-
-  cList = CharacterList(
-    {
-      'x': pgx.DynamicValue('number', 50),
-      'y': pgx.DynamicValue('number', 130),
-      'width': pgx.DynamicValue('number', 600),
-      'height': pgx.DynamicValue('number', 50)
-    }, maxListLength=10
-  )
-
-  for card in cList.listCards:
-    sharedAssets.app.systems['home'].addElements(card)
-
-  charInput = pgx.TextInput(
-    pgx.Section(
-      {
-        'x': pgx.DynamicValue('number', 50),
-        'y': pgx.DynamicValue('number', 50),
-        'width': pgx.DynamicValue('number', 600),
-        'height': pgx.DynamicValue('number', 30)
-      }, pg.Color(250, 250, 250)
-    ), 'Arial', pg.Color(0, 0, 0), placeholder='Character Name',
-    onChangeInfo={
-      'callable': cList.displaySearchAll,
-      'params': None,
-      'sendValue': True
-    }
-  )
-
-  sharedAssets.app.systems['home'].addElement(charInput, 'charInput')
-
-  cList.displaySearchName('')
-
-  print('first update finished')
 
 # implement error messages in the future
 def firstUpdate() -> bool | None:
@@ -55,6 +16,8 @@ def firstUpdate() -> bool | None:
     print('varifying db in background')
     DBProtocols.verifyDBBackground()
 
-  addCList()
+  DatabaseSystems.addGenshinCharacters()
+
+  sharedAssets.app.activateSystems(['home', 'genshinCharacters'])
 
   return True
