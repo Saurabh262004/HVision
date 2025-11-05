@@ -1,6 +1,7 @@
 import os
 import pygame as pg
 import pg_extended as pgx
+from Utility import Sanitizer
 
 class CharacterResources:
   @staticmethod
@@ -80,7 +81,7 @@ class CharacterResources:
       icons[character] = CharacterResources.getIcon(
         os.path.join(
           imageDBPath,
-          f'GenshinCharacters_{character}'
+          f'GenshinCharacters_{Sanitizer.OSProofName(character)}'
         )
       )
 

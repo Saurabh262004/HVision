@@ -152,6 +152,7 @@ class CharacterList:
 
   def updateListPosition(self, listPosition: int = 0):
     self.listPosition = listPosition
+    self.displayCharacters('prev')
 
   def displaySearchName(self, searchInput: str):
     foundChars = Searcher.search(self.characters, searchInput)

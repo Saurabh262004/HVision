@@ -1,12 +1,13 @@
 import requests
 import os
 import time
+from Utility import Sanitizer
 
 def saveImage(url: str, location: str, imageName: str, session: requests.Session = None) -> bool:
   if not os.path.isdir(location):
     os.makedirs(location)
 
-  imagePath = os.path.join(location, imageName)
+  imagePath = os.path.join(location, Sanitizer.OSProofName(imageName))
 
   print(f'Collecting image from URL: "{url}"...')
 
@@ -59,7 +60,7 @@ def checkDBStatus(imageDBLocation: str, manifest: dict) -> dict:
   unavailableImages = {}
 
   for imageName in manifest:
-    imagePath = os.path.join(imageDBLocation, imageName)
+    imagePath = os.path.join(imageDBLocation, Sanitizer.OSProofName(imageName))
 
     if not os.path.exists(imagePath):
       unavailableImages[imageName] = manifest[imageName]
