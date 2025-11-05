@@ -189,6 +189,7 @@ class DBProtocols:
     except:
       return False
 
+  @staticmethod
   def writeRaw(raw: dict) -> bool:
     DBProtocols.verifyConfig()
 
@@ -283,8 +284,18 @@ class DBProtocols:
 
         return False
 
+      if not DBProtocols.loadDB():
+        print('Fatal: could not load database')
+        return False
+
       DBProtocols.dbEventOpen('DBUpdate')
     else:
+      if not DBProtocols.loadDB():
+        print('Fatal: could not load database')
+        return False
+
+      print('Info: Database loaded successfully')
+
       dbAge = int(time.time()) - sharedAssets.db['_metadata_']['creationEpoch']
 
       if dbAge > sharedAssets.config['MaxDBAge']:

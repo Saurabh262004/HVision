@@ -1,12 +1,13 @@
-import pg_extended as pgx
-import sharedAssets
-from RuntimeScripts import customLoopProcess, closingSeq
-from UI.Systems.Home import addHome
+if __name__ == '__main__':
+  import pg_extended as pgx
+  import sharedAssets
+  from RuntimeScripts import customLoopProcess, closingSeq
+  from UI.Systems.Home import addHome
 
-app = sharedAssets.app = pgx.Window('HVision', (1280, 720), customLoopProcess=customLoopProcess)
+  app = sharedAssets.app = pgx.Window('HVision', (1280, 720), customLoopProcess=customLoopProcess)
 
-addHome()
+  addHome()
 
-app.openWindow()
+  app.openWindow()
 
-closingSeq()
+  closingSeq()
