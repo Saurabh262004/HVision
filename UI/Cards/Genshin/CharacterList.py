@@ -151,7 +151,7 @@ class CharacterList:
     self.setActiveCards(activatedCards)
 
   def updateListPosition(self, listPosition: int = 0):
-    self.listPosition = listPosition
+    self.listPosition = int(listPosition)
     self.displayCharacters('prev')
 
   def displaySearchName(self, searchInput: str):
