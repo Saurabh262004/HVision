@@ -72,7 +72,7 @@ class DatabaseSystems:
           'width': pgx.DynamicValue('classPer', sharedAssets.app, classAttribute='screenWidth', percent=1),
           'height': pgx.DynamicValue('classPer', sharedAssets.app, classAttribute='screenHeight', percent=4)
         }, pg.Color(255, 255, 255, 128)
-      ), (0, 99), -2, pg.Color(0, 0, 0, 0),
+      ), (0, len(cList.characters) - 1), -2, pg.Color(0, 0, 0, 0),
       {
         'callable': cList.updateListPosition,
         'params': None,
