@@ -21,6 +21,8 @@ def firstUpdate() -> bool | None:
 
   GenshinDBSystems.addGenshinCharacters()
 
-  sharedAssets.app.activateSystems(['home', 'genshinCharacters'])
+  sharedAssets.app.activateSystems(['home'])
+
+  sharedAssets.app.customAnimatedValues[0].trigger()
 
   return True
