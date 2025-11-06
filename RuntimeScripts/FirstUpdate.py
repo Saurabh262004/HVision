@@ -1,5 +1,5 @@
 from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
-from UI.Systems.DatabaseSystems import DatabaseSystems
+from UI.Systems.Genshin.DatabaseSystems import GenshinDBSystems
 import sharedAssets
 
 # implement error messages in the future
@@ -16,7 +16,7 @@ def firstUpdate() -> bool | None:
     print('varifying db in background')
     DBProtocols.verifyDBBackground()
 
-  DatabaseSystems.addGenshinCharacters()
+  GenshinDBSystems.addGenshinCharacters()
 
   sharedAssets.app.activateSystems(['home', 'genshinCharacters'])
 

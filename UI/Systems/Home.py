@@ -3,11 +3,11 @@ import pg_extended as pgx
 import sharedAssets
 
 def addHome():
-  window: pgx.Window = sharedAssets.app
+  window = sharedAssets.app
 
-  home: pgx.UI.System = pgx.UI.System()
+  home = pgx.UI.System()
 
-  homeBG: pgx.Section = pgx.Section(
+  homeBG = pgx.Section(
     {
       'x': pgx.DynamicValue('number', 0),
       'y': pgx.DynamicValue('number', 0),

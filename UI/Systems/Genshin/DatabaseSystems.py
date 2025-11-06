@@ -3,7 +3,7 @@ import pg_extended as pgx
 from UI.Cards.Genshin.CharacterList import CharacterList
 import sharedAssets
 
-class DatabaseSystems:
+class GenshinDBSystems:
   @staticmethod
   def addGenshinCharacters() -> bool:
     if 'genshinCharacters' in sharedAssets.app.systems:
@@ -96,12 +96,4 @@ class DatabaseSystems:
 
   @staticmethod
   def addGenshinWeapons():
-    pass
-
-  @staticmethod
-  def addZenlessAgents():
-    pass
-
-  @staticmethod
-  def addZenlessWEngines():
     pass
