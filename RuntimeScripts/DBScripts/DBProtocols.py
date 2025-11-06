@@ -228,7 +228,11 @@ class DBProtocols:
 
       DBProtocols.writeDB(db)
       DBProtocols.writeRaw(raw)
-      updateImageDB(sharedAssets.config['ImageDBLocation'], db['ImageCollectorManifest'])
+
+      updateImageDB(
+        os.path.join(sharedAssets.config['ImageDBLocation'],'specific'),
+        db['ImageCollectorManifest']
+      )
 
       return True
     except:
