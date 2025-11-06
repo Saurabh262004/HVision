@@ -1,4 +1,5 @@
 from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
+from UI.Systems.Home import addHome
 from UI.Systems.Genshin.DatabaseSystems import GenshinDBSystems
 import sharedAssets
 
@@ -15,6 +16,8 @@ def firstUpdate() -> bool | None:
     # if we do have the db, proceed and have a different process varify and update it if needed
     print('varifying db in background')
     DBProtocols.verifyDBBackground()
+
+  addHome()
 
   GenshinDBSystems.addGenshinCharacters()
 
