@@ -20,7 +20,7 @@ def addHome():
     (
       pgx.DynamicValue('classNum', window, classAttribute='screenHeight'),
       pgx.DynamicValue('classPer', window, classAttribute='screenHeight', percent=20)
-    ), 250, 'start', 'easeOut'
+    ), 500, 'start', 'easeInOut'
   )
 
   HVisionText = pgx.TextBox(
@@ -39,6 +39,13 @@ def addHome():
   )
 
   HVisionText.lazyUpdate = False
+
+  def triggetOPIntro():
+    nonlocal openingAnim
+
+    openingAnim.trigger(delay=500)
+
+  window.customData['triggetOPIntroFunc'] = triggetOPIntro
 
   window.customAnimatedValues['openingAnim'] = openingAnim
 
