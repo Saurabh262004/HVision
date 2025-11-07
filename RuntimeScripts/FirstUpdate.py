@@ -1,5 +1,6 @@
 from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
 from UI.Systems.Home import addHome
+from UI.Systems.DBUpdateIndicator import addIndicator
 from UI.Systems.Genshin.DatabaseSystems import GenshinDBSystems
 import sharedAssets
 
@@ -19,9 +20,11 @@ def firstUpdate() -> bool | None:
 
   addHome()
 
+  addIndicator()
+
   GenshinDBSystems.addGenshinCharacters()
 
-  sharedAssets.app.activateSystems(['home'])
+  sharedAssets.app.activateSystems(['home', 'dbIndicator'])
 
   sharedAssets.app.customData['triggetOPIntroFunc']()
 

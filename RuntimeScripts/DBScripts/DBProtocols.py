@@ -240,6 +240,20 @@ class DBProtocols:
       return False
 
   @staticmethod
+  def getDBAge() -> int | None:
+    try:
+      return time.time() - sharedAssets.db['_metadata_']['creationEpoch']
+    except:
+      return None
+
+  @staticmethod
+  def dbIsOld() -> bool | None:
+    try:
+      return DBProtocols.getDBAge() > sharedAssets.config['MaxDBAge']
+    except:
+      return None
+
+  @staticmethod
   def verifyDB() -> bool:
     DBProtocols.verifyConfig()
 
@@ -300,9 +314,7 @@ class DBProtocols:
 
       print('Info: Database loaded successfully')
 
-      dbAge = int(time.time()) - sharedAssets.db['_metadata_']['creationEpoch']
-
-      if dbAge > sharedAssets.config['MaxDBAge']:
+      if DBProtocols.dbIsOld():
         print('Info: Database is old, Generating new Database')
 
         if not DBProtocols.generateDB():
