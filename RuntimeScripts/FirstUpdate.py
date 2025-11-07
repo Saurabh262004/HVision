@@ -23,6 +23,6 @@ def firstUpdate() -> bool | None:
 
   sharedAssets.app.activateSystems(['home'])
 
-  sharedAssets.app.customAnimatedValues[0].trigger()
+  sharedAssets.app.customAnimatedValues['openingAnim'].trigger()
 
   return True

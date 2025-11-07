@@ -40,7 +40,7 @@ def addHome():
 
   HVisionText.lazyUpdate = False
 
-  window.customAnimatedValues.append(openingAnim)
+  window.customAnimatedValues['openingAnim'] = openingAnim
 
   home.addElement(homeBG, 'homeBG')
 
