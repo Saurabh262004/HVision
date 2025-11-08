@@ -60,13 +60,13 @@ class CharacterResources:
 
       basicIcons['RarityStars5'].blit(basicIcons['RarityStar'], (i * rarityStarWidth, 0))
 
-    basicIcons['RarityBack4'] = pgx.UI.getGradient(
+    basicIcons['RarityBack4'] = pgx.ImgManipulation.getGradient(
       [(141, 22, 245), (50, 50, 50)],
       [1, 5],
       'right'
     )
 
-    basicIcons['RarityBack5'] = pgx.UI.getGradient(
+    basicIcons['RarityBack5'] = pgx.ImgManipulation.getGradient(
       [(245, 200, 39), (50, 50, 50)],
       [1, 5],
       'right'
