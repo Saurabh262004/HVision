@@ -5,8 +5,8 @@ import sharedAssets
 def addIndicator():
   system = pgx.System()
 
-  tetWidth = pgx.DynamicValue('classPer', sharedAssets.app, classAttribute='screenWidth', percent=2)
-  tetX = pgx.DynamicValue('classPer', sharedAssets.app, classAttribute='screenWidth', percent=97.5)
+  tetWidth = pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=2)
+  tetX = pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=97.5)
 
   # default colour fill looks like it was drawn by a baby. I can literally see the pixels
   tetBack1 = pg.Surface((256, 256), pg.SRCALPHA)
@@ -16,7 +16,7 @@ def addIndicator():
   tet = pgx.Section(
     {
       'x': tetX,
-      'y': pgx.DynamicValue('classPer', sharedAssets.app, classAttribute='screenWidth', percent=.5),
+      'y': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=.5),
       'width': tetWidth,
       'height': tetWidth
     }, tetBack1

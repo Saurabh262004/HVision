@@ -39,7 +39,7 @@ class CharacterList:
       else:
         newCardDim = {
           'x': self.cardDim['x'],
-          'y': pgx.DynamicValue('callable', getDimY, i),
+          'y': pgx.DynamicValue(getDimY, kwargs={'i': i}),
           'width': self.cardDim['width'],
           'height': self.cardDim['height']
         }

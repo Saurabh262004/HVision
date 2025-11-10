@@ -81,10 +81,10 @@ def getSectionCards():
 
     sectionCard = pgx.Section(
       {
-        'x': pgx.DynamicValue('callable', getSectionX, i),
-        'y': pgx.DynamicValue('callable', getSectionY, i),
-        'width': pgx.DynamicValue('classPer', sharedAssets.app, classAttribute='screenWidth', percent=sectionWidthPer),
-        'height': pgx.DynamicValue('classPer', sharedAssets.app, classAttribute='screenWidth', percent=sectionHeightPer)
+        'x': pgx.DynamicValue(getSectionX, kwargs={'i': i}),
+        'y': pgx.DynamicValue(getSectionY, kwargs={'i': i}),
+        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=sectionWidthPer),
+        'height': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=sectionHeightPer)
       }, back, 10
     )
 
@@ -99,15 +99,15 @@ def addHome():
 
   homeBG = pgx.Section(
     {
-      'x': pgx.DynamicValue('number', 0),
-      'y': pgx.DynamicValue('number', 0),
-      'width': pgx.DynamicValue('classNum', window, classAttribute='screenWidth'),
-      'height': pgx.DynamicValue('classNum', window, classAttribute='screenHeight')
+      'x': pgx.DynamicValue(0),
+      'y': pgx.DynamicValue(0),
+      'width': pgx.DynamicValue(window, 'screenWidth'),
+      'height': pgx.DynamicValue(window, 'screenHeight')
     }, pg.Color(20, 10, 20)
   )
 
-  opTitleStart = pgx.DynamicValue('classNum', window, classAttribute='screenHeight')
-  opTitleEnd = pgx.DynamicValue('classPer', window, classAttribute='screenHeight', percent=20)
+  opTitleStart = pgx.DynamicValue(window, 'screenHeight')
+  opTitleEnd = pgx.DynamicValue(window, 'screenHeight', percent=20)
 
   openingAnim = pgx.AnimatedValue(
     (
@@ -120,16 +120,16 @@ def addHome():
   HVisionText = pgx.TextBox(
     pgx.Section(
       {
-        'x': pgx.DynamicValue('number', 0),
-        'y': pgx.DynamicValue('number', 0),
-        'width': pgx.DynamicValue('classNum', window, classAttribute='screenWidth'),
-        'height': pgx.DynamicValue('classNum', openingAnim, classAttribute='value')
+        'x': pgx.DynamicValue(0),
+        'y': pgx.DynamicValue(0),
+        'width': pgx.DynamicValue(window, 'screenWidth'),
+        'height': pgx.DynamicValue(openingAnim, 'value')
       }, pg.Color(20, 10, 20), 8
     ),
     'HVision',
     'Resources/Fonts/thicccboi/fonts/TTF/THICCCBOI-Bold.ttf',
     pg.Color(100, 100, 100, 100),
-    pgx.DynamicValue('number', 50)
+    pgx.DynamicValue(50)
   )
 
   HVisionText.lazyUpdate = False

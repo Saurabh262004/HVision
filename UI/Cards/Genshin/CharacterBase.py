@@ -28,9 +28,9 @@ class CharacterBase:
 
     nameSection = pgx.Section(
       {
-        'x': pgx.DynamicValue('callable', lambda: cardButton.section.x + iconSection.width),
+        'x': pgx.DynamicValue(lambda: cardButton.section.x + iconSection.width),
         'y': cardDim['y'],
-        'width': pgx.DynamicValue('callable', lambda: cardButton.section.width - iconSection.width),
+        'width': pgx.DynamicValue(lambda: cardButton.section.width - iconSection.width),
         'height': cardDim['height']
       }, pg.Color(255, 255, 255, 64)
     )
@@ -40,7 +40,7 @@ class CharacterBase:
       'characterName',
       'Arial',
       pg.Color(250, 255, 255),
-      pgx.DynamicValue('callable', lambda: nameSection.height * .4)
+      pgx.DynamicValue(lambda: nameSection.height * .4)
     )
 
     nameTextBox.alignTextHorizontal = 'left'
@@ -50,16 +50,16 @@ class CharacterBase:
 
     raritySection = pgx.Section(
       {
-        'x': pgx.DynamicValue('callable', lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 4))),
+        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 4))),
         'y': cardDim['y'],
-        'width': pgx.DynamicValue('callable', lambda: cardButton.section.height * 2),
+        'width': pgx.DynamicValue(lambda: cardButton.section.height * 2),
         'height': cardDim['height']
       }, pg.Color(255, 255, 255, 64), backgroundPosition='center_right'
     )
 
     weaponTypeSection = pgx.Section(
       {
-        'x': pgx.DynamicValue('callable', lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 2))),
+        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 2))),
         'y': cardDim['y'],
         'width': cardDim['height'],
         'height': cardDim['height']
@@ -68,7 +68,7 @@ class CharacterBase:
 
     elementSection = pgx.Section(
       {
-        'x': pgx.DynamicValue('callable', lambda: cardButton.section.x + (cardButton.section.width - cardButton.section.height)),
+        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - cardButton.section.height)),
         'y': cardDim['y'],
         'width': cardDim['height'],
         'height': cardDim['height']
