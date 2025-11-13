@@ -50,7 +50,7 @@ class CharacterBase:
 
     raritySection = pgx.Section(
       {
-        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 4))),
+        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 5))),
         'y': cardDim['y'],
         'width': pgx.DynamicValue(lambda: cardButton.section.height * 2),
         'height': cardDim['height']
@@ -59,11 +59,20 @@ class CharacterBase:
 
     weaponTypeSection = pgx.Section(
       {
-        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 2))),
+        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 3))),
         'y': cardDim['y'],
         'width': cardDim['height'],
         'height': cardDim['height']
       }, pg.Color(255, 255, 255, 64), backgroundSizePercent=65
+    )
+
+    nationSection = pgx.Section(
+      {
+        'x': pgx.DynamicValue(lambda: cardButton.section.x + (cardButton.section.width - (cardButton.section.height * 2))),
+        'y': cardDim['y'],
+        'width': cardDim['height'],
+        'height': cardDim['height']
+      }, pg.Color(255, 255, 255, 64), backgroundSizePercent=75
     )
 
     elementSection = pgx.Section(
@@ -80,6 +89,7 @@ class CharacterBase:
     cardBase[f'{prefix}nameTextBox'] = nameTextBox
     cardBase[f'{prefix}elementSection'] = elementSection
     cardBase[f'{prefix}weaponTypeSection'] = weaponTypeSection
+    cardBase[f'{prefix}nationSection'] = nationSection
     cardBase[f'{prefix}raritySection'] = raritySection
 
     return cardBase

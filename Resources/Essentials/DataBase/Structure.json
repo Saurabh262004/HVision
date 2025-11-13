@@ -20,6 +20,7 @@
                 "Rarity": [0, "CharacterRarity"],
                 "Element": [0, "CharacterElement"],
                 "WeaponClass": [0, "CharacterWeapon"],
+                "Region": [0, "CharacterRegion"],
                 "Model": [0, "CharacterModel"],
                 "ReleaseDate": [0, "CharacterReleaseDate"],
                 "ReleaseVersion": [0, "CharacterReleaseVersion"]

@@ -39,7 +39,7 @@ class CharacterList:
       else:
         newCardDim = {
           'x': self.cardDim['x'],
-          'y': pgx.DynamicValue(getDimY, kwargs={'i': i}),
+          'y': pgx.DynamicValue(getDimY, args={'i': i}),
           'width': self.cardDim['width'],
           'height': self.cardDim['height']
         }
@@ -83,6 +83,11 @@ class CharacterList:
 
     weaponClass = characterDetails['WeaponClass']
 
+    region = characterDetails['Region']
+
+    if f'Nation_Emblem_{region}' not in self.basicAssets:
+      region = 'Unknown'
+
     if rarity < 4 or rarity > 5:
       return False
 
@@ -104,6 +109,8 @@ class CharacterList:
     base[f'{index}_elementSection'].background = self.basicAssets[f'Element_{element}']
 
     base[f'{index}_weaponTypeSection'].background = self.basicAssets[f'WeaponClass_{weaponClass}']
+
+    base[f'{index}_nationSection'].background = self.basicAssets[f'Nation_Emblem_{region}']
 
     base[f'{index}_raritySection'].background = self.basicAssets[f'RarityStars{rarity}']
 

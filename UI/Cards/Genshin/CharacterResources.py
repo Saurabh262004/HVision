@@ -30,7 +30,15 @@ class CharacterResources:
       'Element_Dendro': None,
       'Element_Hydro': None,
       'Element_Pyro': None,
-      'Element_Cryo': None
+      'Element_Cryo': None,
+      'Nation_Emblem_Mondstadt': None,
+      'Nation_Emblem_Liyue': None,
+      'Nation_Emblem_Inazuma': None,
+      'Nation_Emblem_Sumeru': None,
+      'Nation_Emblem_Fontaine': None,
+      'Nation_Emblem_Natlan': None,
+      'Nation_Emblem_Nod-Krai': None,
+      'Nation_Emblem_Unknown': None
     }
 
     for iconKey in basicIcons:

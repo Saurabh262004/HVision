@@ -81,8 +81,8 @@ def getSectionCards():
 
     sectionCard = pgx.Section(
       {
-        'x': pgx.DynamicValue(getSectionX, kwargs={'i': i}),
-        'y': pgx.DynamicValue(getSectionY, kwargs={'i': i}),
+        'x': pgx.DynamicValue(getSectionX, args={'i': i}),
+        'y': pgx.DynamicValue(getSectionY, args={'i': i}),
         'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=sectionWidthPer),
         'height': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=sectionHeightPer)
       }, back, 10

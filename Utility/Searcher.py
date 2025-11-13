@@ -3,7 +3,7 @@ class Searcher:
   def search(items: tuple[str] | list[str], findVal: str) -> list:
     foundList = []
 
-    findVal = findVal.lower()
+    findVal = findVal.strip().lower()
 
     for item in items:
       if findVal in item.lower():
@@ -15,7 +15,7 @@ class Searcher:
   def seachDicts(items: dict[str, dict[str, str]], findVal: str, includeKeys: bool = False) -> list[str]:
     foundList = []
 
-    findVal = findVal.lower()
+    findVal = findVal.strip().lower()
 
     for k1 in items:
       item = items[k1]
