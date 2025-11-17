@@ -25,14 +25,14 @@ class GenshinDBSystems:
 
     listScroller = None
 
-    def updateCListAfterSearch(searchVal: str):
+    def updateCListAfterSearch(value: str):
       nonlocal listScroller, cList
 
       cList.updateListPosition(0)
 
       listScroller.value = 0
 
-      cList.displaySearchAll(searchVal)
+      cList.displaySearchAll(value)
 
       listScroller.valueRange = (0, len(cList.activeList) - 1)
 
@@ -48,12 +48,15 @@ class GenshinDBSystems:
       'Arial', pg.Color(250, 250, 250),
       placeholder='Search...',
       placeholderTextColor=pg.Color(128, 128, 128),
-      onChangeInfo={
-        'callable': updateCListAfterSearch,
-        'params': None,
-        'sendValue': True
-      }
+      callback=pgx.Callback(
+        ('None',),
+        updateCListAfterSearch,
+        extraArgKeys=('value',)
+      )
     )
+
+    def updateListPosition(value: int):
+      cList.updateListPosition(value)
 
     listScroller = pgx.Slider(
       'vertical',
@@ -73,11 +76,13 @@ class GenshinDBSystems:
           'height': pgx.DynamicValue(sharedAssets.app, 'screenHeight', percent=4)
         }, pg.Color(255, 255, 255, 128)
       ), (0, len(cList.characters) - 1), -2, pg.Color(0, 0, 0, 0),
-      {
-        'callable': cList.updateListPosition,
-        'params': None,
-        'sendValue': True
-      }, False
+      pgx.CallbackSet((
+        pgx.Callback(
+          ('scroll', 'mouseDrag', 'mouseDown', 'mouseUp'),
+          updateListPosition,
+          extraArgKeys=('value',)
+        ),
+      )), False
     )
 
     listScroller.lazyUpdate = False

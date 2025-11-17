@@ -24,7 +24,7 @@ def firstUpdate() -> bool | None:
 
   GenshinDBSystems.addGenshinCharacters()
 
-  sharedAssets.app.activateSystems(['genshinCharacters', 'dbIndicator'])
+  sharedAssets.app.activateSystems(['genshinCharacters'])
 
   sharedAssets.app.customData['triggetOPIntroFunc']()
 

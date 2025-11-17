@@ -13,8 +13,7 @@ class CharacterBase:
         7,
         'squish',
         'center_right'
-      ),
-      onClickActuation='buttonUp'
+      )
     )
 
     iconSection = pgx.Section(
