@@ -51,12 +51,9 @@ class GenshinDBSystems:
       callback=pgx.Callback(
         ('None',),
         updateCListAfterSearch,
-        extraArgKeys=('value',)
+        extraArgKeys={'value': 'value'}
       )
     )
-
-    def updateListPosition(value: int):
-      cList.updateListPosition(value)
 
     listScroller = pgx.Slider(
       'vertical',
@@ -79,8 +76,8 @@ class GenshinDBSystems:
       pgx.CallbackSet((
         pgx.Callback(
           ('scroll', 'mouseDrag', 'mouseDown', 'mouseUp'),
-          updateListPosition,
-          extraArgKeys=('value',)
+          cList.updateListPosition,
+          extraArgKeys={'value': 'listPosition'}
         ),
       )), False
     )
