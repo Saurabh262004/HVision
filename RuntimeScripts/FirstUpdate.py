@@ -1,7 +1,5 @@
 from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
-from UI.Systems.Home import addHome
-from UI.Systems.DBUpdateIndicator import addIndicator
-from UI.Systems.Genshin.DBSystems.main import GenshinDBSystems
+from UI.SetupSystems import setupSystems
 import sharedAssets
 
 # implement error messages in the future
@@ -18,13 +16,7 @@ def firstUpdate() -> bool | None:
     print('varifying db in background')
     DBProtocols.verifyDBBackground()
 
-  addHome()
-
-  addIndicator()
-
-  GenshinDBSystems.addGenshinCharacters()
-
-  sharedAssets.app.activateSystems(['genshinCharacters'])
+  setupSystems()
 
   sharedAssets.app.customData['triggetOPIntroFunc']()
 
