@@ -1,2 +1,2 @@
-from UI.Systems.Genshin.DatabaseSystems import GenshinDBSystems
+from UI.Systems.Genshin.DBSystems.main import GenshinDBSystems
 from UI.Systems.Home import addHome

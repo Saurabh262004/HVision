@@ -1,7 +1,7 @@
 from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
 from UI.Systems.Home import addHome
 from UI.Systems.DBUpdateIndicator import addIndicator
-from UI.Systems.Genshin.DatabaseSystems import GenshinDBSystems
+from UI.Systems.Genshin.DBSystems.main import GenshinDBSystems
 import sharedAssets
 
 # implement error messages in the future

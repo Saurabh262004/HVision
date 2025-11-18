@@ -15,7 +15,7 @@ class GenshinDBSystems:
       {
         'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=5),
         'y': pgx.DynamicValue(100),
-        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=90),
+        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=60),
         'height': pgx.DynamicValue(50)
       }, maxListLength=10, padding=10
     )
@@ -41,7 +41,7 @@ class GenshinDBSystems:
         {
           'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=5),
           'y': pgx.DynamicValue(50),
-          'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=90),
+          'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=60),
           'height': pgx.DynamicValue(30)
         }, pg.Color(250, 250, 250, 64), 7
       ),
@@ -84,9 +84,24 @@ class GenshinDBSystems:
 
     listScroller.lazyUpdate = False
 
+    filtersHeader = pgx.TextBox(
+      pgx.Section(
+        {
+          'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=68),
+          'y': pgx.DynamicValue(50),
+          'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=29),
+          'height': pgx.DynamicValue(30)
+        }, pg.Color(250, 250, 250, 64), 7
+      ), 'Filters', 'Arial', pg.Color(200, 200, 200)
+    )
+
+    filtersHeader.drawSectionDefault = True
+
     system.addElement(charInput, 'charInput')
 
     system.addElement(listScroller, 'listScroller')
+
+    system.addElement(filtersHeader, 'filtersHeader')
 
     sharedAssets.app.addSystem(system, 'genshinCharacters')
 
@@ -95,7 +110,3 @@ class GenshinDBSystems:
     cList.displaySearchName('')
 
     return True
-
-  @staticmethod
-  def addGenshinWeapons():
-    pass
