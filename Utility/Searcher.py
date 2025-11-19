@@ -75,7 +75,7 @@ class Searcher:
 
     return [
       k for k, v in items.items()
-      if (isinstance(v, str) and findVal in v) or (findVal == v.strip())
+      if (isinstance(v, str) and findVal in v) or (findVal == v)
     ]
 
   # same as strictDictValSearch except non case sensitive
@@ -95,7 +95,7 @@ class Searcher:
 
     return [
       k for k, v in items.items()
-      if (isinstance(v, str) and findVal in v.lower()) or (findVal == v.strip().lower())
+      if (isinstance(v, str) and findVal in v.lower()) or (findVal == v)
     ]
 
   # look for keys and values in a dict. only returns keys
@@ -104,9 +104,47 @@ class Searcher:
         items: dict,
         findVal: Any,
         searchKeys: bool = True,
-        searchValues: list[str] | tuple[str] | Literal['all'] | None = None,
+        searchValuesAtKeys: list[str] | tuple[str] | Literal['all'] | None = None,
         caseSensitiveSearch: bool = True,
         strictSearch: bool = True
       ) -> list[str]:
+
+    result = []
+
+    if searchKeys:
+      result = Searcher.flatSerialSearch(items, findVal, caseSensitiveSearch, strictSearch, 'keys')
+
+    if searchValuesAtKeys is not None:
+      if searchValuesAtKeys  == 'all':
+        lookupDict = items
+      else:
+        lookupDict = {}
+
+        for key in searchValuesAtKeys:
+          if key in items:
+            lookupDict[key] = items[key]
+
+      if caseSensitiveSearch:
+        if strictSearch:
+          result = list(dict.fromkeys(Searcher.strictDictValSearch(lookupDict, findVal)))
+        else:
+          result = list(dict.fromkeys(Searcher.inclusiveDictValStrSearch(lookupDict, findVal)))
+      else:
+        if strictSearch:
+          result = list(dict.fromkeys(Searcher.ncsStrictDictValSearch(lookupDict, findVal)))
+        else:
+          result = list(dict.fromkeys(Searcher.ncsInclusiveDictValSearch(lookupDict, findVal)))
+
+    return result
+
+  @staticmethod
+  def recursiveDictSearch(
+        items: dict,
+        findVal: Any,
+        searchKeys: bool = True,
+        searchValuesAtKeys: list[str] | tuple[str] | Literal['all'] | None = None,
+        caseSensitiveSearch: bool = True,
+        strictSearch: bool = True
+      ):
 
     pass
