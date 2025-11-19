@@ -168,6 +168,6 @@ class CharacterList:
   def displaySearchAll(self, searchInput: str):
     charDicts = sharedAssets.db['GenshinImpact']['Items']['Characters']
 
-    foundChars = Searcher.seachDicts(charDicts, searchInput, True)
+    foundChars = Searcher.searchDicts(charDicts, searchInput, True)
 
     self.displayCharacters(foundChars)
