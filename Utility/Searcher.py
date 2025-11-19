@@ -3,130 +3,110 @@ from typing import Any, Literal
 class Searcher:
   # basic one-to-one comparison search nothing fancy
   @staticmethod
-  def basicStrictSearch(items: list, findVal: Any) -> list:
-    result = []
+  def basicStrictSearch(items: list, findVal: Any) -> list[Any]:
+    findVal = str(findVal).strip()
 
-    for item in items:
-      if item == findVal:
-        result.append(item)
-
-    return result
+    return [
+      item for item in items
+      if (isinstance(item, str) and item.strip() == findVal) or (item == findVal)
+    ]
 
   # in the items list, look if the findVal exists in individual values if the value is a string else just compaire them directly
   @staticmethod
-  def inclusiveStrSearch(items: list, findVal: str) -> list[str]:
-    result = []
+  def inclusiveSearch(items: list, findVal: str) -> list[Any]:
+    findVal = str(findVal).strip()
 
-    for item in items:
-      if (isinstance(item, str) and findVal in item) or (item == findVal):
-        result.append(item)
+    return [
+      item for item in items
+      if (isinstance(item, str) and findVal in item) or (findVal == item)
+    ]
 
-    return result
-
-  # just combines both the above + case sensitive search. only looks for keys in dicts.
+  # basic strict search - just non case sensitive
   @staticmethod
-  def flatSerialSearch(items: tuple | list | dict, findVal: Any, caseSensitiveSearch: bool = True, strictSearch: bool = True) -> list:
-    if not caseSensitiveSearch:
-      if isinstance(findVal, str):
-        findVal = findVal.strip().lower()
+  def ncsStrictSearch(items: list, findVal: str) -> list[Any]:
+    findVal = str(findVal).strip().lower()
 
-      searchList = [item.lower() if isinstance(item, str) else item for item in items]
+    return [
+      item for item in items
+      if isinstance(item, str) and findVal == item.strip().lower()
+    ]
 
-    else:
-      searchList = [item for item in items]
+  # inclusive search - just non case sensitive
+  @staticmethod
+  def ncsInclusiveSearch(items: list, findVal: str) -> list[Any]:
+    findVal = str(findVal).strip().lower()
 
+    return [
+      item for item in items
+      if (isinstance(item, str) and findVal in item.lower()) or findVal == str(item).strip().lower()
+    ]
+
+  # just combines the above four searches into one
+  @staticmethod
+  def flatSerialSearch(items: tuple | list | dict, findVal: Any, caseSensitiveSearch: bool = True, strictSearch: bool = True, dictSearchMode: Literal['keys', 'values'] = 'values') -> list[Any]:
+    if isinstance(items, dict):
+      if dictSearchMode == 'keys':
+        items = list(items.keys())
+      elif dictSearchMode == 'values':
+        items = list(items.values())
+      else:
+        raise ValueError(f'Invalid dictSearchMode: {dictSearchMode}. Please provide either \'keys\' or \'values\'')
+
+    if caseSensitiveSearch:
+      if strictSearch:
+        return Searcher.basicStrictSearch(items, findVal)
+      return Searcher.inclusiveSearch(items, findVal)
     if strictSearch:
-      return Searcher.basicStrictSearch(searchList, findVal)
+      return Searcher.ncsStrictSearch(items, findVal)
+    return Searcher.ncsInclusiveSearch(items, findVal)
 
-    return Searcher.inclusiveStrSearch(searchList, findVal)
-
-  # look for values in a dict and returs keys associated with those values
+  # search for values in a dict and return the keys
   @staticmethod
   def strictDictValSearch(items: dict, findVal: Any) -> list[str]:
-    result = []
-
-    for k, v in items.items():
-      if v == findVal:
-        result.append(k)
-
-    return result
+    return [
+      k for k, v in items.items()
+      if v == findVal
+    ]
 
   # same as the above except if the value in dict is a string check if the findVal exists inside the value
   @staticmethod
   def inclusiveDictValStrSearch(items: dict[str, Any], findVal: str) -> list[str]:
-    result = []
+    findVal = str(findVal).strip()
 
-    for k, v in items.items():
-      if (isinstance(v, str) and findVal in v) or (findVal == v):
-        result.append(k)
+    return [
+      k for k, v in items.items()
+      if (isinstance(v, str) and findVal in v) or (findVal == v.strip())
+    ]
 
-    return result
-
-  # look for keys and values in a dict
-  type SEARCH_VAL_TYPE = list[str] | tuple[str] | Literal['all'] | None
+  # same as strictDictValSearch except non case sensitive
   @staticmethod
-  def shallowDictSearch(items: dict, findVal: Any, searchKeys: bool = True, searchValues: SEARCH_VAL_TYPE = None, caseSensitiveSearch: bool = True, strictSearch: bool = True) -> list[str]:
-    result = []
+  def ncsStrictDictValSearch(items: dict, findVal: str) -> list[str]:
+    findVal = str(findVal).strip().lower()
 
-    if not caseSensitiveSearch:
-      if isinstance(findVal, str):
-        findVal = findVal.strip().lower()
+    return [
+      k for k, v in items.items()
+      if isinstance(v, str) and findVal == v.strip().lower()
+    ]
 
-    if searchKeys:
-      if not caseSensitiveSearch:
-        searchList = [key.lower() for key in items]
+  # same as inclusiveDictValStrSearch except non case sensitive
+  @staticmethod
+  def ncsInclusiveDictValSearch(items: dict, findVal: str) -> list[str]:
+    findVal = str(findVal).strip().lower()
 
-      else:
-        searchList = [key for key in items]
+    return [
+      k for k, v in items.items()
+      if (isinstance(v, str) and findVal in v.lower()) or (findVal == v.strip().lower())
+    ]
 
-      if strictSearch:
-        result = Searcher.basicStrictSearch(searchList, findVal)
+  # look for keys and values in a dict. only returns keys
+  @staticmethod
+  def shallowDictSearch(
+        items: dict,
+        findVal: Any,
+        searchKeys: bool = True,
+        searchValues: list[str] | tuple[str] | Literal['all'] | None = None,
+        caseSensitiveSearch: bool = True,
+        strictSearch: bool = True
+      ) -> list[str]:
 
-      else:
-        result = Searcher.inclusiveStrSearch(searchList, findVal)
-
-    if searchValues is not None:
-      searchList = []
-
-      if not caseSensitiveSearch:
-        if searchValues == 'all':
-          searchDict = {}
-
-          for k, v in items.items():
-            if isinstance(v, str):
-              searchDict[k] = v.lower()
-
-            else:
-              searchDict[k] = v
-
-        else:
-          searchDict = {}
-
-          for k in searchValues:
-            if k in items:
-              if isinstance(items[k], str):
-                searchDict[k] = items[k].lower()
-
-              else:
-                searchDict[k] = items[k]
-
-      else:
-        if searchValues == 'all':
-          searchDict = {}
-
-          for k, v in items.items():
-            searchDict[k] = v
-
-        else:
-          searchDict = {}
-
-          for k in searchValues:
-            if k in items:
-              searchDict[k] = items[k]
-
-      if strictSearch:
-        result = list(dict.fromkeys(result + Searcher.strictDictValSearch(searchDict, findVal)))
-      else:
-        result = list(dict.fromkeys(result + Searcher.inclusiveDictValStrSearch(searchDict, findVal)))
-
-    return result
+    pass
