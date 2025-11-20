@@ -1,6 +1,7 @@
 from UI.Systems.Home import addHome
 from UI.Systems.DBUpdateIndicator import addIndicator
-from UI.Systems.Genshin.DBSystems import GenshinCharacters
+from UI.Systems.Genshin.DBSystems import DBList as GCDBList
+from UI.Systems.Genshin.DBSystems import SearchFilters as GCDBFilters
 import sharedAssets
 
 def setupSystems():
@@ -8,6 +9,8 @@ def setupSystems():
 
   addIndicator()
 
-  GenshinCharacters.addSystem()
+  GCDBList.addSystem()
 
-  sharedAssets.app.activateSystems(['genshinCharacters'])
+  GCDBFilters.addSystem()
+
+  sharedAssets.app.activateSystems(['GCDBList', 'GCDBFilters'])

@@ -4,16 +4,18 @@ from UI.Cards.Genshin.CharacterList import CharacterList
 import sharedAssets
 
 def addSystem() -> bool:
-  if 'genshinCharacters' in sharedAssets.app.systems:
+  window: pgx.Window = sharedAssets.app
+
+  if 'GCDBList' in window.systems:
     return False
 
-  system = pgx.System()
+  system = pgx.System(preLoadState=True)
 
   cList = CharacterList(
     {
-      'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=5),
+      'x': pgx.DynamicValue(window, 'screenWidth', percent=5),
       'y': pgx.DynamicValue(100),
-      'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=60),
+      'width': pgx.DynamicValue(window, 'screenWidth', percent=60),
       'height': pgx.DynamicValue(50)
     }, maxListLength=10, padding=10
   )
@@ -37,9 +39,9 @@ def addSystem() -> bool:
   charInput = pgx.TextInput(
     pgx.Section(
       {
-        'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=5),
+        'x': pgx.DynamicValue(window, 'screenWidth', percent=5),
         'y': pgx.DynamicValue(50),
-        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=60),
+        'width': pgx.DynamicValue(window, 'screenWidth', percent=60),
         'height': pgx.DynamicValue(30)
       }, pg.Color(250, 250, 250, 64), 7
     ),
@@ -57,18 +59,18 @@ def addSystem() -> bool:
     'vertical',
     pgx.Section(
       {
-        'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=99),
+        'x': pgx.DynamicValue(window, 'screenWidth', percent=99),
         'y': pgx.DynamicValue(0),
-        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=1),
-        'height': pgx.DynamicValue(sharedAssets.app, 'screenHeight')
+        'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
+        'height': pgx.DynamicValue(window, 'screenHeight')
       }, pg.Color(0, 0, 0, 0)
     ),
     pgx.Section(
       {
         'x': pgx.DynamicValue(0),
         'y': pgx.DynamicValue(0),
-        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=1),
-        'height': pgx.DynamicValue(sharedAssets.app, 'screenHeight', percent=4)
+        'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
+        'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
       }, pg.Color(255, 255, 255, 128)
     ), (0, len(cList.characters) - 1), -2, pg.Color(0, 0, 0, 0),
     pgx.CallbackSet((
@@ -82,28 +84,13 @@ def addSystem() -> bool:
 
   listScroller.lazyUpdate = False
 
-  filtersHeader = pgx.TextBox(
-    pgx.Section(
-      {
-        'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=68),
-        'y': pgx.DynamicValue(50),
-        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=29),
-        'height': pgx.DynamicValue(30)
-      }, pg.Color(250, 250, 250, 64), 7
-    ), 'Filters', 'Arial', pg.Color(200, 200, 200)
-  )
-
-  filtersHeader.drawSectionDefault = True
-
   system.addElement(charInput, 'charInput')
 
   system.addElement(listScroller, 'listScroller')
 
-  system.addElement(filtersHeader, 'filtersHeader')
+  window.addSystem(system, 'GCDBList')
 
-  sharedAssets.app.addSystem(system, 'genshinCharacters')
-
-  sharedAssets.app.setSystemZ('genshinCharacters', 1)
+  window.setSystemZ('GCDBList', 1)
 
   cList.displaySearchName('')
 

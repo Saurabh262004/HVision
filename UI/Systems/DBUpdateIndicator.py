@@ -3,7 +3,7 @@ import pg_extended as pgx
 import sharedAssets
 
 def addIndicator():
-  system = pgx.System()
+  system = pgx.System(preLoadState=True)
 
   tetWidth = pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=2)
   tetX = pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=97.5)

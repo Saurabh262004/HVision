@@ -92,10 +92,13 @@ def getSectionCards():
 
   return cards
 
-def addHome():
+def addHome() -> bool:
   window = sharedAssets.app
 
-  home = pgx.UI.System()
+  if 'home' in window.systems:
+    return False
+
+  home = pgx.System(preLoadState=True)
 
   homeBG = pgx.Section(
     {
@@ -154,3 +157,5 @@ def addHome():
   window.addSystem(home, 'home')
 
   window.setSystemZ('home', 0)
+
+  return True
