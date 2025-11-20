@@ -3,8 +3,14 @@ from typing import Any, Literal
 class Searcher:
   # basic one-to-one comparison search nothing fancy
   @staticmethod
-  def basicStrictSearch(items: list, findVal: Any) -> list[Any]:
+  def basicStrictSearch(items: list, findVal: Any, returnIndices: bool = True) -> list[Any]:
     findVal = str(findVal).strip()
+
+    if returnIndices:
+      return [
+        i for i, item in enumerate(items)
+        if (isinstance(item, str) and item.strip() == findVal) or (item == findVal)
+      ]
 
     return [
       item for item in items
@@ -13,8 +19,14 @@ class Searcher:
 
   # in the items list, look if the findVal exists in individual values if the value is a string else just compaire them directly
   @staticmethod
-  def inclusiveSearch(items: list, findVal: str) -> list[Any]:
+  def inclusiveSearch(items: list, findVal: str, returnIndices: bool = True) -> list[Any]:
     findVal = str(findVal).strip()
+
+    if returnIndices:
+      return [
+        i for i, item in enumerate(items)
+        if (isinstance(item, str) and findVal in item) or (findVal == item)
+      ]
 
     return [
       item for item in items
@@ -23,8 +35,14 @@ class Searcher:
 
   # basic strict search - just non case sensitive
   @staticmethod
-  def ncsStrictSearch(items: list, findVal: str) -> list[Any]:
+  def ncsStrictSearch(items: list, findVal: str, returnIndices: bool = True) -> list[Any]:
     findVal = str(findVal).strip().lower()
+
+    if returnIndices:
+      return [
+        i for i, item in enumerate(items)
+        if isinstance(item, str) and findVal == item.strip().lower()
+      ]
 
     return [
       item for item in items
@@ -33,8 +51,14 @@ class Searcher:
 
   # inclusive search - just non case sensitive
   @staticmethod
-  def ncsInclusiveSearch(items: list, findVal: str) -> list[Any]:
+  def ncsInclusiveSearch(items: list, findVal: str, returnIndices: bool = True) -> list[Any]:
     findVal = str(findVal).strip().lower()
+
+    if returnIndices:
+      return [
+        i for i, item in enumerate(items)
+        if (isinstance(item, str) and findVal in item.lower()) or findVal == str(item).strip().lower()
+      ]
 
     return [
       item for item in items
@@ -43,7 +67,7 @@ class Searcher:
 
   # just combines the above four searches into one
   @staticmethod
-  def flatSerialSearch(items: tuple | list | dict, findVal: Any, caseSensitiveSearch: bool = True, strictSearch: bool = True, dictSearchMode: Literal['keys', 'values'] = 'values') -> list[Any]:
+  def flatSerialSearch(items: tuple | list | dict, findVal: Any, caseSensitiveSearch: bool = True, strictSearch: bool = True, dictSearchMode: Literal['keys', 'values'] = 'values', returnIndices: bool = True) -> list[Any]:
     if isinstance(items, dict):
       if dictSearchMode == 'keys':
         items = list(items.keys())
@@ -54,11 +78,11 @@ class Searcher:
 
     if caseSensitiveSearch:
       if strictSearch:
-        return Searcher.basicStrictSearch(items, findVal)
-      return Searcher.inclusiveSearch(items, findVal)
+        return Searcher.basicStrictSearch(items, findVal, returnIndices)
+      return Searcher.inclusiveSearch(items, findVal, returnIndices)
     if strictSearch:
-      return Searcher.ncsStrictSearch(items, findVal)
-    return Searcher.ncsInclusiveSearch(items, findVal)
+      return Searcher.ncsStrictSearch(items, findVal, returnIndices)
+    return Searcher.ncsInclusiveSearch(items, findVal, returnIndices)
 
   # search for values in a dict and return the keys
   @staticmethod
@@ -137,14 +161,77 @@ class Searcher:
 
     return result
 
+  # idk just throw whatever you want at this and it'll do some magic and find your shit. only gives access points (indices for lists/tuples and keys for dicts)
   @staticmethod
-  def recursiveDictSearch(
-        items: dict,
+  def recursiveIterableSearch(
+        items: list | tuple | dict,
         findVal: Any,
-        searchKeys: bool = True,
+        searchDictKeys: bool = True,
         searchValuesAtKeys: list[str] | tuple[str] | Literal['all'] | None = None,
         caseSensitiveSearch: bool = True,
-        strictSearch: bool = True
+        strictSearch: bool = True,
+        maxDepth: int = 5
       ):
 
-    pass
+    result = []
+
+    if isinstance(items, dict):
+      doFlatSearch = False
+
+      for k, v in items.items():
+        if isinstance(v, (list, tuple, dict)) and maxDepth > 0:
+          matches = Searcher.recursiveIterableSearch(
+            v,
+            findVal,
+            searchDictKeys,
+            searchValuesAtKeys,
+            caseSensitiveSearch,
+            strictSearch,
+            maxDepth-1
+          )
+
+          if len(matches) > 0:
+            result.extend([k, matches])
+        else:
+          doFlatSearch = True
+
+      if doFlatSearch:
+        result.extend(Searcher.shallowDictSearch(
+          items,
+          findVal,
+          searchDictKeys,
+          searchValuesAtKeys,
+          caseSensitiveSearch,
+          strictSearch
+        ))
+
+    elif isinstance(items, (list, tuple)):
+      doFlatSearch = False
+
+      for i in range(len(items)):
+        if isinstance(items[i], (list, tuple, dict)) and maxDepth > 0:
+          matches = Searcher.recursiveIterableSearch(
+            items[i],
+            findVal,
+            searchDictKeys,
+            searchValuesAtKeys,
+            caseSensitiveSearch,
+            strictSearch,
+            maxDepth-1
+          )
+
+          if len(matches) > 0:
+            result.extend([i, matches])
+
+        else:
+          doFlatSearch = True
+
+      if doFlatSearch:
+        result.extend(Searcher.flatSerialSearch(
+          items,
+          findVal,
+          caseSensitiveSearch,
+          strictSearch
+        ))
+
+    return result
