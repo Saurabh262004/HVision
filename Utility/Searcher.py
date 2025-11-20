@@ -136,7 +136,7 @@ class Searcher:
     result = []
 
     if searchKeys:
-      result = Searcher.flatSerialSearch(items, findVal, caseSensitiveSearch, strictSearch, 'keys')
+      result = Searcher.flatSerialSearch(items, findVal, caseSensitiveSearch, strictSearch, 'keys', False)
 
     if searchValuesAtKeys is not None:
       if searchValuesAtKeys  == 'all':
@@ -150,16 +150,22 @@ class Searcher:
 
       if caseSensitiveSearch:
         if strictSearch:
-          result = list(dict.fromkeys(Searcher.strictDictValSearch(lookupDict, findVal)))
+          result.extend(list(dict.fromkeys(Searcher.strictDictValSearch(lookupDict, findVal))))
         else:
-          result = list(dict.fromkeys(Searcher.inclusiveDictValStrSearch(lookupDict, findVal)))
+          result.extend(list(dict.fromkeys(Searcher.inclusiveDictValStrSearch(lookupDict, findVal))))
       else:
         if strictSearch:
-          result = list(dict.fromkeys(Searcher.ncsStrictDictValSearch(lookupDict, findVal)))
+          result.extend(list(dict.fromkeys(Searcher.ncsStrictDictValSearch(lookupDict, findVal))))
         else:
-          result = list(dict.fromkeys(Searcher.ncsInclusiveDictValSearch(lookupDict, findVal)))
+          result.extend(list(dict.fromkeys(Searcher.ncsInclusiveDictValSearch(lookupDict, findVal))))
 
-    return result
+    deDuped = []
+
+    for res in result:
+      if res not in deDuped:
+        deDuped.append(res)
+
+    return deDuped
 
   # idk just throw whatever you want at this and it'll do some magic and find your shit. only gives access points (indices for lists/tuples and keys for dicts)
   @staticmethod
@@ -176,7 +182,18 @@ class Searcher:
     result = []
 
     if isinstance(items, dict):
-      doFlatSearch = False
+      if searchDictKeys:
+        matches = Searcher.shallowDictSearch(
+          items,
+          findVal,
+          searchDictKeys,
+          searchValuesAtKeys,
+          caseSensitiveSearch,
+          strictSearch
+        )
+
+        for match in matches:
+          result.append([match])
 
       for k, v in items.items():
         if isinstance(v, (list, tuple, dict)) and maxDepth > 0:
@@ -191,47 +208,41 @@ class Searcher:
           )
 
           if len(matches) > 0:
-            result.extend([k, matches])
-        else:
-          doFlatSearch = True
+            result.append([k])
+            result[-1].append(matches)
 
-      if doFlatSearch:
-        result.extend(Searcher.shallowDictSearch(
+    elif isinstance(items, (list, tuple)):
+      deepSearches = []
+
+      if maxDepth > 0:
+        for i in range(len(items)):
+          if isinstance(items[i], (list, tuple, dict)):
+            deepSearches.append(i)
+
+      if not len(deepSearches) == len(items):
+        matches = Searcher.flatSerialSearch(
           items,
+          findVal,
+          caseSensitiveSearch,
+          strictSearch
+        )
+
+        for match in matches:
+          result.append([match])
+
+      for i in deepSearches:
+        matches = Searcher.recursiveIterableSearch(
+          items[i],
           findVal,
           searchDictKeys,
           searchValuesAtKeys,
           caseSensitiveSearch,
-          strictSearch
-        ))
+          strictSearch,
+          maxDepth-1
+        )
 
-    elif isinstance(items, (list, tuple)):
-      doFlatSearch = False
-
-      for i in range(len(items)):
-        if isinstance(items[i], (list, tuple, dict)) and maxDepth > 0:
-          matches = Searcher.recursiveIterableSearch(
-            items[i],
-            findVal,
-            searchDictKeys,
-            searchValuesAtKeys,
-            caseSensitiveSearch,
-            strictSearch,
-            maxDepth-1
-          )
-
-          if len(matches) > 0:
-            result.extend([i, matches])
-
-        else:
-          doFlatSearch = True
-
-      if doFlatSearch:
-        result.extend(Searcher.flatSerialSearch(
-          items,
-          findVal,
-          caseSensitiveSearch,
-          strictSearch
-        ))
+        if len(matches) > 0:
+          result.append([i])
+          result[-1].append(matches)
 
     return result

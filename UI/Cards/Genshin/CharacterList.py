@@ -162,12 +162,24 @@ class CharacterList:
     self.displayCharacters('prev')
 
   def displaySearchName(self, searchInput: str):
-    foundChars = Searcher.flatSerialSearch(self.characters, searchInput, True, False)
+    foundChars = Searcher.flatSerialSearch(self.characters, searchInput, True, False, returnIndices=False)
     self.displayCharacters(foundChars)
 
   def displaySearchAll(self, searchInput: str):
     charDicts = sharedAssets.db['GenshinImpact']['Items']['Characters']
 
-    foundChars = Searcher.shallowDictSearch(charDicts, searchInput, True, 'all', False, False)
+    searchResult = Searcher.recursiveIterableSearch(
+      charDicts,
+      searchInput,
+      True,
+      'all',
+      False,
+      False
+    )
 
-    self.displayCharacters(foundChars)
+    charList = []
+
+    for accessPoints in searchResult:
+      charList.append(accessPoints[0])
+
+    self.displayCharacters(charList)
