@@ -14,16 +14,28 @@ def addSystem() -> bool:
     pgx.Section(
       {
         'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=68),
-        'y': pgx.DynamicValue(50),
+        'y': pgx.DynamicValue(window, 'screenHeight', percent=3),
         'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=29),
-        'height': pgx.DynamicValue(30)
+        'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
       }, pg.Color(250, 250, 250, 64), 7
     ), 'Filters', 'Arial', pg.Color(200, 200, 200)
   )
 
   filtersHeader.drawSectionDefault = True
 
-  system.addElement(filtersHeader, 'filtersHeader')
+  filterSection = pgx.Section(
+    {
+      'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=68),
+      'y': pgx.DynamicValue(window, 'screenHeight', percent=10),
+      'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=29),
+      'height': pgx.DynamicValue(window, 'screenHeight', percent=80)
+    }, pg.Color(250, 250, 250, 64), 7
+  )
+
+  system.addElements({
+    'filtersHeader': filtersHeader,
+    'filterSection': filterSection
+  })
 
   window.addSystem(system, 'GCDBFilters')
 

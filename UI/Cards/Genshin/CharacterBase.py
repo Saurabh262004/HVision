@@ -18,7 +18,7 @@ class CharacterBase:
 
     iconSection = pgx.Section(
       {
-        'x': cardDim['x'],
+        'x': pgx.DynamicValue(lambda: cardDim['x'].value + (cardDim['width'].value / 100)),
         'y': cardDim['y'],
         'width': cardDim['height'],
         'height': cardDim['height']
@@ -27,7 +27,7 @@ class CharacterBase:
 
     nameSection = pgx.Section(
       {
-        'x': pgx.DynamicValue(lambda: cardButton.section.x + iconSection.width),
+        'x': pgx.DynamicValue(lambda: iconSection.x + iconSection.width),
         'y': cardDim['y'],
         'width': pgx.DynamicValue(lambda: cardButton.section.width - iconSection.width),
         'height': cardDim['height']

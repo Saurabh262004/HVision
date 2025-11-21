@@ -5,10 +5,8 @@ from Utility import Searcher
 import sharedAssets
 
 class CharacterList:
-  def __init__(self, cardDim: dict[str, pgx.DynamicValue], callback: callable = None, callbackParams: list = None, lazyCards: bool = True, maxListLength: int = 5, padding: int = 5):
+  def __init__(self, cardDim: dict[str, pgx.DynamicValue], maxListLength: int, padding: pgx.DynamicValue, lazyCards: bool = True):
     self.cardDim = cardDim
-    self.callback = callback
-    self.callbackParams = callbackParams
     self.lazyCards = lazyCards
     self.maxListLength = maxListLength
     self.padding = padding
@@ -31,7 +29,8 @@ class CharacterList:
     self.characterIcons = CharacterResources.getCharacterIcons(self.characters, self.imageDBPath)
 
     def getDimY(i):
-      return self.cardDim['y'].value + ((self.cardDim['height'].value + self.padding) * i)
+      self.padding.resolveValue()
+      return self.cardDim['y'].value + ((self.cardDim['height'].value + self.padding.value) * i)
 
     for i in range(self.maxListLength):
       if i == 0:

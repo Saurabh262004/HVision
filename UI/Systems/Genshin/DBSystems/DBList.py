@@ -14,10 +14,10 @@ def addSystem() -> bool:
   cList = CharacterList(
     {
       'x': pgx.DynamicValue(window, 'screenWidth', percent=5),
-      'y': pgx.DynamicValue(100),
+      'y': pgx.DynamicValue(window, 'screenHeight', percent=10),
       'width': pgx.DynamicValue(window, 'screenWidth', percent=60),
-      'height': pgx.DynamicValue(50)
-    }, maxListLength=10, padding=10
+      'height': pgx.DynamicValue(window, 'screenHeight', percent=7)
+    }, 11, pgx.DynamicValue(window, 'screenHeight', percent=1)
   )
 
   for card in cList.listCards:
@@ -40,9 +40,9 @@ def addSystem() -> bool:
     pgx.Section(
       {
         'x': pgx.DynamicValue(window, 'screenWidth', percent=5),
-        'y': pgx.DynamicValue(50),
+        'y': pgx.DynamicValue(window, 'screenHeight', percent=3),
         'width': pgx.DynamicValue(window, 'screenWidth', percent=60),
-        'height': pgx.DynamicValue(30)
+        'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
       }, pg.Color(250, 250, 250, 64), 7
     ),
     'Arial', pg.Color(250, 250, 250),
