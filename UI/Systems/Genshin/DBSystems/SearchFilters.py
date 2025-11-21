@@ -28,7 +28,7 @@ def addSystem() -> bool:
       'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=68),
       'y': pgx.DynamicValue(window, 'screenHeight', percent=10),
       'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=29),
-      'height': pgx.DynamicValue(window, 'screenHeight', percent=80)
+      'height': pgx.DynamicValue(window, 'screenHeight', percent=87)
     }, pg.Color(250, 250, 250, 64), 7
   )
 

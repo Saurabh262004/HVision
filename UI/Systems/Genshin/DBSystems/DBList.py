@@ -11,6 +11,15 @@ def addSystem() -> bool:
 
   system = pgx.System(preLoadState=True)
 
+  bg = pgx.Section(
+    {
+      'x': pgx.DynamicValue(0),
+      'y': pgx.DynamicValue(0),
+      'width': pgx.DynamicValue(window, 'screenWidth'),
+      'height': pgx.DynamicValue(window, 'screenHeight')
+    }, pg.Color(20, 10, 20)
+  )
+
   cList = CharacterList(
     {
       'x': pgx.DynamicValue(window, 'screenWidth', percent=5),
@@ -19,9 +28,6 @@ def addSystem() -> bool:
       'height': pgx.DynamicValue(window, 'screenHeight', percent=7)
     }, 11, pgx.DynamicValue(window, 'screenHeight', percent=1)
   )
-
-  for card in cList.listCards:
-    system.addElements(card)
 
   listScroller = None
 
@@ -84,9 +90,14 @@ def addSystem() -> bool:
 
   listScroller.lazyUpdate = False
 
-  system.addElement(charInput, 'charInput')
+  system.addElements({
+    'bg': bg,
+    'charInput': charInput,
+    'listScroller': listScroller
+  })
 
-  system.addElement(listScroller, 'listScroller')
+  for card in cList.listCards:
+    system.addElements(card)
 
   window.addSystem(system, 'GCDBList')
 
