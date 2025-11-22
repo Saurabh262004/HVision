@@ -188,13 +188,12 @@ class Searcher:
           findVal,
           caseSensitiveSearch,
           strictSearch,
-          'keys'
+          'keys',
+          False
         )
         
-        keys = list(items.keys())
-
         for match in matches:
-          result.append([keys[match]])
+          result.append([match])
 
       if searchValuesAtKeys is not None:
         matches = Searcher.shallowDictSearch(
