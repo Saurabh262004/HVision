@@ -13,6 +13,22 @@ class CharacterList:
 
     self.characters: list[str] = []
 
+    self.filters: tuple[str] = (
+      'Rarity',
+      'Element',
+      'WeaponClass',
+      'Region',
+      'Model'
+    )
+
+    self.activeFilters: dict[str, list[str]] = {
+      'Rarity': [],
+      'Element': [],
+      'WeaponClass': [],
+      'Region': [],
+      'Model': []
+    }
+
     self.activeList: list[str] = []
 
     self.listCards: list[dict[str, pgx.UIElement]] = []
@@ -160,17 +176,87 @@ class CharacterList:
     self.listPosition = int(listPosition)
     self.displayCharacters('prev')
 
+  def activateFilters(self, filterType: str, filterData: str | list[str] | tuple[str]) -> bool:
+    if filterType not in self.filters:
+      return False
+
+    if isinstance(filterData, (str)):
+      filterData = (filterData,)
+
+    for data in filterData:
+      if not filterData in self.activeFilters[filterType]:
+        self.activeFilters[filterType].append(data)
+
+    return True
+
+  def deactivateFilters(self, filterType: str, filterData: str | list[str] | tuple[str]) -> bool:
+    if filterType not in self.filters:
+      return False
+
+    if isinstance(filterData, str):
+      filterData = (filterData,)
+
+    for data in filterData:
+      if data in self.activeFilters[filterType]:
+        self.activeFilters[filterType].remove(data)
+
+    return True
+
+  def deactivateFiltersAll(self):
+    for filterType in self.activeFilters:
+      self.activeFilters[filterType] = []
+
+  def getFilteredChars(self) -> dict[str, dict[str, str]]:
+    charDicts = sharedAssets.db['GenshinImpact']['Items']['Characters']
+
+    activeFiltersCount = 0
+
+    for filterType in self.activeFilters:
+      activeFiltersCount += len(self.activeFilters[filterType])
+
+    if activeFiltersCount == 0:
+      return charDicts
+
+    multipleFilterMatches = []
+
+    for filterType in self.activeFilters:
+      if len(self.activeFilters[filterType]) == 0:
+        continue
+
+      singleFilterMatches = []
+
+      for filterData in self.activeFilters[filterType]:
+        for charName, charData in charDicts.items():
+          if (charData[filterType] == filterData) and (charName not in singleFilterMatches):
+            singleFilterMatches.append(charName)
+
+      multipleFilterMatches.append(singleFilterMatches)
+
+    results = {}
+
+    for char in charDicts:
+      addChar = True
+
+      for singleFilterMatches in multipleFilterMatches:
+        if char not in singleFilterMatches:
+          addChar = False
+
+      if addChar:
+        results[char] = charDicts[char]
+
+    return results
+
   def displaySearchName(self, searchInput: str):
     foundChars = Searcher.flatSerialSearch(self.characters, searchInput, True, False, returnIndices=False)
     self.displayCharacters(foundChars)
 
   def displaySearchAll(self, searchInput: str):
-    charDicts = sharedAssets.db['GenshinImpact']['Items']['Characters']
+    filterdDict = self.getFilteredChars()
 
     searchResult = Searcher.recursiveIterableSearch(
-      charDicts,
+      filterdDict,
       searchInput,
-      True,
+      False,
       'all',
       False,
       False

@@ -103,6 +103,6 @@ def addSystem() -> bool:
 
   window.setSystemZ('GCDBList', 1)
 
-  cList.displaySearchName('')
+  cList.displaySearchAll('')
 
   return True

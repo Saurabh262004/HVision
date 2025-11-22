@@ -133,10 +133,10 @@ class Searcher:
         strictSearch: bool = True
       ) -> list[str]:
 
-    result = []
+    results = []
 
     if searchKeys:
-      result = Searcher.flatSerialSearch(items, findVal, caseSensitiveSearch, strictSearch, 'keys', False)
+      results = Searcher.flatSerialSearch(items, findVal, caseSensitiveSearch, strictSearch, 'keys', False)
 
     if searchValuesAtKeys is not None:
       if searchValuesAtKeys  == 'all':
@@ -150,20 +150,20 @@ class Searcher:
 
       if caseSensitiveSearch:
         if strictSearch:
-          result.extend(list(dict.fromkeys(Searcher.strictDictValSearch(lookupDict, findVal))))
+          results.extend(list(dict.fromkeys(Searcher.strictDictValSearch(lookupDict, findVal))))
         else:
-          result.extend(list(dict.fromkeys(Searcher.inclusiveDictValStrSearch(lookupDict, findVal))))
+          results.extend(list(dict.fromkeys(Searcher.inclusiveDictValStrSearch(lookupDict, findVal))))
       else:
         if strictSearch:
-          result.extend(list(dict.fromkeys(Searcher.ncsStrictDictValSearch(lookupDict, findVal))))
+          results.extend(list(dict.fromkeys(Searcher.ncsStrictDictValSearch(lookupDict, findVal))))
         else:
-          result.extend(list(dict.fromkeys(Searcher.ncsInclusiveDictValSearch(lookupDict, findVal))))
+          results.extend(list(dict.fromkeys(Searcher.ncsInclusiveDictValSearch(lookupDict, findVal))))
 
     deDuped = []
 
-    for res in result:
-      if res not in deDuped:
-        deDuped.append(res)
+    for result in results:
+      if result not in deDuped:
+        deDuped.append(result)
 
     return deDuped
 
@@ -183,10 +183,24 @@ class Searcher:
 
     if isinstance(items, dict):
       if searchDictKeys:
+        matches = Searcher.flatSerialSearch(
+          items,
+          findVal,
+          caseSensitiveSearch,
+          strictSearch,
+          'keys'
+        )
+        
+        keys = list(items.keys())
+
+        for match in matches:
+          result.append([keys[match]])
+
+      if searchValuesAtKeys is not None:
         matches = Searcher.shallowDictSearch(
           items,
           findVal,
-          searchDictKeys,
+          False,
           searchValuesAtKeys,
           caseSensitiveSearch,
           strictSearch
