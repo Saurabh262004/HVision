@@ -256,7 +256,7 @@ class CharacterList:
     searchResult = Searcher.recursiveIterableSearch(
       filterdDict,
       searchInput,
-      False,
+      True,
       'all',
       False,
       False
