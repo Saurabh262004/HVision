@@ -2,6 +2,7 @@ import os
 import pygame as pg
 import pg_extended as pgx
 import sharedAssets
+from UI import SystemSwitch
 
 HOME_CARDS_DATA = {
   'titles': (
@@ -12,10 +13,18 @@ HOME_CARDS_DATA = {
     'Genshin_Logo',
     'Zenless_Logo'
   ),
+  'bgSizes': (
+    150,
+    70
+  ),
+  'systems': (
+    ['Nav', 'GCDBList', 'GCDBFilters'],
+    []
+  ),
   'len': 2
 }
 
-def getSectionCards():
+def getSectionCards(container: pgx.Section) -> dict[str, pgx.UIElement]:
   global HOME_CARDS_DATA
 
   imageDBLocation = sharedAssets.config['ImageDBLocation']
@@ -42,7 +51,9 @@ def getSectionCards():
   def getSectionX(i: int):
     nonlocal per, sectionWidthPer, marginPer, matrixRows
 
-    sw = sharedAssets.app.screenWidth
+    sx = container.x
+
+    sw = container.width
 
     i = i % matrixRows
 
@@ -50,14 +61,16 @@ def getSectionCards():
 
     sectionWidth = per(sw, sectionWidthPer + marginPer)
 
-    return padding + (sectionWidth * i)
+    return sx + padding + (sectionWidth * i)
 
   def getSectionY(i: int):
     nonlocal per, sectionWidthPer, sectionHeightPer, marginPer, matrixRows
 
-    sh = sharedAssets.app.screenHeight
+    sy = container.y
 
-    sw = sharedAssets.app.screenWidth
+    sh = container.height
+
+    sw = container.width
 
     i = int(i / matrixRows)
 
@@ -65,52 +78,64 @@ def getSectionCards():
 
     sectionHeight = per(sw, sectionHeightPer) + per(sw, marginPer)
 
-    return padding + (sectionHeight * i)
+    return sy + padding + (sectionHeight * i)
 
   cards = {}
   for i in range(HOME_CARDS_DATA['len']):
-    # title = HOME_CARDS_DATA['titles'][i]
-
-    back = pg.Surface((sectionWidthPer * 30, sectionHeightPer * 30), pg.SRCALPHA)
-
-    back.fill(pg.Color(100, 100, 100, 64))
-
-    icon = pgx.Util.ImgManipulation.fit(icons[i], back.get_size(), True)
-
-    back.blit(icon)
-
-    sectionCard = pgx.Section(
+    bg = pgx.Section(
       {
         'x': pgx.DynamicValue(getSectionX, args={'i': i}),
         'y': pgx.DynamicValue(getSectionY, args={'i': i}),
-        'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=sectionWidthPer),
-        'height': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=sectionHeightPer)
-      }, back, 10
+        'width': pgx.DynamicValue(container, 'width', percent=sectionWidthPer),
+        'height': pgx.DynamicValue(container, 'width', percent=sectionHeightPer)
+      }, pg.Color(100, 100, 100, 64), 10
     )
 
-    cards[HOME_CARDS_DATA['iconNames'][i]] = sectionCard
+    icon = pgx.Section(
+      bg.dimensions, icons[i], 0, 'fit', 'center', HOME_CARDS_DATA['bgSizes'][i]
+    )
+
+    btn = pgx.Button(
+      bg,
+      callback=pgx.CallbackSet(
+        (
+          pgx.Callback(
+            ('mouseUp',),
+            SystemSwitch.switch,
+            {
+              'systems': HOME_CARDS_DATA['systems'][i]
+            }
+          ),
+        )
+      )
+    )
+
+    cards[f'{HOME_CARDS_DATA['iconNames'][i]}_btn'] = btn
+    cards[f'{HOME_CARDS_DATA['iconNames'][i]}_icon'] = icon
 
   return cards
 
 def addHome() -> bool:
   window = sharedAssets.app
 
-  if 'home' in window.systems:
+  if 'Home' in window.systems:
     return False
 
   home = pgx.System(preLoadState=True)
 
-  homeBG = pgx.Section(
+  homeContainer = pgx.Section(
     {
-      'x': pgx.DynamicValue(0),
+      'x': pgx.DynamicValue(window, 'screenWidth', percent=7),
       'y': pgx.DynamicValue(0),
-      'width': pgx.DynamicValue(window, 'screenWidth'),
+      'width': pgx.DynamicValue(window, 'screenWidth', percent=93),
       'height': pgx.DynamicValue(window, 'screenHeight')
     }, pg.Color(20, 10, 20)
   )
 
-  opTitleStart = pgx.DynamicValue(window, 'screenHeight')
-  opTitleEnd = pgx.DynamicValue(window, 'screenHeight', percent=20)
+  homeContainer.activeDraw = False
+
+  opTitleStart = pgx.DynamicValue(homeContainer, 'height')
+  opTitleEnd = pgx.DynamicValue(homeContainer, 'height', percent=20)
 
   openingAnim = pgx.AnimatedValue(
     (
@@ -123,9 +148,9 @@ def addHome() -> bool:
   HVisionText = pgx.TextBox(
     pgx.Section(
       {
-        'x': pgx.DynamicValue(0),
+        'x': pgx.DynamicValue(homeContainer, 'x'),
         'y': pgx.DynamicValue(0),
-        'width': pgx.DynamicValue(window, 'screenWidth'),
+        'width': pgx.DynamicValue(homeContainer, 'width'),
         'height': pgx.DynamicValue(openingAnim, 'value')
       }, pg.Color(20, 10, 20), 8
     ),
@@ -137,7 +162,7 @@ def addHome() -> bool:
 
   HVisionText.lazyUpdate = False
 
-  cards = getSectionCards()
+  cards = getSectionCards(homeContainer)
 
   def triggetOPIntro():
     nonlocal openingAnim
@@ -148,14 +173,14 @@ def addHome() -> bool:
 
   window.customAnimatedValues['openingAnim'] = openingAnim
 
-  home.addElement(homeBG, 'homeBG')
+  home.addElement(homeContainer, 'homeBG')
 
   home.addElement(HVisionText, 'HVisionText')
 
   home.addElements(cards)
 
-  window.addSystem(home, 'home')
+  window.addSystem(home, 'Home')
 
-  window.setSystemZ('home', 0)
+  window.setSystemZ('Home', 0)
 
   return True
