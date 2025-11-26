@@ -4,25 +4,20 @@ import pg_extended as pgx
 import sharedAssets
 from UI import SystemSwitch
 
-HOME_CARDS_DATA = {
-  'titles': (
-    'Genshin Impact',
-    'Zenless Zone Zero'
-  ),
-  'iconNames': (
-    'Genshin_Logo',
-    'Zenless_Logo'
-  ),
-  'bgSizes': (
-    150,
-    70
-  ),
-  'systems': (
-    ['Nav', 'GCDBList', 'GCDBFilters'],
-    []
-  ),
-  'len': 2
-}
+HOME_CARDS_DATA = (
+  {
+    'titles': 'Genshin Impact',
+    'iconName': 'Genshin_Logo',
+    'bgSize': 150,
+    'systems': ['Nav', 'GCDBList', 'GCDBFilters']
+  },
+  {
+    'titles': 'Zenless Zone Zero',
+    'iconName': 'Zenless_Logo',
+    'bgSize': 70,
+    'systems': ['Nav', 'Home']
+  }
+)
 
 def getSectionCards(container: pgx.Section) -> dict[str, pgx.UIElement]:
   global HOME_CARDS_DATA
@@ -34,11 +29,11 @@ def getSectionCards(container: pgx.Section) -> dict[str, pgx.UIElement]:
       os.path.join(
         imageDBLocation,
         'common',
-        iconName
+        card['iconName']
       )
     ).convert_alpha()
 
-    for iconName in HOME_CARDS_DATA['iconNames']
+    for card in HOME_CARDS_DATA
   ]
 
   per = lambda val, perc: val / 100 * perc
@@ -81,7 +76,7 @@ def getSectionCards(container: pgx.Section) -> dict[str, pgx.UIElement]:
     return sy + padding + (sectionHeight * i)
 
   cards = {}
-  for i in range(HOME_CARDS_DATA['len']):
+  for i in range(len(HOME_CARDS_DATA)):
     bg = pgx.Section(
       {
         'x': pgx.DynamicValue(getSectionX, args={'i': i}),
@@ -92,26 +87,26 @@ def getSectionCards(container: pgx.Section) -> dict[str, pgx.UIElement]:
     )
 
     icon = pgx.Section(
-      bg.dimensions, icons[i], 0, 'fit', 'center', HOME_CARDS_DATA['bgSizes'][i]
+      bg.dimensions, icons[i], 0, 'fit', 'center', HOME_CARDS_DATA[i]['bgSize']
     )
 
     btn = pgx.Button(
-      bg,
-      callback=pgx.CallbackSet(
+      pgx.TextBox(bg, '', 'arial', pg.Color(0, 0, 0)),
+      pgx.CallbackSet(
         (
           pgx.Callback(
             ('mouseUp',),
             SystemSwitch.switch,
             {
-              'systems': HOME_CARDS_DATA['systems'][i]
+              'systems': HOME_CARDS_DATA[i]['systems']
             }
           ),
         )
       )
     )
 
-    cards[f'{HOME_CARDS_DATA['iconNames'][i]}_btn'] = btn
-    cards[f'{HOME_CARDS_DATA['iconNames'][i]}_icon'] = icon
+    cards[f'{HOME_CARDS_DATA[i]['iconName']}_btn'] = btn
+    cards[f'{HOME_CARDS_DATA[i]['iconName']}_icon'] = icon
 
   return cards
 

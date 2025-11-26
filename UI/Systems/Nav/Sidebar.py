@@ -1,15 +1,27 @@
 import pygame as pg
 import pg_extended as pgx
+from UI import SystemSwitch
 import sharedAssets
 
 BTN_INFO = (
-  {'title': 'HVision', 'bg': None, 'textSize': 10},
+  {
+    'title': 'HVision',
+    'bg': None,
+    'textSize': 10,
+    'systems': ['Nav', 'Home']
+  },
+  {
+    'title': 'Genshin',
+    'bg': None,
+    'textSize': 10,
+    'systems': ['Nav', 'GCDBList', 'GCDBFilters']
+  },
 )
 
 def getBTNY(container: pgx.Section, index: int) -> int | float:
   per = lambda n, p: n / 100 * p
 
-  margin = per(container.height, 5)
+  margin = per(container.width, 10)
 
   btnH = per(container.width, 80)
 
@@ -21,21 +33,27 @@ def getBTN(container: pgx.Section, index: int) -> pgx.Button:
   btnS = pgx.DynamicValue(container, 'width', percent=80)
 
   btn = pgx.Button(
-    pgx.Section(
-      {
-        'x': pgx.DynamicValue(container, 'width', percent=20),
-        'y': pgx.DynamicValue(getBTNY, args={'container': container, 'index': index}),
-        'width': btnS,
-        'height': btnS
-      }, pg.Color(0, 0, 0)
-    ), text=BTN_INFO[index]['title'], fontPath='Arial', textColor=pg.Color(255, 255, 255),
-    callback=pgx.CallbackSet((
-      pgx.Callback(
-        'mouseUp',
-        print,
-        {'*values': 'hello?'}
-      ),
-    ))
+    pgx.TextBox(
+      pgx.Section(
+        {
+          'x': pgx.DynamicValue(container, 'width', percent=10),
+          'y': pgx.DynamicValue(getBTNY, args={'container': container, 'index': index}),
+          'width': btnS,
+          'height': btnS
+        }, pg.Color(0, 0, 0)
+      ), BTN_INFO[index]['title'], 'Arial', pg.Color(255, 255, 255), pgx.DynamicValue(btnS, percent=20)
+    ),
+    pgx.CallbackSet(
+      (
+        pgx.Callback(
+          ('mouseUp',),
+          SystemSwitch.switch,
+          {
+            'systems': BTN_INFO[index]['systems']
+          }
+        ),
+      )
+    )
   )
 
   return btn

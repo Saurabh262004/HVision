@@ -7,12 +7,14 @@ class CharacterBase:
     cardBase = {}
 
     cardButton = pgx.Button(
-      pgx.Section(
-        cardDim,
-        pg.Color(255, 255, 255, 64),
-        7,
-        'squish',
-        'center_right'
+      pgx.TextBox(
+        pgx.Section(
+          cardDim,
+          pg.Color(255, 255, 255, 64),
+          7,
+          'squish',
+          'center_right'
+        ), '', 'arial', pg.Color(0, 0, 0)
       )
     )
 
