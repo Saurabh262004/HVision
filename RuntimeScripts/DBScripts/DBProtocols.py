@@ -261,8 +261,6 @@ class DBProtocols:
       DBProtocols.loadDBStructure()
 
       if sharedAssets.dbStructure is None:
-        DBProtocols.dbEventClose('DBSafe')
-
         print('Fatal: Couldn\'t load Database structure')
 
         return False
@@ -293,8 +291,6 @@ class DBProtocols:
         print('Info: Database file exists')
 
     if not validDB:
-      DBProtocols.dbEventClose('DBSafe')
-
       print('Error: No valid Database exists, generating new Database')
 
       if not DBProtocols.generateDB():
@@ -318,8 +314,6 @@ class DBProtocols:
         print('Info: Database is old, Generating new Database')
 
         if not DBProtocols.generateDB():
-          DBProtocols.dbEventClose('DBSafe')
-
           print('Fatal: Couldn\'t generate new Database')
 
           return False
@@ -328,8 +322,6 @@ class DBProtocols:
 
       else:
         print('DB isn\'t old enough. It won\'t be updated')
-
-    DBProtocols.dbEventOpen('DBSafe')
 
     return True
 
