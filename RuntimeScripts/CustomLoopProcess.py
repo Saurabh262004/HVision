@@ -1,6 +1,6 @@
-import os
 import pg_extended as pgx
 from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
+from RuntimeScripts.DBScripts.InternalUpdates import InternalUpdates
 from RuntimeScripts.FirstUpdate import firstUpdate
 import sharedAssets
 
@@ -14,9 +14,10 @@ def customLoopProcess():
       Exception('You fucked up bad...')
 
   if DBProtocols.dbEventCheck('DBUpdate'):
-    DBProtocols.loadDB()
-    DBProtocols.dbEventClose('DBUpdate')
+    print('Updating Internal Database...')
+    InternalUpdates.updateInternalDB()
 
     if 'GCList' in window.customData:
-      window.customData['GCList'].updateCharactersData()
-      window.customData['GCList'].prevSearchMethod(window.customData['GCList'].prevSearch)
+      InternalUpdates.updateGCList()
+
+    print('Internal Database Updated Successfully')

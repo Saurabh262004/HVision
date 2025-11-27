@@ -13,7 +13,6 @@ class CharacterList:
     self.padding = padding
 
     self.characters: list[str] = []
-    
     self.characterIcons: dict[str, pg.Surface] = {}
 
     self.prevSearch: str = ''
