@@ -1,3 +1,4 @@
+import pygame as pg
 import pg_extended as pgx
 from UI.Cards.Genshin.CharacterResources import CharacterResources
 from UI.Cards.Genshin.CharacterBase import CharacterBase
@@ -12,6 +13,11 @@ class CharacterList:
     self.padding = padding
 
     self.characters: list[str] = []
+    
+    self.characterIcons: dict[str, pg.Surface] = {}
+
+    self.prevSearch: str = ''
+    self.prevSearchMethod = self.displaySearchName
 
     self.filters: tuple[str] = (
       'Rarity',
@@ -39,10 +45,7 @@ class CharacterList:
 
     self.basicAssets = CharacterResources.getBasicResources(self.imageDBPath)
 
-    for char in sharedAssets.db['GenshinImpact']['Items']['Characters']:
-      self.characters.append(char)
-
-    self.characterIcons = CharacterResources.getCharacterIcons(self.characters, self.imageDBPath)
+    self.updateCharactersData()
 
     def getDimY(i):
       self.padding.resolveValue()
@@ -62,6 +65,14 @@ class CharacterList:
       self.listCards.append(CharacterBase.getCardBase(newCardDim, f'{str(i)}_'))
 
     self.setActiveCards(0)
+
+  def updateCharactersData(self):
+    self.characters = []
+
+    for char in sharedAssets.db['GenshinImpact']['Items']['Characters']:
+      self.characters.append(char)
+
+    self.characterIcons = CharacterResources.getCharacterIcons(self.characters, self.imageDBPath)
 
   def setLazyCards(self, lazyUpdate: bool):
     for card in self.listCards:
@@ -247,10 +258,17 @@ class CharacterList:
     return results
 
   def displaySearchName(self, searchInput: str):
+    self.prevSearch = searchInput
+    self.prevSearchMethod = self.displaySearchName
+
     foundChars = Searcher.flatSerialSearch(self.characters, searchInput, True, False, returnIndices=False)
+
     self.displayCharacters(foundChars)
 
   def displaySearchAll(self, searchInput: str):
+    self.prevSearch = searchInput
+    self.prevSearchMethod = self.displaySearchAll
+
     filterdDict = self.getFilteredChars()
 
     searchResult = Searcher.recursiveIterableSearch(

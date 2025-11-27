@@ -16,3 +16,7 @@ def customLoopProcess():
   if DBProtocols.dbEventCheck('DBUpdate'):
     DBProtocols.loadDB()
     DBProtocols.dbEventClose('DBUpdate')
+
+    if 'GCList' in window.customData:
+      window.customData['GCList'].updateCharactersData()
+      window.customData['GCList'].prevSearchMethod(window.customData['GCList'].prevSearch)

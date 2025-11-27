@@ -99,6 +99,8 @@ def addSystem() -> bool:
   for card in cList.listCards:
     system.addElements(card)
 
+  window.customData['GCList'] = cList
+
   window.addSystem(system, 'GCDBList')
 
   window.setSystemZ('GCDBList', 1)
