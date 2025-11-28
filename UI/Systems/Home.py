@@ -118,6 +118,15 @@ def addHome() -> bool:
 
   home = pgx.System(preLoadState=True)
 
+  homeBG = pgx.Section(
+    {
+      'x': pgx.DynamicValue(0),
+      'y': pgx.DynamicValue(0),
+      'width': pgx.DynamicValue(window, 'screenWidth'),
+      'height': pgx.DynamicValue(window, 'screenHeight')
+    }, pg.Color(20, 10, 20)
+  )
+
   homeContainer = pgx.Section(
     {
       'x': pgx.DynamicValue(window, 'screenWidth', percent=7),
@@ -168,7 +177,9 @@ def addHome() -> bool:
 
   window.customAnimatedValues['openingAnim'] = openingAnim
 
-  home.addElement(homeContainer, 'homeBG')
+  home.addElement(homeBG, 'homeBG')
+
+  home.addElement(homeContainer, 'homeContainer')
 
   home.addElement(HVisionText, 'HVisionText')
 

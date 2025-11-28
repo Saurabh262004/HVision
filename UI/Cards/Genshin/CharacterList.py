@@ -121,7 +121,7 @@ class CharacterList:
 
     base = self.listCards[index]
 
-    base[f'{index}_cardSection'].defaultBackground = self.basicAssets[f'RarityBack{rarity}']
+    base[f'{index}_cardSection'].defaultBG = self.basicAssets[f'RarityBack{rarity}']
 
     base[f'{index}_cardSection'].section.background = self.basicAssets[f'RarityBack{rarity}']
 
