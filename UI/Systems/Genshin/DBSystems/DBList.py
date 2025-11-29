@@ -23,7 +23,7 @@ def addSystem() -> bool:
   cList = CharacterList(
     {
       'x': pgx.DynamicValue(window, 'screenWidth', percent=10),
-      'y': pgx.DynamicValue(window, 'screenHeight', percent=10),
+      'y': pgx.DynamicValue(window, 'screenHeight', percent=14),
       'width': pgx.DynamicValue(window, 'screenWidth', percent=55),
       'height': pgx.DynamicValue(window, 'screenHeight', percent=7)
     }, 11, pgx.DynamicValue(window, 'screenHeight', percent=1)
@@ -46,7 +46,7 @@ def addSystem() -> bool:
     pgx.Section(
       {
         'x': pgx.DynamicValue(window, 'screenWidth', percent=10),
-        'y': pgx.DynamicValue(window, 'screenHeight', percent=3),
+        'y': pgx.DynamicValue(window, 'screenHeight', percent=7),
         'width': pgx.DynamicValue(window, 'screenWidth', percent=55),
         'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
       }, pg.Color(250, 250, 250, 64), 7

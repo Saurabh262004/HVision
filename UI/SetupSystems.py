@@ -3,6 +3,7 @@ from UI.Systems.Home import addHome
 from UI.Systems.DBUpdateIndicator import addIndicator
 from UI.Systems.Genshin.DBSystems import DBList as GCDBList
 from UI.Systems.Genshin.DBSystems import SearchFilters as GCDBFilters
+from UI.Systems.Genshin import GINav as GINav
 import sharedAssets
 
 def setupSystems():
@@ -15,5 +16,7 @@ def setupSystems():
   GCDBList.addSystem()
 
   GCDBFilters.addSystem()
+
+  GINav.addGINav()
 
   sharedAssets.app.activateSystems(['Nav', 'Home'])

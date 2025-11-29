@@ -14,7 +14,7 @@ def addSystem() -> bool:
     pgx.Section(
       {
         'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=68),
-        'y': pgx.DynamicValue(window, 'screenHeight', percent=3),
+        'y': pgx.DynamicValue(window, 'screenHeight', percent=7),
         'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=29),
         'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
       }, pg.Color(250, 250, 250, 64), 7
@@ -26,9 +26,9 @@ def addSystem() -> bool:
   filterSection = pgx.Section(
     {
       'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=68),
-      'y': pgx.DynamicValue(window, 'screenHeight', percent=10),
+      'y': pgx.DynamicValue(window, 'screenHeight', percent=14),
       'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=29),
-      'height': pgx.DynamicValue(window, 'screenHeight', percent=87)
+      'height': pgx.DynamicValue(window, 'screenHeight', percent=83)
     }, pg.Color(250, 250, 250, 64), 7
   )
 

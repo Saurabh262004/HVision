@@ -14,7 +14,7 @@ BTN_INFO = (
     'title': 'Genshin',
     'bg': None,
     'textSize': 10,
-    'systems': ['Nav', 'GCDBList', 'GCDBFilters']
+    'systems': ['Nav', 'GCDBList', 'GCDBFilters', 'GINav']
   },
 )
 
