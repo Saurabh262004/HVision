@@ -1,6 +1,30 @@
 import time
 import orjson
+import socket
 from DBProcessors import scrapeLayouts
+
+TESTING_CONNECTION_HOSTS = (
+  ('8.8.8.8', 53), # Google DNS
+  ('1.1.1.1', 53), # Cloudflare DNS
+  ('9.9.9.9', 53), # Quad9 DNS
+  ('208.67.222.222', 53), # OpenDNS
+)
+
+def check_internet_connection(host: str = '8.8.8.8', port: int = 53, timeout: int = 5) -> bool:
+  try:
+    socket.setdefaulttimeout(timeout)
+    socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+    return True
+  except Exception as ex:
+    print(f'Internet connection check failed: {host}:{port}')
+    print(f'Error: {ex}')
+    return False
+
+def ensure_internet_connection(timeout: int = 5) -> bool:
+  for host, port in TESTING_CONNECTION_HOSTS:
+    if check_internet_connection(host, port, timeout):
+      return True
+  return False
 
 def creatreDictList(itemStructure: dict | list, itemKey: str, pages: list[str], scrapedData: dict) -> dict:
   lst = {}
@@ -76,8 +100,12 @@ def createObject(structure: dict | list, pages: list[str], scrapedData: dict) ->
 
   return parent
 
-def makeDB(layoutSourcesURL: str, dbStructureURL: str) -> tuple[dict, dict]:
+def makeDB(layoutSourcesURL: str, dbStructureURL: str) -> tuple[dict, dict] | bool:
   print(f'Building database.')
+  
+  if not ensure_internet_connection():
+    print('No internet connection available. Cannot proceed with database creation.')
+    return False
 
   startTime = time.time()
 

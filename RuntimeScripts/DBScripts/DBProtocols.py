@@ -222,7 +222,12 @@ class DBProtocols:
     layoutSourceLocation = sharedAssets.config['layoutSourcesFileLocation']
 
     try:
-      db, raw = makeDB(layoutSourceLocation, dbStructureLocation)
+      result = makeDB(layoutSourceLocation, dbStructureLocation)
+
+      if result is False:
+        return False
+
+      db, raw = result
 
       db = processDB(db)
 
