@@ -13,8 +13,8 @@ def addSystem() -> bool:
 
   bg = pgx.Section(
     {
-      'x': pgx.DynamicValue(0),
-      'y': pgx.DynamicValue(0),
+      'x': 0,
+      'y': 0,
       'width': pgx.DynamicValue(window, 'screenWidth'),
       'height': pgx.DynamicValue(window, 'screenHeight')
     }, pg.Color(20, 10, 20)
@@ -66,19 +66,19 @@ def addSystem() -> bool:
     pgx.Section(
       {
         'x': pgx.DynamicValue(window, 'screenWidth', percent=99),
-        'y': pgx.DynamicValue(0),
+        'y': pgx.DynamicValue(window, 'screenHeight', percent=5),
         'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
         'height': pgx.DynamicValue(window, 'screenHeight')
       }, pg.Color(0, 0, 0, 0)
     ),
     pgx.Section(
       {
-        'x': pgx.DynamicValue(0),
-        'y': pgx.DynamicValue(0),
+        'x': 0,
+        'y': 0,
         'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
         'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
       }, pg.Color(255, 255, 255, 128)
-    ), (0, len(cList.characters) - 1), -2, pg.Color(0, 0, 0, 0),
+    ), (0, len(cList.characters) - 1), -2, pg.Color(255, 255, 255, 64),
     pgx.CallbackSet((
       pgx.Callback(
         ('scroll', 'mouseDrag', 'mouseDown', 'mouseUp'),
