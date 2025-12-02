@@ -68,7 +68,7 @@ def addSystem() -> bool:
         'x': pgx.DynamicValue(window, 'screenWidth', percent=99),
         'y': pgx.DynamicValue(window, 'screenHeight', percent=5),
         'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
-        'height': pgx.DynamicValue(window, 'screenHeight')
+        'height': pgx.DynamicValue(window, 'screenHeight', percent=95)
       }, pg.Color(0, 0, 0, 0)
     ),
     pgx.Section(
