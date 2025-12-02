@@ -282,6 +282,7 @@ class CharacterList:
     charList = []
 
     for accessPoints in searchResult:
-      charList.append(accessPoints[0])
+      if accessPoints[0] not in charList:
+        charList.append(accessPoints[0])
 
     self.displayCharacters(charList)
