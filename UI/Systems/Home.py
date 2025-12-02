@@ -12,8 +12,8 @@ def addHome() -> bool:
 
   homeBG = pgx.Section(
     {
-      'x': pgx.DynamicValue(0),
-      'y': pgx.DynamicValue(0),
+      'x': 0,
+      'y': 0,
       'width': pgx.DynamicValue(window, 'screenWidth'),
       'height': pgx.DynamicValue(window, 'screenHeight')
     }, pg.Color(20, 10, 20)
@@ -22,7 +22,7 @@ def addHome() -> bool:
   homeContainer = pgx.Section(
     {
       'x': pgx.DynamicValue(window, 'screenWidth', percent=7),
-      'y': pgx.DynamicValue(0),
+      'y': 0,
       'width': pgx.DynamicValue(window, 'screenWidth', percent=93),
       'height': pgx.DynamicValue(window, 'screenHeight')
     }, pg.Color(20, 10, 20)

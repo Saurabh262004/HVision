@@ -75,8 +75,8 @@ def addSystem():
 
   bg = pgx.Section(
     {
-      'x': pgx.DynamicValue(0),
-      'y': pgx.DynamicValue(0),
+      'x': 0,
+      'y': 0,
       'width': pgx.DynamicValue(window, 'screenWidth', percent=7),
       'height': pgx.DynamicValue(window, 'screenHeight')
     },
