@@ -1,6 +1,8 @@
 from CMD import getArgs
 
 def bootGUI():
+  print('Running in GUI mode')
+
   import pg_extended as pgx
   import SharedAssets
   from RuntimeScripts import customLoopProcess, closingSeq
@@ -11,18 +13,26 @@ def bootGUI():
 
   closingSeq()
 
+def bootTUI():
+  print('Running in TUI mode.')
+
+  from CMD import TUI
+
+  TUI()
+
 def main():
   args = getArgs()
 
-  if args.no_gui:
-    print('Running in TUI mode.')
+  if args.force_update_db:
+    print('Force updating database')
 
-    from CMD import TUI
-    TUI()
+    from DBManagers.DBScripts.DBProtocols import DBProtocols
+    DBProtocols.generateDB()
+
+  if args.no_gui:
+    bootTUI()
 
   else:
-    print('Running in GUI mode')
-
     bootGUI()
 
 if __name__ == '__main__':
