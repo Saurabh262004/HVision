@@ -8,7 +8,7 @@ def help():
   for k, v in optionsDict.items():
     print(f'{k:<25}: {v['disc']}')
 
-  print('\n')
+  print('')
 
 def setupRuntimeOptions():
   optionsDict['help'] = {'fn': help, 'disc': 'Print this output.'}
