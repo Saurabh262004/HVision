@@ -16,13 +16,13 @@ def main():
 
   if args.no_gui:
     print('Running in TUI mode.')
- 
+
     from CMD import TUI
     TUI()
- 
+
   else:
     print('Running in GUI mode')
- 
+
     bootGUI()
 
 if __name__ == '__main__':
