@@ -1,7 +1,7 @@
 import time
 import orjson
 import socket
-from DBProcessors import scrapeLayouts
+from DBManagers.DBProcessors.Scraper import scrapeLayouts
 
 TESTING_CONNECTION_HOSTS = (
   ('8.8.8.8', 53), # Google DNS

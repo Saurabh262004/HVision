@@ -3,7 +3,7 @@ import os
 import orjson
 import requests
 from bs4 import BeautifulSoup
-from DBProcessors import navigate
+from DBManagers.DBProcessors.SoupNavigator import navigate
 
 def scrapeLayouts(layoutSources: list[str]):
   scrapedData = {}

@@ -1,2 +1,0 @@
-from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
-from RuntimeScripts.DBScripts.InternalUpdates import InternalUpdates

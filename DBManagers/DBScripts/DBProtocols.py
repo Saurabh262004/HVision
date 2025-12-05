@@ -3,8 +3,9 @@ import time
 import orjson
 import traceback
 from multiprocessing import Process
-from DBProcessors import makeDB, processDB
-from DBProcessors.ImageCollector import updateImageDB
+from DBManagers.DBProcessors.DBMaker import makeDB
+from DBManagers.DBProcessors.DBPostProcessor import processDB
+from DBManagers.DBProcessors.ImageCollector import updateImageDB
 import sharedAssets
 
 DEFAULT_CONFIG = {

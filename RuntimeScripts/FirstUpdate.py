@@ -1,4 +1,4 @@
-from RuntimeScripts.DBScripts.DBProtocols import DBProtocols
+from DBManagers.DBScripts.DBProtocols import DBProtocols
 from UI.SetupSystems import setupSystems
 import sharedAssets
 
