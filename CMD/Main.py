@@ -1,3 +1,5 @@
+from CMD.RuntimeOptions import optionsDict
+
 def TUI():
   running=True
 
@@ -5,7 +7,14 @@ def TUI():
 
   while running:
 
-    tuiInput = input().lower()
+    tuiInput = input('HVision: ')
 
-    if tuiInput == 'quit' or tuiInput == 'q':
+    if tuiInput in optionsDict:
+      optionsDict[tuiInput]['fn']()
+
+    elif tuiInput == 'quit' or tuiInput == 'q':
+      print('Quitting HVision')
       running = False
+
+    else:
+      print(f'[INFO] {tuiInput} is not a recgnised option')
