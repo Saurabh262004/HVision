@@ -6,7 +6,7 @@ from multiprocessing import Process
 from DBManagers.DBProcessors.DBMaker import makeDB
 from DBManagers.DBProcessors.DBPostProcessor import processDB
 from DBManagers.DBProcessors.ImageCollector import updateImageDB
-import sharedAssets
+import SharedAssets
 
 DEFAULT_CONFIG = {
   "DBLocation": "./Resources/Essentials/DataBase/",
@@ -25,7 +25,7 @@ CONFIG_FILE_LOCATION = os.path.join(CONFIG_LOCATION, 'config.json')
 class DBProtocols:
   @staticmethod
   def dbEventOpen(event: str) -> bool:
-    dbDir = sharedAssets.config['DBLocation']
+    dbDir = SharedAssets.config['DBLocation']
 
     if not os.path.isdir(dbDir):
       os.makedirs(dbDir)
@@ -44,7 +44,7 @@ class DBProtocols:
 
   @staticmethod
   def dbEventClose(event: str) -> bool:
-    dbDir = sharedAssets.config['DBLocation']
+    dbDir = SharedAssets.config['DBLocation']
 
     if not os.path.isdir(dbDir):
       os.makedirs(dbDir)
@@ -63,7 +63,7 @@ class DBProtocols:
 
   @staticmethod
   def dbEventCheck(event: str) -> bool:
-    dbDir = sharedAssets.config['DBLocation']
+    dbDir = SharedAssets.config['DBLocation']
 
     if not os.path.isdir(dbDir):
       os.makedirs(dbDir)
@@ -80,7 +80,7 @@ class DBProtocols:
 
   @staticmethod
   def loadDefaultConfig():
-    sharedAssets.config = DEFAULT_CONFIG
+    SharedAssets.config = DEFAULT_CONFIG
 
   @staticmethod
   def writeDefaultConfig() -> bool:
@@ -98,7 +98,7 @@ class DBProtocols:
   def loadConfig() -> bool:
     try:
       with open(CONFIG_FILE_LOCATION, 'rb') as f:
-        sharedAssets.config = orjson.loads(f.read())
+        SharedAssets.config = orjson.loads(f.read())
         return True
     except:
       return False
@@ -106,7 +106,7 @@ class DBProtocols:
   @staticmethod
   def writeConfig(config: dict = None) -> bool:
     if config is None:
-      config = sharedAssets.config
+      config = SharedAssets.config
 
     if config is None:
       return False
@@ -123,7 +123,7 @@ class DBProtocols:
 
   @staticmethod
   def verifyConfig() -> bool:
-    if (sharedAssets.config is None) and (not DBProtocols.loadConfig()):
+    if (SharedAssets.config is None) and (not DBProtocols.loadConfig()):
       print('Warning: Failed to load config file, loading default config')
 
       DBProtocols.loadDefaultConfig()
@@ -139,13 +139,13 @@ class DBProtocols:
     DBProtocols.verifyConfig()
 
     dbStructureLocation = os.path.join(
-      sharedAssets.config['DBLocation'],
-      sharedAssets.config['DBStructureFileName']
+      SharedAssets.config['DBLocation'],
+      SharedAssets.config['DBStructureFileName']
     )
 
     try:
       with open(dbStructureLocation, 'rb') as f:
-        sharedAssets.dbStructure = orjson.loads(f.read())
+        SharedAssets.dbStructure = orjson.loads(f.read())
         return True
     except:
       return False
@@ -155,13 +155,13 @@ class DBProtocols:
     DBProtocols.verifyConfig()
 
     dbFileLocation = os.path.join(
-      sharedAssets.config['DBLocation'],
-      sharedAssets.config['DBFileName']
+      SharedAssets.config['DBLocation'],
+      SharedAssets.config['DBFileName']
     )
 
     try:
       with open(dbFileLocation, 'rb') as f:
-        sharedAssets.db = orjson.loads(f.read())
+        SharedAssets.db = orjson.loads(f.read())
         return True
     except:
       return False
@@ -171,13 +171,13 @@ class DBProtocols:
     DBProtocols.verifyConfig()
 
     if db is None:
-      db = sharedAssets.db
+      db = SharedAssets.db
 
-    dbDir = sharedAssets.config['DBLocation']
+    dbDir = SharedAssets.config['DBLocation']
 
     dbFileLocation = os.path.join(
       dbDir,
-      sharedAssets.config['DBFileName']
+      SharedAssets.config['DBFileName']
     )
 
     if not os.path.isdir(dbDir):
@@ -194,11 +194,11 @@ class DBProtocols:
   def writeRaw(raw: dict) -> bool:
     DBProtocols.verifyConfig()
 
-    dbDir = sharedAssets.config['DBLocation']
+    dbDir = SharedAssets.config['DBLocation']
 
     rawFileLocation = os.path.join(
       dbDir,
-      sharedAssets.config['RawDBFileName']
+      SharedAssets.config['RawDBFileName']
     )
 
     if not os.path.isdir(dbDir):
@@ -216,11 +216,11 @@ class DBProtocols:
     DBProtocols.verifyConfig()
 
     dbStructureLocation = os.path.join(
-      sharedAssets.config['DBLocation'],
-      sharedAssets.config['DBStructureFileName']
+      SharedAssets.config['DBLocation'],
+      SharedAssets.config['DBStructureFileName']
     )
 
-    layoutSourceLocation = sharedAssets.config['layoutSourcesFileLocation']
+    layoutSourceLocation = SharedAssets.config['layoutSourcesFileLocation']
 
     try:
       result = makeDB(layoutSourceLocation, dbStructureLocation)
@@ -236,7 +236,7 @@ class DBProtocols:
       DBProtocols.writeRaw(raw)
 
       updateImageDB(
-        os.path.join(sharedAssets.config['ImageDBLocation'],'specific'),
+        os.path.join(SharedAssets.config['ImageDBLocation'],'specific'),
         db['ImageCollectorManifest']
       )
 
@@ -248,14 +248,14 @@ class DBProtocols:
   @staticmethod
   def getDBAge() -> int | None:
     try:
-      return time.time() - sharedAssets.db['_metadata_']['creationEpoch']
+      return time.time() - SharedAssets.db['_metadata_']['creationEpoch']
     except:
       return None
 
   @staticmethod
   def dbIsOld() -> bool | None:
     try:
-      return DBProtocols.getDBAge() > sharedAssets.config['MaxDBAge']
+      return DBProtocols.getDBAge() > SharedAssets.config['MaxDBAge']
     except:
       return None
 
@@ -263,19 +263,19 @@ class DBProtocols:
   def verifyDB() -> bool:
     DBProtocols.verifyConfig()
 
-    if sharedAssets.dbStructure is None:
+    if SharedAssets.dbStructure is None:
       DBProtocols.loadDBStructure()
 
-      if sharedAssets.dbStructure is None:
+      if SharedAssets.dbStructure is None:
         print('Fatal: Couldn\'t load Database structure')
 
         return False
 
-    dbDir = sharedAssets.config['DBLocation']
+    dbDir = SharedAssets.config['DBLocation']
 
     dbFileLocation = os.path.join(
       dbDir,
-      sharedAssets.config['DBFileName']
+      SharedAssets.config['DBFileName']
     )
 
     validDB = True

@@ -1,10 +1,10 @@
 import pygame as pg
 import pg_extended as pgx
 from UI.Cards.Genshin.CharacterList import CharacterList
-import sharedAssets
+import SharedAssets
 
 def addSystem() -> bool:
-  window: pgx.Window = sharedAssets.app
+  window: pgx.Window = SharedAssets.app
 
   if 'GCDBList' in window.systems:
     return False

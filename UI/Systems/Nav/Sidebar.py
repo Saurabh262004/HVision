@@ -1,7 +1,7 @@
 import pygame as pg
 import pg_extended as pgx
 from UI import SystemSwitch
-import sharedAssets
+import SharedAssets
 
 BTN_INFO = (
   {
@@ -69,7 +69,7 @@ def getBTNs(container: pgx.Section) -> dict[str, pgx.Button]:
   return BTNCollection
 
 def addSystem():
-  window: pgx.Window = sharedAssets.app
+  window: pgx.Window = SharedAssets.app
 
   system = pgx.System(preLoadState=True)
 

@@ -1,9 +1,9 @@
 import pygame as pg
 import pg_extended as pgx
-import sharedAssets
+import SharedAssets
 
 def addGINav(force: bool = False):
-  window: pgx.Window = sharedAssets.app
+  window: pgx.Window = SharedAssets.app
 
   if 'GINav' in window.systems and not force:
     return
@@ -12,10 +12,10 @@ def addGINav(force: bool = False):
 
   container = pgx.Section(
     {
-      'x': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=7),
+      'x': pgx.DynamicValue(SharedAssets.app, 'screenWidth', percent=7),
       'y': 0,
-      'width': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=93),
-      'height': pgx.DynamicValue(sharedAssets.app, 'screenHeight', percent=5),
+      'width': pgx.DynamicValue(SharedAssets.app, 'screenWidth', percent=93),
+      'height': pgx.DynamicValue(SharedAssets.app, 'screenHeight', percent=5),
     },
     pgx.ImgManipulation.getGradient(
       [

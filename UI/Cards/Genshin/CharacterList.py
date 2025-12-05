@@ -3,7 +3,7 @@ import pg_extended as pgx
 from UI.Cards.Genshin.CharacterResources import CharacterResources
 from UI.Cards.Genshin.CharacterBase import CharacterBase
 from Utility import Searcher
-import sharedAssets
+import SharedAssets
 
 class CharacterList:
   def __init__(self, cardDim: dict[str, pgx.DynamicValue], maxListLength: int, padding: pgx.DynamicValue, lazyCards: bool = True):
@@ -40,7 +40,7 @@ class CharacterList:
 
     self.listPosition: int = 0
 
-    self.imageDBPath = sharedAssets.config['ImageDBLocation']
+    self.imageDBPath = SharedAssets.config['ImageDBLocation']
 
     self.basicAssets = CharacterResources.getBasicResources(self.imageDBPath)
 
@@ -68,7 +68,7 @@ class CharacterList:
   def updateCharactersData(self):
     self.characters = []
 
-    for char in sharedAssets.db['GenshinImpact']['Items']['Characters']:
+    for char in SharedAssets.db['GenshinImpact']['Items']['Characters']:
       self.characters.append(char)
 
     self.characterIcons = CharacterResources.getCharacterIcons(self.characters, self.imageDBPath)
@@ -100,7 +100,7 @@ class CharacterList:
     if index < 0 or index >= self.maxListLength:
       return False
 
-    characterDetails = sharedAssets.db['GenshinImpact']['Items']['Characters'][character]
+    characterDetails = SharedAssets.db['GenshinImpact']['Items']['Characters'][character]
 
     rarity = int(characterDetails['Rarity'][0])
 
@@ -217,7 +217,7 @@ class CharacterList:
       self.activeFilters[filterType] = []
 
   def getFilteredChars(self) -> dict[str, dict[str, str]]:
-    charDicts = sharedAssets.db['GenshinImpact']['Items']['Characters']
+    charDicts = SharedAssets.db['GenshinImpact']['Items']['Characters']
 
     activeFiltersCount = 0
 

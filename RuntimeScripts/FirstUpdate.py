@@ -1,6 +1,6 @@
 from DBManagers.DBScripts.DBProtocols import DBProtocols
 from UI.SetupSystems import setupSystems
-import sharedAssets
+import SharedAssets
 
 # implement error messages in the future
 def firstUpdate() -> bool | None:
@@ -18,6 +18,6 @@ def firstUpdate() -> bool | None:
 
   setupSystems()
 
-  sharedAssets.app.customData['triggetOPIntroFunc']()
+  SharedAssets.app.customData['triggetOPIntroFunc']()
 
   return True

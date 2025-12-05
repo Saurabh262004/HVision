@@ -1,12 +1,12 @@
 import pygame as pg
 import pg_extended as pgx
-import sharedAssets
+import SharedAssets
 
 def addIndicator():
   system = pgx.System(preLoadState=True)
 
-  tetWidth = pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=2)
-  tetX = pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=97.5)
+  tetWidth = pgx.DynamicValue(SharedAssets.app, 'screenWidth', percent=2)
+  tetX = pgx.DynamicValue(SharedAssets.app, 'screenWidth', percent=97.5)
 
   # default colour fill looks like it was drawn by a baby. I can literally see the pixels
   tetBack1 = pg.Surface((256, 256), pg.SRCALPHA)
@@ -16,7 +16,7 @@ def addIndicator():
   tet = pgx.Section(
     {
       'x': tetX,
-      'y': pgx.DynamicValue(sharedAssets.app, 'screenWidth', percent=.5),
+      'y': pgx.DynamicValue(SharedAssets.app, 'screenWidth', percent=.5),
       'width': tetWidth,
       'height': tetWidth
     }, tetBack1
@@ -24,6 +24,6 @@ def addIndicator():
 
   system.addElement(tet, 'tet0')
 
-  sharedAssets.app.addSystem(system, 'dbIndicator')
+  SharedAssets.app.addSystem(system, 'dbIndicator')
 
-  sharedAssets.app.setSystemZ('dbIndicator', 10)
+  SharedAssets.app.setSystemZ('dbIndicator', 10)

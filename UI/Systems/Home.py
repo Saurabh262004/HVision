@@ -1,9 +1,9 @@
 import pygame as pg
 import pg_extended as pgx
-import sharedAssets
+import SharedAssets
 
 def addHome() -> bool:
-  window = sharedAssets.app
+  window = SharedAssets.app
 
   if 'Home' in window.systems:
     return False

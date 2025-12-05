@@ -1,6 +1,6 @@
-import sharedAssets
+import SharedAssets
 
 def switch(systems: list[str]):
-  sharedAssets.app.deactivateSystems('all')
+  SharedAssets.app.deactivateSystems('all')
 
-  sharedAssets.app.activateSystems(systems)
+  SharedAssets.app.activateSystems(systems)

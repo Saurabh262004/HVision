@@ -2,10 +2,10 @@ import pg_extended as pgx
 from DBManagers.DBScripts.DBProtocols import DBProtocols
 from DBManagers.DBScripts.InternalUpdates import InternalUpdates
 from RuntimeScripts.FirstUpdate import firstUpdate
-import sharedAssets
+import SharedAssets
 
 def customLoopProcess():
-  window: pgx.Window = sharedAssets.app
+  window: pgx.Window = SharedAssets.app
 
   if window.firstUpdate:
     firstUpdateStatus = firstUpdate()

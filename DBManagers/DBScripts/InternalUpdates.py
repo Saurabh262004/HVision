@@ -1,4 +1,4 @@
-import sharedAssets
+import SharedAssets
 from DBManagers.DBScripts.DBProtocols import DBProtocols
 
 class InternalUpdates:
@@ -9,5 +9,5 @@ class InternalUpdates:
 
   @staticmethod
   def updateGCList():
-    sharedAssets.app.customData['GCList'].updateCharactersData()
-    sharedAssets.app.customData['GCList'].prevSearchMethod(sharedAssets.app.customData['GCList'].prevSearch)
+    SharedAssets.app.customData['GCList'].updateCharactersData()
+    SharedAssets.app.customData['GCList'].prevSearchMethod(SharedAssets.app.customData['GCList'].prevSearch)
