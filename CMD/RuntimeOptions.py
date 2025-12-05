@@ -6,7 +6,7 @@ def help():
   print('\n ----- HVision ----- \n')
 
   for k, v in optionsDict.items():
-    print(f'{k}: {v['disc']}')
+    print(f'{k:<25}: {v['disc']}')
 
   print('\n')
 
