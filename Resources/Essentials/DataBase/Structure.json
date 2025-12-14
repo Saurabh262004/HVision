@@ -135,7 +135,7 @@
     "ImageCollectorManifestData": {
       "_type_": "object",
       "_structure_": {
-        "GenshinCharacters": {
+        "GenshinCharacter": {
           "_type_": "dictList",
           "_key_": "Name",
           "_structure_": {
@@ -143,7 +143,31 @@
             "URL": [0, "CharacterIconURL"]
           }
         },
-        "GenshinWeapons": {
+        "GenshinElement": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [0, "CharacterElement"],
+            "URL": [0, "ElementIconURL"]
+          }
+        },
+        "GenshinWeaponClass": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [0, "CharacterWeapon"],
+            "URL": [0, "WeaponTypeIconURL"]
+          }
+        },
+        "GenshinRegion": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [0, "CharacterRegion"],
+            "URL": [0, "RegionIconURL"]
+          }
+        },
+        "GenshinWeapon": {
           "_type_": "dictList",
           "_key_": "Name",
           "_structure_": {
@@ -151,7 +175,7 @@
             "URL": [1, "WeaponIconURL"]
           }
         },
-        "ZenlessAgents": {
+        "ZenlessAgent": {
           "_type_": "dictList",
           "_key_": "Name",
           "_structure_": {
@@ -159,12 +183,52 @@
             "URL": [2, "AgentIconURL"]
           }
         },
-        "ZenlessWEngines": {
+        "ZenlessAgentRank": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [2, "AgentRank"],
+            "URL": [2, "AgentRankIconURL"]
+          }
+        },
+        "ZenlessAttribute": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [2, "AgentAttribute"],
+            "URL": [2, "AttributeIconURL"]
+          }
+        },
+        "ZenlessSpeciality": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [2, "AgentSpeciality"],
+            "URL": [2, "SpecialityIconURL"]
+          }
+        },
+        "ZenlessFaction": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [2, "AgentFaction"],
+            "URL": [2, "FactionIconURL"]
+          }
+        },
+        "ZenlessWEngine": {
           "_type_": "dictList",
           "_key_": "Name",
           "_structure_": {
             "Name": [3, "WEngineName"],
             "URL": [3, "WEngineIconURL"]
+          }
+        },
+        "ZenlessWEngineRank": {
+          "_type_": "dictList",
+          "_key_": "Name",
+          "_structure_": {
+            "Name": [3, "WEngineRank"],
+            "URL": [3, "WEngineRankIconURL"]
           }
         }
       }

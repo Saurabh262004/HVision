@@ -45,7 +45,7 @@ class CharacterResources:
       basicIcons[iconKey] = CharacterResources.getIcon(
         os.path.join(
           imageDBPath,
-          f'Genshin_{iconKey}'
+          f'Genshin{iconKey}'
         )
       )
 
@@ -89,7 +89,7 @@ class CharacterResources:
       icons[character] = CharacterResources.getIcon(
         os.path.join(
           imageDBPath,
-          f'GenshinCharacters_{Sanitizer.OSProofName(character)}'
+          f'GenshinCharacter{Sanitizer.OSProofName(character)}'
         )
       )
 
