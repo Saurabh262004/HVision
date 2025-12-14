@@ -236,7 +236,7 @@ class DBProtocols:
       DBProtocols.writeRaw(raw)
 
       updateImageDB(
-        os.path.join(SharedAssets.config['ImageDBLocation'],'specific'),
+        SharedAssets.config['ImageDBLocation'],
         db['ImageCollectorManifest']
       )
 
