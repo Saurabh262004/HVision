@@ -1,10 +1,10 @@
 from CMD import getArgs
+import SharedAssets
 
 def bootGUI():
   print('Running in GUI mode')
 
   import pg_extended as pgx
-  import SharedAssets
   from RuntimeScripts import customLoopProcess, closingSeq
 
   app = SharedAssets.app = pgx.Window('HVision', (1280, 720), customLoopProcess=customLoopProcess)
@@ -21,7 +21,7 @@ def bootTUI():
   TUI()
 
 def main():
-  args = getArgs()
+  args = SharedAssets.args = getArgs()
 
   if args.force_update_db:
     print('Force updating database')

@@ -63,7 +63,7 @@ def addHome() -> bool:
 
     openingAnim.trigger(delay=500)
 
-  window.customData['triggetOPIntroFunc'] = triggetOPIntro
+  window.customData['triggerOPIntroFunc'] = triggetOPIntro
 
   window.customAnimatedValues['openingAnim'] = openingAnim
 

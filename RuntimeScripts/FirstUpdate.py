@@ -12,12 +12,15 @@ def firstUpdate() -> bool | None:
     if not DBProtocols.verifyDB():
       return False
   else:
-    # if we do have the db, proceed and have a different process varify and update it if needed
-    print('varifying db in background')
-    DBProtocols.verifyDBBackground()
+    if not SharedAssets.args.no_update_db:
+      # if we do have the db, proceed and have a different process varify and update it if needed
+      print('varifying db in background')
+      DBProtocols.verifyDBBackground()
+    else:
+      print('Database is loaded successfully but won\'t be updated')
 
   setupSystems()
 
-  SharedAssets.app.customData['triggetOPIntroFunc']()
+  SharedAssets.app.customData['triggerOPIntroFunc']()
 
   return True

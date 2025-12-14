@@ -78,7 +78,7 @@ def addSystem() -> bool:
         'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
         'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
       }, pg.Color(255, 255, 255, 128)
-    ), (0, len(cList.characters) - 1), -2, pg.Color(255, 255, 255, 64),
+    ), (0, len(cList.characters) - 1), -2, pg.Color(255, 255, 255, 0),
     pgx.CallbackSet((
       pgx.Callback(
         ('scroll', 'mouseDrag', 'mouseDown', 'mouseUp'),
