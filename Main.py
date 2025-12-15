@@ -1,4 +1,5 @@
 from CMD import getArgs
+from UI.AssetsLoader import loadAssets
 import SharedAssets
 
 def bootGUI():

@@ -43,6 +43,6 @@ def processDB(db: dict) -> dict:
   endTime = time.time()
   processingTime = endTime - startTime
 
-  print(f"Done post-processing DataBase in {processingTime:.2f} seconds.")
+  print(f"Done post-processing DataBase in {processingTime:.5f} seconds.")
 
   return db

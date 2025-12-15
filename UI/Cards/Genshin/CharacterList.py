@@ -1,8 +1,8 @@
-import pygame as pg
+from copy import copy
 import pg_extended as pgx
-from UI.Cards.Genshin.CharacterResources import CharacterResources
-from UI.Cards.Genshin.CharacterBase import CharacterBase
 from Utility import Searcher
+from UI.Cards.Genshin.CharacterBase import CharacterBase
+from UI.AssetsLoader import loadAssets
 import SharedAssets
 
 class CharacterList:
@@ -12,8 +12,7 @@ class CharacterList:
     self.maxListLength = maxListLength
     self.padding = padding
 
-    self.characters: list[str] = []
-    self.characterIcons: dict[str, pg.Surface] = {}
+    self.characters: list[str] = copy(SharedAssets.db['GenshinImpact']['Items']['Characters'])
 
     self.prevSearch: str = ''
     self.prevSearchMethod = self.displaySearchName
@@ -40,12 +39,6 @@ class CharacterList:
 
     self.listPosition: int = 0
 
-    self.imageDBPath = SharedAssets.config['ImageDBLocation']
-
-    self.basicAssets = CharacterResources.getBasicResources(self.imageDBPath)
-
-    self.updateCharactersData()
-
     def getDimY(i):
       self.padding.resolveValue()
       return self.cardDim['y'].value + ((self.cardDim['height'].value + self.padding.value) * i)
@@ -66,12 +59,11 @@ class CharacterList:
     self.setActiveCards(0)
 
   def updateCharactersData(self):
-    self.characters = []
+    self.characters = copy(SharedAssets.db['GenshinImpact']['Items']['Characters'])
 
-    for char in SharedAssets.db['GenshinImpact']['Items']['Characters']:
-      self.characters.append(char)
+    iconNames = [f'Genshin_Character_{character}' for character in self.characters]
 
-    self.characterIcons = CharacterResources.getCharacterIcons(self.characters, self.imageDBPath)
+    loadAssets(iconNames, False)
 
   def setLazyCards(self, lazyUpdate: bool):
     for card in self.listCards:
@@ -110,34 +102,34 @@ class CharacterList:
 
     region = characterDetails['Region']
 
-    if f'Nation_Emblem_{region}' not in self.basicAssets:
-      region = 'Unknown'
-
     if rarity < 4 or rarity > 5:
       return False
 
     if 'N/A' in element or 'N/A' in weaponClass:
       return False
 
+    if 'N/A' in region:
+      region = 'Unknown'
+
     base = self.listCards[index]
 
-    base[f'{index}_cardSection'].defaultBG = self.basicAssets[f'RarityBack{rarity}']
+    base[f'{index}_cardSection'].defaultBG = SharedAssets.dbAssets[f'Genshin_RarityBack_{rarity}']
 
-    base[f'{index}_cardSection'].section.background = self.basicAssets[f'RarityBack{rarity}']
+    base[f'{index}_cardSection'].section.background = SharedAssets.dbAssets[f'Genshin_RarityBack_{rarity}']
 
     base[f'{index}_cardSection'].section.update()
 
-    base[f'{index}_iconSection'].background = self.characterIcons[character]
+    base[f'{index}_iconSection'].background = SharedAssets.dbAssets[f'Genshin_Character_{character}']
 
     base[f'{index}_nameTextBox'].text = character
 
-    base[f'{index}_elementSection'].background = self.basicAssets[f'Element_{element}']
+    base[f'{index}_elementSection'].background = SharedAssets.dbAssets[f'Genshin_Element_{element}']
 
-    base[f'{index}_weaponTypeSection'].background = self.basicAssets[f'WeaponClass_{weaponClass}']
+    base[f'{index}_weaponTypeSection'].background = SharedAssets.dbAssets[f'Genshin_Weapon_Class_{weaponClass}']
 
-    base[f'{index}_nationSection'].background = self.basicAssets[f'Nation_Emblem_{region}']
+    base[f'{index}_nationSection'].background = SharedAssets.dbAssets[f'Genshin_Region_{region}']
 
-    base[f'{index}_raritySection'].background = self.basicAssets[f'RarityStars{rarity}']
+    base[f'{index}_raritySection'].background = SharedAssets.dbAssets[f'Genshin_RarityStar_{rarity}']
 
     base[f'{index}_raritySection'].backgroundSizePercent = (100 / 6) * rarity
 
