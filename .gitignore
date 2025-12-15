@@ -2,6 +2,7 @@
 __pycache__/
 pg_extended/
 tests/
+/GameAssets
 ScraperLayouts/
 Raw.json
 DB.json
