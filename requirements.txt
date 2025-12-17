@@ -1,5 +1,6 @@
+pygame-ce
+orjson
 requests
 pyperclip
 bs4
-orjson
-pygame-ce
+tqdm

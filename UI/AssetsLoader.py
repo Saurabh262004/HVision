@@ -5,6 +5,7 @@ import pygame as pg
 import pg_extended as pgx
 from Utility import Sanitizer
 import SharedAssets
+from tqdm import tqdm
 
 def getIcon(path: str) -> pg.Surface | pg.Color:
   try:
@@ -72,7 +73,7 @@ def loadAssets(assetNames: Iterable[str] = None, loadCustoms: bool = True):
 
   print('loading assets...')
 
-  customAssetsLoaded = 0
+  totalCustomAssets = 0
 
   if assetNames is None:
     assetNames = SharedAssets.db['ImageCollectorManifest']
@@ -85,20 +86,26 @@ def loadAssets(assetNames: Iterable[str] = None, loadCustoms: bool = True):
   if loadCustoms:
     customAssets = getCustomAssets()
 
+    totalCustomAssets += len(customAssets)
+
     SharedAssets.dbAssets.update(customAssets)
 
-    customAssetsLoaded += len(customAssets)
+  totalAssets = len(assetNames) + totalCustomAssets
 
-  imageDBLocation = SharedAssets.config['ImageDBLocation']
+  with tqdm(total=len(assetNames), desc='Loading', unit='files') as progBar:
 
-  for assetName in assetNames:
-    OSProofName = Sanitizer.OSProofName(assetName)
+    imageDBLocation = SharedAssets.config['ImageDBLocation']
 
-    SharedAssets.dbAssets[assetName] = getIcon(
-      os.path.join(
-        imageDBLocation,
-        OSProofName
+    for assetName in assetNames:
+      OSProofName = Sanitizer.OSProofName(assetName)
+
+      SharedAssets.dbAssets[assetName] = getIcon(
+        os.path.join(
+          imageDBLocation,
+          OSProofName
+        )
       )
-    )
 
-  print(f'Loaded {customAssetsLoaded + len(assetNames)} assets in {(time.time() - startTime):.4f}s.')
+      progBar.update(1)
+
+  print(f'Loaded {totalAssets} assets in {(time.time() - startTime):.4f}s.')
