@@ -1,5 +1,6 @@
 import pygame as pg
 import pg_extended as pgx
+from UI import SystemSwitch
 import SharedAssets
 
 def addGINav(force: bool = False):
@@ -28,12 +29,64 @@ def addGINav(force: bool = False):
     backgroundSizeType='squish'
   )
 
-  system.addElements(
-    {
-      'navContainer': container,
-    }
+  chrListSelector = pgx.Button(
+    pgx.TextBox(
+      pgx.Section(
+        {
+          'x': pgx.DynamicValue(container, 'x'),
+          'y': pgx.DynamicValue(container, 'y'),
+          'width': pgx.DynamicValue(container, 'width', percent=10),
+          'height': pgx.DynamicValue(container, 'height')
+        }, pg.Color(255, 255, 255, 64)
+      ),
+      'Characters', 'Arial',
+      pg.Color(200, 200, 200),
+      pgx.DynamicValue(container, 'height', percent=50)
+    ),
+    pgx.CallbackSet(
+      (
+        pgx.Callback(
+          ('mouseUp',),
+          SystemSwitch.switch,
+          {'systems': ['Nav', 'GCDBList', 'GCDBFilters', 'GINav']}
+        ),
+      )
+    ),
+    pressedBG=pg.Color(255, 255, 255, 16)
   )
+
+  wpnListSelector = pgx.Button(
+    pgx.TextBox(
+      pgx.Section(
+        {
+          'x': pgx.DynamicValue(lambda: container.x + (container.width / 10)),
+          'y': pgx.DynamicValue(container, 'y'),
+          'width': pgx.DynamicValue(container, 'width', percent=10),
+          'height': pgx.DynamicValue(container, 'height')
+        }, pg.Color(255, 255, 255, 64)
+      ),
+      'Weapons', 'Arial',
+      pg.Color(200, 200, 200),
+      pgx.DynamicValue(container, 'height', percent=50)
+    ),
+    pgx.CallbackSet(
+      (
+        pgx.Callback(
+          ('mouseUp',),
+          SystemSwitch.switch,
+          {'systems': ['Nav', 'GWDBList', 'GWDBFilters', 'GINav']}
+        ),
+      )
+    ),
+    pressedBG=pg.Color(255, 255, 255, 16)
+  )
+
+  system.addElements({
+    'navContainer': container,
+    'chrListSelector': chrListSelector,
+    'wpnListSelector': wpnListSelector
+  })
 
   window.addSystem(system, 'GINav')
 
-  window.setSystemZ('GINav', 1000)
+  window.setSystemZ('GINav', 999)

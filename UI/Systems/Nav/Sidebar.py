@@ -41,7 +41,7 @@ def getBTN(container: pgx.Section, index: int) -> pgx.Button:
           'width': btnS,
           'height': btnS
         }, pg.Color(0, 0, 0)
-      ), BTN_INFO[index]['title'], 'Arial', pg.Color(255, 255, 255), pgx.DynamicValue(btnS, percent=20)
+      ), BTN_INFO[index]['title'], 'Arial', pg.Color(250, 250, 250), pgx.DynamicValue(btnS, percent=20)
     ),
     pgx.CallbackSet(
       (
@@ -99,4 +99,4 @@ def addSystem():
 
   window.addSystem(system, 'Nav')
 
-  window.setSystemZ('Nav', 999)
+  window.setSystemZ('Nav', 1000)

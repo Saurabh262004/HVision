@@ -59,11 +59,17 @@ class CharacterList:
     self.setActiveCards(0)
 
   def updateCharactersData(self):
-    self.characters = copy(SharedAssets.db['GenshinImpact']['Items']['Characters'])
+    characters = copy(SharedAssets.db['GenshinImpact']['Items']['Characters'])
 
-    iconNames = [f'Genshin_Character_{character}' for character in self.characters]
+    updateIconsList = []
 
-    loadAssets(iconNames, False)
+    for character in characters:
+      if character not in self.characters:
+        updateIconsList.append(f'Genshin_Character_{character}')
+
+    self.characters = characters
+
+    loadAssets(updateIconsList, False)
 
   def setLazyCards(self, lazyUpdate: bool):
     for card in self.listCards:
