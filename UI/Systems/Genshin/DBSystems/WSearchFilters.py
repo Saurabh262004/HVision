@@ -4,7 +4,7 @@ import pg_extended as pgx
 def addSystem():
   window = SharedAssets.app
 
-  system: pgx.System = pgx.System()
+  system: pgx.System = pgx.System(preLoadState=True)
 
   window.addSystem(system, 'GWDBFilters')
 
