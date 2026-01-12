@@ -1,48 +1,48 @@
 import time
 
 def deleteKeyRecursive(obj, targetKey):
-  if isinstance(obj, dict):
-    keys_to_delete = [key for key in obj if key.startswith(targetKey)]
+	if isinstance(obj, dict):
+		keys_to_delete = [key for key in obj if key.startswith(targetKey)]
 
-    for key in keys_to_delete:
-      del obj[key]
+		for key in keys_to_delete:
+			del obj[key]
 
-    for value in list(obj.values()):
-      deleteKeyRecursive(value, targetKey)
+		for value in list(obj.values()):
+			deleteKeyRecursive(value, targetKey)
 
-  elif isinstance(obj, list):
-    for item in obj:
-      deleteKeyRecursive(item, targetKey)
+	elif isinstance(obj, list):
+		for item in obj:
+			deleteKeyRecursive(item, targetKey)
 
 def processDB(db: dict) -> dict:
-  startTime = time.time()
+	startTime = time.time()
 
-  # remove all the N/A data
-  deleteKeyRecursive(db, 'N/A')
+	# remove all the N/A data
+	deleteKeyRecursive(db, 'N/A')
 
-  # create a proper manifest for image collector
-  manifest = {}
+	# create a proper manifest for image collector
+	manifest = {}
 
-  for manifestName in db['ImageCollectorManifestData']:
-    manifestPart = db['ImageCollectorManifestData'][manifestName]
+	for manifestName in db['ImageCollectorManifestData']:
+		manifestPart = db['ImageCollectorManifestData'][manifestName]
 
-    for itemName in manifestPart:
-      # remove query parameters from image URLs
-      url: str = manifestPart[itemName]['URL']
+		for itemName in manifestPart:
+			# remove query parameters from image URLs
+			url: str = manifestPart[itemName]['URL']
 
-      endIndex = url.find('.png') + 4
+			endIndex = url.find('.png') + 4
 
-      url = url[:endIndex]
+			url = url[:endIndex]
 
-      manifest[f'{manifestName}_{itemName}'] = url
+			manifest[f'{manifestName}_{itemName}'] = url
 
-  del db['ImageCollectorManifestData']
+	del db['ImageCollectorManifestData']
 
-  db['ImageCollectorManifest'] = manifest
+	db['ImageCollectorManifest'] = manifest
 
-  endTime = time.time()
-  processingTime = endTime - startTime
+	endTime = time.time()
+	processingTime = endTime - startTime
 
-  print(f"Done post-processing DataBase in {processingTime:.5f} seconds.")
+	print(f"Done post-processing DataBase in {processingTime:.5f} seconds.")
 
-  return db
+	return db

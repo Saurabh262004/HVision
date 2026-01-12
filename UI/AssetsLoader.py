@@ -8,104 +8,104 @@ import SharedAssets
 from tqdm import tqdm
 
 def getIcon(path: str) -> pg.Surface | pg.Color:
-  try:
-    icon = pg.image.load(path).convert_alpha()
-  except Exception as e:
-    print(f'Failed to load image from "{path}":\n- {e}')
-    icon = pg.Surface((64, 64), pg.SRCALPHA)
-    icon.fill((255, 0, 64, 128))
+	try:
+		icon = pg.image.load(path).convert_alpha()
+	except Exception as e:
+		print(f'Failed to load image from "{path}":\n- {e}')
+		icon = pg.Surface((64, 64), pg.SRCALPHA)
+		icon.fill((255, 0, 64, 128))
 
-  return icon
+	return icon
 
 def getCustomAssets() -> dict[str, pg.Surface]:
-  imageDBLocation = SharedAssets.config['ImageDBLocation']
+	imageDBLocation = SharedAssets.config['ImageDBLocation']
 
-  customAssets = {}
+	customAssets = {}
 
-  customAssets['Genshin_RarityStar'] = getIcon(
-    os.path.join(
-      imageDBLocation,
-      'Genshin_RarityStar'
-    )
-  )
+	customAssets['Genshin_RarityStar'] = getIcon(
+		os.path.join(
+			imageDBLocation,
+			'Genshin_RarityStar'
+		)
+	)
 
-  customAssets['Genshin_Region_Unknown'] = getIcon(
-    os.path.join(
-      imageDBLocation,
-      'Genshin_Region_Unknown'
-    )
-  )
+	customAssets['Genshin_Region_Unknown'] = getIcon(
+		os.path.join(
+			imageDBLocation,
+			'Genshin_Region_Unknown'
+		)
+	)
 
-  rarityStarWidth, rarityStarHeight = customAssets['Genshin_RarityStar'].get_size()
+	rarityStarWidth, rarityStarHeight = customAssets['Genshin_RarityStar'].get_size()
 
-  customAssets['Genshin_RarityStar_4'] = pg.Surface(
-    (4 * rarityStarWidth, rarityStarHeight),
-    pg.SRCALPHA
-  )
+	customAssets['Genshin_RarityStar_4'] = pg.Surface(
+		(4 * rarityStarWidth, rarityStarHeight),
+		pg.SRCALPHA
+	)
 
-  customAssets['Genshin_RarityStar_5'] = pg.Surface(
-    (5 * rarityStarWidth, rarityStarHeight),
-    pg.SRCALPHA
-  )
+	customAssets['Genshin_RarityStar_5'] = pg.Surface(
+		(5 * rarityStarWidth, rarityStarHeight),
+		pg.SRCALPHA
+	)
 
-  for i in range(5):
-    if i < 4:
-      customAssets['Genshin_RarityStar_4'].blit(customAssets['Genshin_RarityStar'], (i * rarityStarWidth, 0))
+	for i in range(5):
+		if i < 4:
+			customAssets['Genshin_RarityStar_4'].blit(customAssets['Genshin_RarityStar'], (i * rarityStarWidth, 0))
 
-    customAssets['Genshin_RarityStar_5'].blit(customAssets['Genshin_RarityStar'], (i * rarityStarWidth, 0))
+		customAssets['Genshin_RarityStar_5'].blit(customAssets['Genshin_RarityStar'], (i * rarityStarWidth, 0))
 
-  customAssets['Genshin_RarityBack_4'] = pgx.ImgManipulation.getGradient(
-    [(141, 22, 245), (50, 50, 50)],
-    [1, 5],
-    'right'
-  )
+	customAssets['Genshin_RarityBack_4'] = pgx.ImgManipulation.getGradient(
+		[(141, 22, 245), (50, 50, 50)],
+		[1, 5],
+		'right'
+	)
 
-  customAssets['Genshin_RarityBack_5'] = pgx.ImgManipulation.getGradient(
-    [(245, 200, 39), (50, 50, 50)],
-    [1, 5],
-    'right'
-  )
+	customAssets['Genshin_RarityBack_5'] = pgx.ImgManipulation.getGradient(
+		[(245, 200, 39), (50, 50, 50)],
+		[1, 5],
+		'right'
+	)
 
-  return customAssets
+	return customAssets
 
 def loadAssets(assetNames: Iterable[str] = None, loadCustoms: bool = True):
-  startTime = time.time()
+	startTime = time.time()
 
-  print('loading assets...')
+	print('loading assets...')
 
-  totalCustomAssets = 0
+	totalCustomAssets = 0
 
-  if assetNames is None:
-    assetNames = SharedAssets.db['ImageCollectorManifest']
+	if assetNames is None:
+		assetNames = SharedAssets.db['ImageCollectorManifest']
 
-  if isinstance(assetNames, dict):
-    assetNames = assetNames.keys()
-  elif isinstance(assetNames, tuple):
-    assetNames = list(assetNames)
+	if isinstance(assetNames, dict):
+		assetNames = assetNames.keys()
+	elif isinstance(assetNames, tuple):
+		assetNames = list(assetNames)
 
-  if loadCustoms:
-    customAssets = getCustomAssets()
+	if loadCustoms:
+		customAssets = getCustomAssets()
 
-    totalCustomAssets += len(customAssets)
+		totalCustomAssets += len(customAssets)
 
-    SharedAssets.dbAssets.update(customAssets)
+		SharedAssets.dbAssets.update(customAssets)
 
-  totalAssets = len(assetNames) + totalCustomAssets
+	totalAssets = len(assetNames) + totalCustomAssets
 
-  with tqdm(total=len(assetNames), desc='Loading', unit='files') as progBar:
+	with tqdm(total=len(assetNames), desc='Loading', unit='files') as progBar:
 
-    imageDBLocation = SharedAssets.config['ImageDBLocation']
+		imageDBLocation = SharedAssets.config['ImageDBLocation']
 
-    for assetName in assetNames:
-      OSProofName = Sanitizer.OSProofName(assetName)
+		for assetName in assetNames:
+			OSProofName = Sanitizer.OSProofName(assetName)
 
-      SharedAssets.dbAssets[assetName] = getIcon(
-        os.path.join(
-          imageDBLocation,
-          OSProofName
-        )
-      )
+			SharedAssets.dbAssets[assetName] = getIcon(
+				os.path.join(
+					imageDBLocation,
+					OSProofName
+				)
+			)
 
-      progBar.update(1)
+			progBar.update(1)
 
-  print(f'Loaded {totalAssets} assets in {(time.time() - startTime):.4f}s.')
+	print(f'Loaded {totalAssets} assets in {(time.time() - startTime):.4f}s.')

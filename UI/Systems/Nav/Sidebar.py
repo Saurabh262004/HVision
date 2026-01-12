@@ -4,99 +4,99 @@ from UI import SystemSwitch
 import SharedAssets
 
 BTN_INFO = (
-  {
-    'title': 'HVision',
-    'bg': None,
-    'textSize': 10,
-    'systems': ['Nav', 'Home']
-  },
-  {
-    'title': 'Genshin',
-    'bg': None,
-    'textSize': 10,
-    'systems': ['Nav', 'GCDBList', 'GCDBFilters', 'GINav']
-  },
+	{
+		'title': 'HVision',
+		'bg': None,
+		'textSize': 10,
+		'systems': ['Nav', 'Home']
+	},
+	{
+		'title': 'Genshin',
+		'bg': None,
+		'textSize': 10,
+		'systems': ['Nav', 'GCDBList', 'GCDBFilters', 'GINav']
+	},
 )
 
 def getBTNY(container: pgx.Section, index: int) -> int | float:
-  per = lambda n, p: n / 100 * p
+	per = lambda n, p: n / 100 * p
 
-  margin = per(container.width, 10)
+	margin = per(container.width, 10)
 
-  btnH = per(container.width, 80)
+	btnH = per(container.width, 80)
 
-  return margin + ((btnH + margin) * index)
+	return margin + ((btnH + margin) * index)
 
 def getBTN(container: pgx.Section, index: int) -> pgx.Button:
-  global BTN_INFO
+	global BTN_INFO
 
-  btnS = pgx.DynamicValue(container, 'width', percent=80)
+	btnS = pgx.DynamicValue(container, 'width', percent=80)
 
-  btn = pgx.Button(
-    pgx.TextBox(
-      pgx.Section(
-        {
-          'x': pgx.DynamicValue(container, 'width', percent=10),
-          'y': pgx.DynamicValue(getBTNY, args={'container': container, 'index': index}),
-          'width': btnS,
-          'height': btnS
-        }, pg.Color(0, 0, 0)
-      ), BTN_INFO[index]['title'], 'Arial', pg.Color(250, 250, 250), pgx.DynamicValue(btnS, percent=20)
-    ),
-    pgx.CallbackSet(
-      (
-        pgx.Callback(
-          ('mouseUp',),
-          SystemSwitch.switch,
-          {
-            'systems': BTN_INFO[index]['systems']
-          }
-        ),
-      )
-    )
-  )
+	btn = pgx.Button(
+		pgx.TextBox(
+			pgx.Section(
+				{
+					'x': pgx.DynamicValue(container, 'width', percent=10),
+					'y': pgx.DynamicValue(getBTNY, args={'container': container, 'index': index}),
+					'width': btnS,
+					'height': btnS
+				}, pg.Color(0, 0, 0)
+			), BTN_INFO[index]['title'], 'Arial', pg.Color(250, 250, 250), pgx.DynamicValue(btnS, percent=20)
+		),
+		pgx.CallbackSet(
+			(
+				pgx.Callback(
+					('mouseUp',),
+					SystemSwitch.switch,
+					{
+						'systems': BTN_INFO[index]['systems']
+					}
+				),
+			)
+		)
+	)
 
-  return btn
+	return btn
 
 def getBTNs(container: pgx.Section) -> dict[str, pgx.Button]:
-  global BTN_INFO
+	global BTN_INFO
 
-  BTNCollection = {}
+	BTNCollection = {}
 
-  for i in range(len(BTN_INFO)):
-    BTNCollection[BTN_INFO[i]['title']] = getBTN(container, i)
+	for i in range(len(BTN_INFO)):
+		BTNCollection[BTN_INFO[i]['title']] = getBTN(container, i)
 
-  return BTNCollection
+	return BTNCollection
 
 def addSystem():
-  window: pgx.Window = SharedAssets.app
+	window: pgx.Window = SharedAssets.app
 
-  system = pgx.System(preLoadState=True)
+	system = pgx.System(preLoadState=True)
 
-  bg = pgx.Section(
-    {
-      'x': 0,
-      'y': 0,
-      'width': pgx.DynamicValue(window, 'screenWidth', percent=7),
-      'height': pgx.DynamicValue(window, 'screenHeight')
-    },
-    pgx.ImgManipulation.getGradient(
-      [
-        (255, 255, 255, 32),
-        (0, 0, 0)
-      ],
-      [20, 1],
-      'right'
-    ),
-    backgroundSizeType='squish'
-  )
+	bg = pgx.Section(
+		{
+			'x': 0,
+			'y': 0,
+			'width': pgx.DynamicValue(window, 'screenWidth', percent=7),
+			'height': pgx.DynamicValue(window, 'screenHeight')
+		},
+		pgx.ImgManipulation.getGradient(
+			[
+				(255, 255, 255, 32),
+				(0, 0, 0)
+			],
+			[20, 1],
+			'right'
+		),
+		backgroundSizeType='squish'
+	)
 
-  elements = getBTNs(bg)
+	elements = getBTNs(bg)
 
-  elements.update({'bg': bg})
+	elements.update({'bg': bg})
 
-  system.addElements(elements)
+	system.addElements(elements)
 
-  window.addSystem(system, 'Nav')
+	window.addSystem(system, 'Nav')
 
-  window.setSystemZ('Nav', 1000)
+	window.setSystemZ('Nav', 1000)

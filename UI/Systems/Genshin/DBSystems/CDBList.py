@@ -4,107 +4,107 @@ from UI.Cards.Genshin.CharacterList import CharacterList
 import SharedAssets
 
 def addSystem() -> bool:
-  window: pgx.Window = SharedAssets.app
+	window: pgx.Window = SharedAssets.app
 
-  if 'GCDBList' in window.systems:
-    return False
+	if 'GCDBList' in window.systems:
+		return False
 
-  system = pgx.System(preLoadState=True)
+	system = pgx.System(preLoadState=True)
 
-  bg = pgx.Section(
-    {
-      'x': 0,
-      'y': 0,
-      'width': pgx.DynamicValue(window, 'screenWidth'),
-      'height': pgx.DynamicValue(window, 'screenHeight')
-    }, pg.Color(20, 10, 20)
-  )
+	bg = pgx.Section(
+		{
+			'x': 0,
+			'y': 0,
+			'width': pgx.DynamicValue(window, 'screenWidth'),
+			'height': pgx.DynamicValue(window, 'screenHeight')
+		}, pg.Color(20, 10, 20)
+	)
 
-  cList = CharacterList(
-    {
-      'x': pgx.DynamicValue(window, 'screenWidth', percent=10),
-      'y': pgx.DynamicValue(window, 'screenHeight', percent=14),
-      'width': pgx.DynamicValue(window, 'screenWidth', percent=55),
-      'height': pgx.DynamicValue(window, 'screenHeight', percent=7)
-    }, 11, pgx.DynamicValue(window, 'screenHeight', percent=1)
-  )
+	cList = CharacterList(
+		{
+			'x': pgx.DynamicValue(window, 'screenWidth', percent=10),
+			'y': pgx.DynamicValue(window, 'screenHeight', percent=14),
+			'width': pgx.DynamicValue(window, 'screenWidth', percent=55),
+			'height': pgx.DynamicValue(window, 'screenHeight', percent=7)
+		}, 11, pgx.DynamicValue(window, 'screenHeight', percent=1)
+	)
 
-  listScroller = None
+	listScroller = None
 
-  def updateCListAfterSearch(value: str):
-    nonlocal listScroller, cList
+	def updateCListAfterSearch(value: str):
+		nonlocal listScroller, cList
 
-    cList.updateListPosition(0)
+		cList.updateListPosition(0)
 
-    listScroller.value = 0
+		listScroller.value = 0
 
-    cList.displaySearchAll(value)
+		cList.displaySearchAll(value)
 
-    listScroller.valueRange = (0, len(cList.activeList) - 1)
+		listScroller.valueRange = (0, len(cList.activeList) - 1)
 
-  charInput = pgx.TextInput(
-    pgx.Section(
-      {
-        'x': pgx.DynamicValue(window, 'screenWidth', percent=10),
-        'y': pgx.DynamicValue(window, 'screenHeight', percent=7),
-        'width': pgx.DynamicValue(window, 'screenWidth', percent=55),
-        'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
-      }, pg.Color(250, 250, 250, 64), 7
-    ),
-    'Arial', pg.Color(250, 250, 250),
-    placeholder='Search...',
-    placeholderTextColor=pg.Color(128, 128, 128),
-    callback=pgx.Callback(
-      ('None',),
-      updateCListAfterSearch,
-      extraArgKeys={'value': 'value'}
-    )
-  )
+	charInput = pgx.TextInput(
+		pgx.Section(
+			{
+				'x': pgx.DynamicValue(window, 'screenWidth', percent=10),
+				'y': pgx.DynamicValue(window, 'screenHeight', percent=7),
+				'width': pgx.DynamicValue(window, 'screenWidth', percent=55),
+				'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
+			}, pg.Color(250, 250, 250, 64), 7
+		),
+		'Arial', pg.Color(250, 250, 250),
+		placeholder='Search...',
+		placeholderTextColor=pg.Color(128, 128, 128),
+		callback=pgx.Callback(
+			('None',),
+			updateCListAfterSearch,
+			extraArgKeys={'value': 'value'}
+		)
+	)
 
-  listScroller = pgx.Slider(
-    'vertical',
-    pgx.Section(
-      {
-        'x': pgx.DynamicValue(window, 'screenWidth', percent=99),
-        'y': pgx.DynamicValue(window, 'screenHeight', percent=5),
-        'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
-        'height': pgx.DynamicValue(window, 'screenHeight', percent=95)
-      }, pg.Color(0, 0, 0, 0)
-    ),
-    pgx.Section(
-      {
-        'x': 0,
-        'y': 0,
-        'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
-        'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
-      }, pg.Color(255, 255, 255, 128)
-    ), (0, len(cList.characters) - 1), -2, pg.Color(255, 255, 255, 0),
-    pgx.CallbackSet((
-      pgx.Callback(
-        ('scroll', 'mouseDrag', 'mouseDown', 'mouseUp'),
-        cList.updateListPosition,
-        extraArgKeys={'value': 'listPosition'}
-      ),
-    )), False
-  )
+	listScroller = pgx.Slider(
+		'vertical',
+		pgx.Section(
+			{
+				'x': pgx.DynamicValue(window, 'screenWidth', percent=99),
+				'y': pgx.DynamicValue(window, 'screenHeight', percent=5),
+				'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
+				'height': pgx.DynamicValue(window, 'screenHeight', percent=95)
+			}, pg.Color(0, 0, 0, 0)
+		),
+		pgx.Section(
+			{
+				'x': 0,
+				'y': 0,
+				'width': pgx.DynamicValue(window, 'screenWidth', percent=1),
+				'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
+			}, pg.Color(255, 255, 255, 128)
+		), (0, len(cList.characters) - 1), -2, pg.Color(255, 255, 255, 0),
+		pgx.CallbackSet((
+			pgx.Callback(
+				('scroll', 'mouseDrag', 'mouseDown', 'mouseUp'),
+				cList.updateListPosition,
+				extraArgKeys={'value': 'listPosition'}
+			),
+		)), False
+	)
 
-  listScroller.lazyUpdate = False
+	listScroller.lazyUpdate = False
 
-  system.addElements({
-    'bg': bg,
-    'charInput': charInput,
-    'listScroller': listScroller
-  })
+	system.addElements({
+		'bg': bg,
+		'charInput': charInput,
+		'listScroller': listScroller
+	})
 
-  for card in cList.listCards:
-    system.addElements(card)
+	for card in cList.listCards:
+		system.addElements(card)
 
-  window.customData['GCList'] = cList
+	window.customData['GCList'] = cList
 
-  window.addSystem(system, 'GCDBList')
+	window.addSystem(system, 'GCDBList')
 
-  window.setSystemZ('GCDBList', 1)
+	window.setSystemZ('GCDBList', 1)
 
-  cList.displaySearchAll('')
+	cList.displaySearchAll('')
 
-  return True
+	return True

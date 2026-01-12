@@ -5,19 +5,19 @@ from RuntimeScripts.FirstUpdate import firstUpdate
 import SharedAssets
 
 def customLoopProcess():
-  window: pgx.Window = SharedAssets.app
+	window: pgx.Window = SharedAssets.app
 
-  if window.firstUpdate:
-    firstUpdateStatus = firstUpdate()
+	if window.firstUpdate:
+		firstUpdateStatus = firstUpdate()
 
-    if not firstUpdateStatus:
-      Exception('You fucked up bad...')
+		if not firstUpdateStatus:
+			Exception('You fucked up bad...')
 
-  if DBProtocols.dbEventCheck('DBUpdate'):
-    print('Updating Internal Database...')
-    InternalUpdates.updateInternalDB()
+	if DBProtocols.dbEventCheck('DBUpdate'):
+		print('Updating Internal Database...')
+		InternalUpdates.updateInternalDB()
 
-    if 'GCList' in window.customData:
-      InternalUpdates.updateGCList()
+		if 'GCList' in window.customData:
+			InternalUpdates.updateGCList()
 
-    print('Internal Database Updated Successfully')
+		print('Internal Database Updated Successfully')

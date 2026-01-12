@@ -9,20 +9,20 @@ from UI.Systems.Genshin import GINav as GINav
 import SharedAssets
 
 def setupSystems():
-  addHome()
+	addHome()
 
-  Sidebar.addSystem()
+	Sidebar.addSystem()
 
-  addIndicator()
+	addIndicator()
 
-  GINav.addGINav()
+	GINav.addGINav()
 
-  GCDBList.addSystem()
+	GCDBList.addSystem()
 
-  GCDBFilters.addSystem()
+	GCDBFilters.addSystem()
 
-  GWDBList.addSystem()
+	GWDBList.addSystem()
 
-  GWDBFilters.addSystem()
+	GWDBFilters.addSystem()
 
-  SharedAssets.app.activateSystems(['Nav', 'Home'])
+	SharedAssets.app.activateSystems(['Nav', 'Home'])
