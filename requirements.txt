@@ -1,7 +1,6 @@
-pygame-ce
+pg-extended
 orjson
-requests
 pyperclip
 bs4
 tqdm
-pg-extended
+cloudscraper
