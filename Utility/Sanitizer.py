@@ -22,7 +22,7 @@ class Sanitizer:
 		name = name.strip()
 
 		# get filename without extention (if there is any)
-		base = name.split('.')[0].upper()
+		base = '.'.join(name.split('.').pop(-1)).upper()
 
 		if base in WIN_RESERVED:
 			return False
