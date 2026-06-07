@@ -79,9 +79,6 @@ class CharacterList:
 
 	def setActiveCards(self, length: int):
 		for i in range(self.maxListLength):
-			if i >= self.maxListLength:
-				return None
-
 			elements = self.listCards[i].values()
 
 			if i < length:
@@ -158,8 +155,6 @@ class CharacterList:
 
 			self.activeList = validChars
 
-		self.setActiveCards(self.maxListLength)
-
 		totalActive = len(self.activeList)
 
 		activatedCards = 0
@@ -192,7 +187,7 @@ class CharacterList:
 			filterData = (filterData,)
 
 		for data in filterData:
-			if not filterData in self.activeFilters[filterType]:
+			if not data in self.activeFilters[filterType]:
 				self.activeFilters[filterType].append(data)
 
 		return True
