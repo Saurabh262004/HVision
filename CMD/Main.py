@@ -17,4 +17,4 @@ def TUI():
 			running = False
 
 		else:
-			print(f'[INFO] {tuiInput} is not a recgnised option')
+			print(f'[INFO] {tuiInput} is not a recognised option')
