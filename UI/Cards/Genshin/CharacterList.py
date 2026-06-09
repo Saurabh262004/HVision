@@ -97,7 +97,7 @@ class CharacterList:
 
 		characterDetails = SharedAssets.db['GenshinImpact']['Items']['Characters'][character]
 
-		rarity = int(characterDetails['Rarity'][0])
+		rarity = characterDetails['Rarity']
 
 		element = characterDetails['Element']
 

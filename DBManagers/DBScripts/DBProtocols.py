@@ -132,22 +132,6 @@ class DBProtocols:
 		return True
 
 	@staticmethod
-	def loadDBStructure() -> bool:
-		DBProtocols.verifyConfig()
-
-		dbStructureLocation = os.path.join(
-			SharedAssets.config['DBLocation'],
-			SharedAssets.config['DBStructureFileName']
-		)
-
-		try:
-			with open(dbStructureLocation, 'rb') as f:
-				SharedAssets.dbStructure = orjson.loads(f.read())
-				return True
-		except:
-			return False
-
-	@staticmethod
 	def loadDB() -> bool:
 		DBProtocols.verifyConfig()
 
@@ -212,13 +196,6 @@ class DBProtocols:
 	def generateDB() -> bool:
 		DBProtocols.verifyConfig()
 
-		dbStructureLocation = os.path.join(
-			SharedAssets.config['DBLocation'],
-			SharedAssets.config['DBStructureFileName']
-		)
-
-		layoutSourceLocation = SharedAssets.config['layoutSourcesFileLocation']
-
 		try:
 			result = makeDB()
 
@@ -257,14 +234,6 @@ class DBProtocols:
 	@staticmethod
 	def verifyDB() -> bool:
 		DBProtocols.verifyConfig()
-
-		if SharedAssets.dbStructure is None:
-			DBProtocols.loadDBStructure()
-
-			if SharedAssets.dbStructure is None:
-				print('Fatal: Couldn\'t load Database structure')
-
-				return False
 
 		dbDir = SharedAssets.config['DBLocation']
 
