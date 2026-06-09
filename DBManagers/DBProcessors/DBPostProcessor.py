@@ -1,48 +1,62 @@
-import time
+def createImageCollectorManifest(db: dict) -> dict:
+	imageCollectorManifest = {}
 
-def deleteKeyRecursive(obj, targetKey):
-	if isinstance(obj, dict):
-		keys_to_delete = [key for key in obj if key.startswith(targetKey)]
+	# genshin characters
+	for character, data in db['GenshinImpact']['Items']['Characters'].items():
+		if not data['Icon'] == 'Unknown':
+			imageCollectorManifest[f'Genshin_Character_{character}'] = data.pop('Icon')
 
-		for key in keys_to_delete:
-			del obj[key]
+		if not data['ElementIcon'] == 'Unknown':
+			imageCollectorManifest[f'Genshin_Element_{data['Element']}'] = data.pop('ElementIcon')
 
-		for value in list(obj.values()):
-			deleteKeyRecursive(value, targetKey)
+		if not data['WeaponClassIcon'] == 'Unknown':
+			imageCollectorManifest[f'Genshin_Weapon_Class_{data['WeaponClass']}'] = data.pop('WeaponClassIcon')
 
-	elif isinstance(obj, list):
-		for item in obj:
-			deleteKeyRecursive(item, targetKey)
+		if not data['RegionIcon'] == 'Unknown':
+			imageCollectorManifest[f'Genshin_Region_{data['Region']}'] = data.pop('RegionIcon')
 
-def processDB(db: dict) -> dict:
-	startTime = time.time()
+	# genshin weapons
+	for weapon, data in db['GenshinImpact']['Items']['Weapons'].items():
+		if not data['Icon'] == 'Unknown':
+			imageCollectorManifest[f'Genshin_Weapon_{weapon}'] = data.pop('Icon')
 
-	# remove all the N/A data
-	deleteKeyRecursive(db, 'N/A')
+	# zzz agents
+	for agent, data in db['ZenlessZoneZero']['Items']['Agents'].items():
+		if not data['Icon'] == 'Unknown':
+			imageCollectorManifest[f'Zenless_Agent_{agent}'] = data.pop('Icon')
 
-	# create a proper manifest for image collector
-	manifest = {}
+		if not data['Rank'] == 'Unknown':
+			imageCollectorManifest[f'Zenless_Agent_Rank_{data['Rank']}'] = data.pop('RankIcon')
+		
+		if not data['Attribute'] == 'Unknown':
+			imageCollectorManifest[f'Zenless_Attribute_{data['Attribute']}'] = data.pop('AttributeIcon')
 
-	for manifestName in db['ImageCollectorManifestData']:
-		manifestPart = db['ImageCollectorManifestData'][manifestName]
+		if not data['Speciality'] == 'Unknown':
+			imageCollectorManifest[f'Zenless_Speciality_{data['Speciality']}'] = data.pop('SpecialityIcon')
 
-		for itemName in manifestPart:
-			# remove query parameters from image URLs
-			url: str = manifestPart[itemName]['URL']
+		for i in range(len(data['AttackType'])):
+			atkType = data['AttackType'][i]
+			atkTypeIcon = data['AttackTypeIcons'][i]
 
-			endIndex = url.find('.png') + 4
+			if not atkType == 'Unknown':
+				imageCollectorManifest[f'Zenless_Attack_Type_{atkType}'] = atkTypeIcon
 
-			url = url[:endIndex]
+		data.pop('AttackTypeIcons')
 
-			manifest[f'{manifestName}_{itemName}'] = url
+		if not data['Faction'] == 'Unknown':
+			imageCollectorManifest[f'Zenless_Faction_{data['Faction']}'] = data.pop('FactionIcon')
 
-	del db['ImageCollectorManifestData']
+	# zzz wengines
+	for wengine, data in db['ZenlessZoneZero']['Items']['WEngines'].items():
+		if not data['Icon'] == 'Unknown':
+			imageCollectorManifest[f'Zenless_WEngine_{wengine}'] = data.pop('Icon')
 
-	db['ImageCollectorManifest'] = manifest
+		if not data['Rank'] == 'Unknown':
+			imageCollectorManifest[f'Zenless_WEngine_Rank_{data['Rank']}'] = data.pop('RankIcon')
 
-	endTime = time.time()
-	processingTime = endTime - startTime
-
-	print(f"Done post-processing DataBase in {processingTime:.5f} seconds.")
+	db['ImageCollectorManifest'] = imageCollectorManifest
 
 	return db
+
+def processDB(db: dict) -> dict:
+	return createImageCollectorManifest(db)

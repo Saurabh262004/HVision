@@ -4,17 +4,14 @@ import orjson
 import traceback
 from multiprocessing import Process
 from DBManagers.DBProcessors.DBMaker import makeDB
-from DBManagers.DBProcessors.DBPostProcessor import processDB
-from DBManagers.DBProcessors.ImageCollector import updateImageDB
+from DBManagers.DBProcessors.ImageDBManager import updateImageDB
 import SharedAssets
 
 DEFAULT_CONFIG = {
-	"DBLocation": "./Resources/Essentials/DataBase/",
+	"DBLocation": "./Resources/DataBase/",
 	"ImageDBLocation": "./Resources/Assets/GameAssets/",
-	"layoutSourcesFileLocation": "./Resources/Essentials/LayoutSources.json",
 	"DBFileName": "DB.json",
 	"RawDBFileName": "Raw.json",
-	"DBStructureFileName": "Structure.json",
 	"MaxDBAge": 3600
 }
 
@@ -223,14 +220,12 @@ class DBProtocols:
 		layoutSourceLocation = SharedAssets.config['layoutSourcesFileLocation']
 
 		try:
-			result = makeDB(layoutSourceLocation, dbStructureLocation)
+			result = makeDB()
 
 			if result is False:
 				return False
 
 			db, raw = result
-
-			db = processDB(db)
 
 			DBProtocols.writeDB(db)
 			DBProtocols.writeRaw(raw)
