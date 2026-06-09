@@ -116,23 +116,23 @@ class CharacterList:
 
 		base = self.listCards[index]
 
-		base[f'{index}_cardSection'].defaultBG = SharedAssets.dbAssets[f'Genshin_RarityBack_{rarity}']
+		base[f'{index}_cardSection'].defaultBG = SharedAssets.dbAssets.get(f'Genshin_RarityBack_{rarity}')
 
-		base[f'{index}_cardSection'].section.background = SharedAssets.dbAssets[f'Genshin_RarityBack_{rarity}']
+		base[f'{index}_cardSection'].section.background = SharedAssets.dbAssets.get(f'Genshin_RarityBack_{rarity}')
 
 		base[f'{index}_cardSection'].section.update()
 
-		base[f'{index}_iconSection'].background = SharedAssets.dbAssets[f'Genshin_Character_{character}']
+		base[f'{index}_iconSection'].background = SharedAssets.dbAssets.get(f'Genshin_Character_{character}')
 
 		base[f'{index}_nameTextBox'].text = character
 
-		base[f'{index}_elementSection'].background = SharedAssets.dbAssets[f'Genshin_Element_{element}']
+		base[f'{index}_elementSection'].background = SharedAssets.dbAssets.get(f'Genshin_Element_{element}')
 
-		base[f'{index}_weaponTypeSection'].background = SharedAssets.dbAssets[f'Genshin_Weapon_Class_{weaponClass}']
+		base[f'{index}_weaponTypeSection'].background = SharedAssets.dbAssets.get(f'Genshin_Weapon_Class_{weaponClass}')
 
-		base[f'{index}_nationSection'].background = SharedAssets.dbAssets[f'Genshin_Region_{region}']
+		base[f'{index}_nationSection'].background = SharedAssets.dbAssets.get(f'Genshin_Region_{region}')
 
-		base[f'{index}_raritySection'].background = SharedAssets.dbAssets[f'Genshin_RarityStar_{rarity}']
+		base[f'{index}_raritySection'].background = SharedAssets.dbAssets.get(f'Genshin_RarityStar_{rarity}')
 
 		base[f'{index}_raritySection'].backgroundSizePercent = (100 / 6) * rarity
 
