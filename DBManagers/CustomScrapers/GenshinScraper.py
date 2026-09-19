@@ -1,6 +1,7 @@
 import time
 from bs4 import BeautifulSoup
-from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions
+from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive
+
 
 def getCharacterData(tr: BeautifulSoup) -> tuple[str, dict]:
 	data = {}
@@ -62,7 +63,7 @@ def getWeaponData(tr: BeautifulSoup) -> tuple[str, dict]:
 	data['Rarity'] = int(rowData[2].find('img').get('alt')[0])
 	data['BaseATK'] = rowData[3].get_text()
 	data['2ndStat'] = rowData[4].get_text()
-	data['Passive'] = rowData[5].get_text()
+	data['Passive'] = parsePassive(rowData[5])
 
 	return name, data
 
