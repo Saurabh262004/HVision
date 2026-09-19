@@ -176,10 +176,12 @@ class CharacterList:
 		self.setActiveCards(activatedCards)
 
 	def updateListPosition(self, listPosition: int = 0):
-		if self.listPosition == int(listPosition):
+		listPosition = int(listPosition)
+
+		if self.listPosition == listPosition:
 			return
 
-		self.listPosition = int(listPosition)
+		self.listPosition = listPosition
 		self.displayCharacters('prev')
 
 	def activateFilters(self, filterType: str, filterData: str | list[str] | tuple[str]) -> bool:
