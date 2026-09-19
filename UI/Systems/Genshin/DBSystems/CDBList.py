@@ -50,16 +50,17 @@ def addSystem() -> bool:
 				'width': pgx.DynamicValue(window, 'screenWidth', percent=55),
 				'height': pgx.DynamicValue(window, 'screenHeight', percent=4)
 			}, pg.Color(250, 250, 250, 64), 7
-		),
-		'Arial', pg.Color(250, 250, 250),
-		placeholder='Search...',
-		placeholderTextColor=pg.Color(128, 128, 128),
-		callback=pgx.Callback(
+		), 'Arial', pg.Color(250, 250, 250),
+		pgx.Callback(
 			('None',),
 			updateCListAfterSearch,
 			extraArgKeys={'value': 'value'}
 		)
 	)
+
+	charInput.placeholder = 'Search...'
+	charInput.placeholderTextColor = pg.Color(128, 128, 128)
+	charInput.setTextBoxValue()
 
 	listScroller = pgx.Slider(
 		'vertical',
