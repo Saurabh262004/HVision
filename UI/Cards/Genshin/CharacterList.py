@@ -176,6 +176,9 @@ class CharacterList:
 		self.setActiveCards(activatedCards)
 
 	def updateListPosition(self, listPosition: int = 0):
+		if self.listPosition == int(listPosition):
+			return
+
 		self.listPosition = int(listPosition)
 		self.displayCharacters('prev')
 
