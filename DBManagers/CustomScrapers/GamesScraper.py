@@ -6,16 +6,15 @@ def getData() -> list:
 	genshinData, genshinFetchTime, genshinProcessTime, genshinStallTime = GenshinScraper.getData()
 	time.sleep(2)
 	print('getting ZZZ data...')
-	#zenlessData, zenlessFetchTime, zenlessProcessTime, zenlessStallTime = {}, 0, 0, 0
 	zenlessData, zenlessFetchTime, zenlessProcessTime, zenlessStallTime = ZenlessScraper.getData()
-	#time.sleep(2)
-	#print('getting HSR data...')
-	starRailData, starRailFetchTime, starRailProcessTime, starRailStallTime = {}, 0, 0, 0
-	#starRailData, starRailFetchTime, starRailProcessTime, starRailStallTime = StarRailScraper.getData()
+	time.sleep(2)
+	print('getting HSR data...')
+	#starRailData, starRailFetchTime, starRailProcessTime, starRailStallTime = {}, 0, 0, 0
+	starRailData, starRailFetchTime, starRailProcessTime, starRailStallTime = StarRailScraper.getData()
 
 	fetchTime = genshinFetchTime + zenlessFetchTime + starRailFetchTime
 	processTime = genshinProcessTime + zenlessProcessTime + starRailProcessTime
-	stallTime = genshinStallTime + zenlessStallTime + starRailStallTime + 2000
+	stallTime = genshinStallTime + zenlessStallTime + starRailStallTime + 4000
 
 	# group scraped data
 	scrapedData = {

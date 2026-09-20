@@ -1,7 +1,7 @@
 def createImageCollectorManifest(db: dict) -> dict:
 	imageCollectorManifest = {}
 
-	# genshin characters
+	# Genshin Characters
 	for character, data in db['GenshinImpact']['Items']['Characters'].items():
 		if not data['Icon'] == 'Unknown':
 			imageCollectorManifest[f'Genshin_Character_{character}'] = data.pop('Icon')
@@ -15,12 +15,12 @@ def createImageCollectorManifest(db: dict) -> dict:
 		if not data['RegionIcon'] == 'Unknown':
 			imageCollectorManifest[f'Genshin_Region_{data['Region']}'] = data.pop('RegionIcon')
 
-	# genshin weapons
+	# Genshin Weapons
 	for weapon, data in db['GenshinImpact']['Items']['Weapons'].items():
 		if not data['Icon'] == 'Unknown':
 			imageCollectorManifest[f'Genshin_Weapon_{weapon}'] = data.pop('Icon')
 
-	# zzz agents
+	# ZZZ Agents
 	for agent, data in db['ZenlessZoneZero']['Items']['Agents'].items():
 		if not data['Icon'] == 'Unknown':
 			imageCollectorManifest[f'Zenless_Agent_{agent}'] = data.pop('Icon')
@@ -46,7 +46,7 @@ def createImageCollectorManifest(db: dict) -> dict:
 		if not data['Faction'] == 'Unknown':
 			imageCollectorManifest[f'Zenless_Faction_{data['Faction']}'] = data.pop('FactionIcon')
 
-	# zzz wengines
+	# ZZZ WEngines
 	for wengine, data in db['ZenlessZoneZero']['Items']['WEngines'].items():
 		if not data['Icon'] == 'Unknown':
 			imageCollectorManifest[f'Zenless_WEngine_{wengine}'] = data.pop('Icon')
@@ -55,6 +55,17 @@ def createImageCollectorManifest(db: dict) -> dict:
 			imageCollectorManifest[f'Zenless_WEngine_Rank_{data['Rank']}'] = data.pop('RankIcon')
 
 	db['ImageCollectorManifest'] = imageCollectorManifest
+
+	# HSR Characters
+	for character, data in db['HonkaiStarRail']['Items']['Characters'].items():
+		if not data['Icon'] == 'Unknown':
+			imageCollectorManifest[f'StarRail_Character_{character}'] = data.pop('Icon')
+
+		if not data['PathIcon'] == 'Unknown':
+			imageCollectorManifest[f'StarRail_Path_{data['Path']}'] = data.pop('PathIcon')
+
+		if not data['CombatTypeIcon'] == 'Unknown':
+			imageCollectorManifest[f'StarRail_CombatType_{data['CombatType']}'] = data.pop('CombatTypeIcon')
 
 	return db
 

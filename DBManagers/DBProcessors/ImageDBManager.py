@@ -28,16 +28,14 @@ def updateImageDB(imageDBLocation: str, manifest: dict) -> bool:
 		return False
 
 	print('Updating Image DataBase...')
-	print('Expected time: ', len(manifest) * 2, ' seconds or more')
+	print('Expected time: ', len(manifest) * 2.5, ' seconds or more')
 
-	ImageCollector.collectBatch(manifest, imageDBLocation)
+	stallTime = ImageCollector.collectBatch(manifest, imageDBLocation)
 
 	endTime = Misc.timeMS()
 
-	stallTime = len(manifest) * 2
-
 	processingTime = endTime - (startTime - stallTime)
 
-	print(f'Done updating Image DataBase in {processingTime}ms. excluding {stallTime}S of stall time')
+	print(f'Done updating Image DataBase in {processingTime}ms. excluding {stallTime/1000}S of stall time')
 
 	return True

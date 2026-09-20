@@ -43,7 +43,9 @@ class ImageCollector:
 
 	# collect multiple images (raw content) from urls and save to dir with names
 	@staticmethod
-	def collectBatch(manifest: dict[str, str], dir: str, session: cloudscraper.CloudScraper = None, stall: float = 2.0) -> None:
-		contents = Fetcher.fetchContentBatch(manifest, session, stall)
+	def collectBatch(manifest: dict[str, str], dir: str, session: cloudscraper.CloudScraper = None, stall: float = 2.0) -> int:
+		contents, totalStall = Fetcher.fetchContentBatch(manifest, session, stall)
 
 		ImageCollector.saveBatch(contents, dir)
+
+		return totalStall

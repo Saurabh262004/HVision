@@ -52,8 +52,7 @@ def getData() -> tuple[dict, int, int, int]:
 
 	processStart = time.time()
 
-	characterRows = BeautifulSoup(characterHTML, 'html.parser').find('tbody').find_all('tr')
-	characterRows.pop(0)
+	characterRows = BeautifulSoup(characterHTML, 'html.parser').find('tbody').find_all('tr')[1:]
 	characters = {}
 	for row in characterRows:
 		name, cData = getCharacterData(row)
@@ -63,8 +62,7 @@ def getData() -> tuple[dict, int, int, int]:
 	WEAPON_CLASSES = ('Sword', 'Claymore', 'Polearm', 'Catalyst', 'Bow')
 	weapons = {}
 	for i in range(5):
-		weaponRows = weaponTables[i].find_all('tr')
-		weaponRows.pop(0)
+		weaponRows = weaponTables[i].find_all('tr')[1:]
 
 		for row in weaponRows:
 			name, wData = getWeaponData(row)

@@ -100,8 +100,7 @@ def getData() -> tuple[dict, int, int, int]:
 			name, aData = getAgentData(row)
 			agents[name] = aData
 
-	wEngineRows = BeautifulSoup(wEngineHTML, 'html.parser').find('tbody').find_all('tr')
-	wEngineRows.pop(0)
+	wEngineRows = BeautifulSoup(wEngineHTML, 'html.parser').find('tbody').find_all('tr')[1:]
 	wEngines = {}
 	for row in wEngineRows:
 		name, wData = getWEngineData(row)
