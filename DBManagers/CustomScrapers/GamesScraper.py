@@ -1,15 +1,16 @@
 from DBManagers.CustomScrapers import GenshinScraper, ZenlessScraper, StarRailScraper
 import time
 
-def getData() -> list:
+def getData() -> list[dict, int, int, int]:
 	print('getting Genshin data...')
+	#genshinData, genshinFetchTime, genshinProcessTime, genshinStallTime = {}, 0, 0, 0
 	genshinData, genshinFetchTime, genshinProcessTime, genshinStallTime = GenshinScraper.getData()
 	time.sleep(2)
 	print('getting ZZZ data...')
+	#zenlessData, zenlessFetchTime, zenlessProcessTime, zenlessStallTime = {}, 0, 0, 0
 	zenlessData, zenlessFetchTime, zenlessProcessTime, zenlessStallTime = ZenlessScraper.getData()
 	time.sleep(2)
 	print('getting HSR data...')
-	#starRailData, starRailFetchTime, starRailProcessTime, starRailStallTime = {}, 0, 0, 0
 	starRailData, starRailFetchTime, starRailProcessTime, starRailStallTime = StarRailScraper.getData()
 
 	fetchTime = genshinFetchTime + zenlessFetchTime + starRailFetchTime
@@ -23,4 +24,4 @@ def getData() -> list:
 		'HonkaiStarRail': starRailData
 	}
 
-	return scrapedData, fetchTime, processTime, stallTime
+	return scrapedData, int(fetchTime), int(processTime), int(stallTime)

@@ -67,6 +67,11 @@ def createImageCollectorManifest(db: dict) -> dict:
 		if not data['CombatTypeIcon'] == 'Unknown':
 			imageCollectorManifest[f'StarRail_CombatType_{data['CombatType']}'] = data.pop('CombatTypeIcon')
 
+	# HSR Light Cone
+	for lightCone, data in db['HonkaiStarRail']['Items']['LightCones'].items():
+		if not data['Icon'] == 'Unknown':
+			imageCollectorManifest[f'StarRail_LightCone_{lightCone}'] = data.pop('Icon')
+
 	return db
 
 def processDB(db: dict) -> dict:

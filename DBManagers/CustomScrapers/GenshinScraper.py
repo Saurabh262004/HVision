@@ -2,7 +2,7 @@ import time
 from bs4 import BeautifulSoup
 from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive, getTitleIconPair
 
-def getCharacterData(tr: BeautifulSoup) -> tuple[str, dict]:
+def getCharacterData(tr: BeautifulSoup) -> list[str, dict]:
 	data = {}
 
 	rowData = tr.find_all('td')
@@ -22,9 +22,9 @@ def getCharacterData(tr: BeautifulSoup) -> tuple[str, dict]:
 	data['ReleaseDate'] = rowData[7].get('data-release')
 	data['ReleaseVersion'] = rowData[8].get('data-version')
 
-	return (name, data)
+	return name, data
 
-def getWeaponData(tr: BeautifulSoup) -> tuple[str, dict]:
+def getWeaponData(tr: BeautifulSoup) -> list[str, dict]:
 	data = {}
 
 	rowData = tr.find_all('td')
@@ -43,7 +43,7 @@ def getWeaponData(tr: BeautifulSoup) -> tuple[str, dict]:
 
 	return name, data
 
-def getData() -> tuple[dict, int, int, int]:
+def getData() -> list[dict, int, int, int]:
 	fetchStart = time.time()
 	characterHTML = getFandomPageHTML('genshin-impact', 'Character/List')
 	time.sleep(2)

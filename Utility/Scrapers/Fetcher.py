@@ -1,3 +1,4 @@
+import requests
 import random
 import time
 import cloudscraper
@@ -41,7 +42,23 @@ class Fetcher:
 	@staticmethod
 	def _get(url: str, session: cloudscraper.CloudScraper, retries: int = 3, retry_delay: float = 5.0):
 		for attempt in range(retries + 1):
-			response = session.get(url, headers=HEADERS)
+			try:
+				response = session.get(url, headers=HEADERS)
+			except requests.exceptions.RequestException as e:
+				if attempt >= retries:
+					raise
+
+				delay = retry_delay * (2 ** attempt)
+				delay += random.uniform(0, 2)
+
+				print(
+					f"{type(e).__name__} from {url} "
+					f"(attempt {attempt + 1}/{retries + 1}), "
+					f"retrying in {delay:.2f}s..."
+				)
+
+				time.sleep(delay)
+				continue
 
 			if response.status_code not in RETRY_STATUSES:
 				response.raise_for_status()
@@ -60,7 +77,6 @@ class Fetcher:
 				except ValueError:
 					delay = retry_delay * (2 ** attempt)
 			else:
-				# Exponential backoff + random jitter
 				delay = retry_delay * (2 ** attempt)
 				delay += random.uniform(0, 2)
 
