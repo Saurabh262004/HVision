@@ -56,7 +56,7 @@ def parseEffectList(listTag: BeautifulSoup) -> list[dict]:
 def parsePassive(cell: BeautifulSoup) -> dict:
 	body = copy.copy(cell)
 
-	titleTag = body.find('b')
+	titleTag = body.find(['big', 'b'])
 	title = titleTag.get_text(strip=True) if titleTag else ''
 	if titleTag is not None:
 		titleTag.decompose()
@@ -84,3 +84,18 @@ def parsePassive(cell: BeautifulSoup) -> dict:
 	flushProse()
 
 	return {'title': title, 'effects': effects}
+
+def getStatLines(cell: BeautifulSoup) -> list[str]:
+	tag = copy.copy(cell)
+	for br in tag.find_all('br'):
+		br.replace_with('\n')
+	return [line.strip() for line in tag.get_text().split('\n') if line.strip()]
+
+def getTitleIconPair(td: BeautifulSoup):
+	try:
+		elementA = td.find('a')
+		title = elementA.get('title')
+		icon = removeImageOptions(elementA.find('img').get('data-src'))
+		return title, icon
+	except:
+		return 'N/A', 'Unknown'

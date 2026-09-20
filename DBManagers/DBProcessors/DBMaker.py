@@ -1,4 +1,5 @@
 import time
+from copy import deepcopy
 import socket
 from Utility import Misc
 from DBManagers.CustomScrapers import GamesScraper
@@ -38,7 +39,7 @@ def makeDB() -> tuple[dict, dict] | bool:
 
 	start = Misc.timeMS()
 
-	db = DBPostProcessor.processDB(scrapedData)
+	db = DBPostProcessor.processDB(deepcopy(scrapedData))
 
 	postProcessTime = Misc.timeMS() - start
 

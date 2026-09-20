@@ -1,7 +1,6 @@
 import time
 from bs4 import BeautifulSoup
-from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive
-
+from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive, getTitleIconPair
 
 def getCharacterData(tr: BeautifulSoup) -> tuple[str, dict]:
 	data = {}
@@ -16,33 +15,10 @@ def getCharacterData(tr: BeautifulSoup) -> tuple[str, dict]:
 		data['Icon'] = 'Unknown'
 
 	data['Rarity'] = int(rowData[2].find('img').get('alt')[0])
-
-	try:
-		elementA = rowData[3].find('a')
-		data['Element'] = elementA.get('title')
-		data['ElementIcon'] = removeImageOptions(elementA.find('img').get('data-src'))
-	except:
-		data['Element'] = 'Unknown'
-		data['ElementIcon'] = 'Unknown'
-
-	try:
-		weaponA = rowData[4].find('a')
-		data['WeaponClass'] = weaponA.get('title')
-		data['WeaponClassIcon'] = removeImageOptions(weaponA.find('img').get('data-src'))
-	except:
-		data['WeaponClass'] = 'Unknown'
-		data['WeaponClassIcon'] = 'Unknown'
-
-	try:
-		regionA = rowData[5].find('a')
-		data['Region'] = regionA.get('title')
-		data['RegionIcon'] = removeImageOptions(regionA.find('img').get('data-src'))
-	except:
-		data['Region'] = 'Unknown'
-		data['RegionIcon'] = 'Unknown'
-
+	data['Element'], data['ElementIcon'] = getTitleIconPair(rowData[3])
+	data['WeaponClass'], data['WeaponClassIcon'] = getTitleIconPair(rowData[4])
+	data['Region'], data['RegionIcon'] = getTitleIconPair(rowData[5])
 	data['Model'] = rowData[6].find('a').get_text()
-
 	data['ReleaseDate'] = rowData[7].get('data-release')
 	data['ReleaseVersion'] = rowData[8].get('data-version')
 
@@ -78,7 +54,6 @@ def getData() -> tuple[dict, int, int, int]:
 
 	characterRows = BeautifulSoup(characterHTML, 'html.parser').find('tbody').find_all('tr')
 	characterRows.pop(0)
-
 	characters = {}
 	for row in characterRows:
 		name, cData = getCharacterData(row)
@@ -86,7 +61,6 @@ def getData() -> tuple[dict, int, int, int]:
 
 	weaponTables = BeautifulSoup(weaponHTML, 'html.parser').find_all('tbody')
 	WEAPON_CLASSES = ('Sword', 'Claymore', 'Polearm', 'Catalyst', 'Bow')
-
 	weapons = {}
 	for i in range(5):
 		weaponRows = weaponTables[i].find_all('tr')
