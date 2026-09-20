@@ -3,11 +3,9 @@ import time
 
 def getData() -> list[dict, int, int, int]:
 	print('getting Genshin data...')
-	#genshinData, genshinFetchTime, genshinProcessTime, genshinStallTime = {}, 0, 0, 0
 	genshinData, genshinFetchTime, genshinProcessTime, genshinStallTime = GenshinScraper.getData()
 	time.sleep(2)
 	print('getting ZZZ data...')
-	#zenlessData, zenlessFetchTime, zenlessProcessTime, zenlessStallTime = {}, 0, 0, 0
 	zenlessData, zenlessFetchTime, zenlessProcessTime, zenlessStallTime = ZenlessScraper.getData()
 	time.sleep(2)
 	print('getting HSR data...')
