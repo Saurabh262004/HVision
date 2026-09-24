@@ -11,6 +11,12 @@ def getFandomPageHTML(fandomName: str, page: str) -> str:
 def removeImageOptions(url: str) -> str:
 	return url[:url.find('.png') + 4]
 
+def safeAttr(fn: callable, default: str = 'Unknown'):
+	try:
+		return fn()
+	except:
+		return default
+
 def extractInlineText(tag: BeautifulSoup) -> str:
 	tag = copy.copy(tag)
 

@@ -98,11 +98,8 @@ class CharacterList:
 		characterDetails = SharedAssets.db['GenshinImpact']['Items']['Characters'][character]
 
 		rarity = characterDetails['Rarity']
-
 		element = characterDetails['Element']
-
 		weaponClass = characterDetails['WeaponClass']
-
 		region = characterDetails['Region']
 
 		if rarity < 4 or rarity > 5:

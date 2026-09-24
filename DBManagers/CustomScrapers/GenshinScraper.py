@@ -1,6 +1,6 @@
 import time
 from bs4 import BeautifulSoup
-from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive, getTitleIconPair
+from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive, getTitleIconPair, safeAttr
 
 def getCharacterData(tr: BeautifulSoup) -> list[str, dict]:
 	data = {}
@@ -9,18 +9,15 @@ def getCharacterData(tr: BeautifulSoup) -> list[str, dict]:
 
 	name = rowData[0].find('a').get('title')
 
-	try:
-		data['Icon'] = removeImageOptions(rowData[0].find('img').get('data-src'))
-	except:
-		data['Icon'] = 'Unknown'
+	data['Icon'] = safeAttr(lambda: removeImageOptions(rowData[0].find('img').get('data-src')))
+	data['Rarity'] = safeAttr(lambda: int(rowData[2].find('img').get('alt')[0]), 'N/A')
+	data['Model'] = safeAttr(lambda: rowData[6].find('a').get_text(), 'N/A')
+	data['ReleaseDate'] = safeAttr(lambda: rowData[7].get('data-release'), 'N/A')
+	data['ReleaseVersion'] = safeAttr(lambda: rowData[8].get('data-version'), 'N/A')
 
-	data['Rarity'] = int(rowData[2].find('img').get('alt')[0])
 	data['Element'], data['ElementIcon'] = getTitleIconPair(rowData[3])
 	data['WeaponClass'], data['WeaponClassIcon'] = getTitleIconPair(rowData[4])
 	data['Region'], data['RegionIcon'] = getTitleIconPair(rowData[5])
-	data['Model'] = rowData[6].find('a').get_text()
-	data['ReleaseDate'] = rowData[7].get('data-release')
-	data['ReleaseVersion'] = rowData[8].get('data-version')
 
 	return name, data
 
@@ -36,9 +33,9 @@ def getWeaponData(tr: BeautifulSoup) -> list[str, dict]:
 	except:
 		data['Icon'] = 'Unknown'
 
-	data['Rarity'] = int(rowData[2].find('img').get('alt')[0])
-	data['BaseATK'] = rowData[3].get_text()
-	data['2ndStat'] = rowData[4].get_text()
+	data['Rarity'] = safeAttr(lambda: int(rowData[2].find('img').get('alt')[0]))
+	data['BaseATK'] = safeAttr(lambda: rowData[3].get_text())
+	data['2ndStat'] = safeAttr(lambda: rowData[4].get_text())
 	data['Passive'] = parsePassive(rowData[5])
 
 	return name, data
