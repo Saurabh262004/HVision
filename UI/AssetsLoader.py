@@ -1,11 +1,11 @@
-import time
-from typing import Iterable
 import os
-import pygame as pg
-import pg_extended as pgx
-from Utility import Sanitizer
+import time
 import SharedAssets
+import pygame as pg
 from tqdm import tqdm
+import pg_extended as pgx
+from typing import Iterable
+from Utility import Sanitizer
 
 def getIcon(path: str) -> pg.Surface | pg.Color:
 	try:

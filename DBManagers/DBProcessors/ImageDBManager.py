@@ -18,6 +18,9 @@ def checkDBStatus(imageDBLocation: str, manifest: dict) -> dict:
 
 	return unavailableImages
 
+def updateSingleImage(imageDBLocation: str, imageTitle: str, imageURL: str):
+	ImageCollector.collectImage(imageURL, imageDBLocation, imageTitle)
+
 def updateImageDB(imageDBLocation: str, manifest: dict) -> bool:
 	startTime = Misc.timeMS()
 
