@@ -1,15 +1,39 @@
-from orjson import loads
-from bs4 import BeautifulSoup, NavigableString
-from Utility.Scrapers import Fetcher
 import copy
+from orjson import loads
+from urllib.parse import urlsplit, parse_qs
+from bs4 import BeautifulSoup
+from Utility.Scrapers import Fetcher
 
 def getFandomPageHTML(fandomName: str, page: str) -> str:
 	return loads(Fetcher.fetchContent(
 	f'https://{fandomName}.fandom.com/api.php?action=parse&page={page}&prop=text&format=json'
 	))['parse']['text']['*']
 
-def removeImageOptions(url: str) -> str:
-	return url[:url.find('.png') + 4]
+def parseImageURL(url: str) -> dict:
+    parts = urlsplit(url)
+    cb = parse_qs(parts.query).get('cb', [None])[0]
+    base = f'{parts.scheme}://{parts.netloc}{parts.path}'.split('/revision/')[0]
+
+    return {'url': base, 'cb': cb}
+
+def unknownImage() -> dict:
+	return {'url': 'Unknown', 'cb': None}
+
+def getImage(img: BeautifulSoup) -> dict:
+	src = (img.get('data-src') or img.get('src')) if img else None
+
+	if not src:
+		return unknownImage()
+
+	return parseImageURL(src)
+
+def getTitleIconPair(td: BeautifulSoup):
+	elementA = td.find('a')
+
+	if elementA is None:
+		return 'N/A', unknownImage()
+
+	return elementA.get('title', 'N/A'), getImage(elementA.find('img'))
 
 def safeAttr(fn: callable, default: str = 'Unknown'):
 	try:
@@ -93,15 +117,8 @@ def parsePassive(cell: BeautifulSoup) -> dict:
 
 def getStatLines(cell: BeautifulSoup) -> list[str]:
 	tag = copy.copy(cell)
+
 	for br in tag.find_all('br'):
 		br.replace_with('\n')
-	return [line.strip() for line in tag.get_text().split('\n') if line.strip()]
 
-def getTitleIconPair(td: BeautifulSoup):
-	try:
-		elementA = td.find('a')
-		title = elementA.get('title')
-		icon = removeImageOptions(elementA.find('img').get('data-src'))
-		return title, icon
-	except:
-		return 'N/A', 'Unknown'
+	return [line.strip() for line in tag.get_text().split('\n') if line.strip()]

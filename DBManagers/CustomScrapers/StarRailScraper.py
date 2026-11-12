@@ -1,19 +1,14 @@
 import time
 from collections import Counter
 from bs4 import BeautifulSoup
-from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, getTitleIconPair
+from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, getImage, getTitleIconPair
 
 def getCharacterData(tr: BeautifulSoup) -> list[str, dict]:
 	data = {}
 	rowData = tr.find_all('td')
 
 	name = rowData[0].find('a').get('title')
-
-	try:
-		data['Icon'] = removeImageOptions(rowData[0].find('img').get('data-src'))
-	except:
-		data['Icon'] = 'Unknown'
-
+	data['Icon'] = getImage(rowData[0].find('img'))
 	data['Rarity'] = int(rowData[1].find('img').get('alt')[0])
 	data['Path'], data['PathIcon'] = getTitleIconPair(rowData[2])
 	data['CombatType'], data['CombatTypeIcon'] = getTitleIconPair(rowData[3])
@@ -61,12 +56,7 @@ def getLightConeData(tr: BeautifulSoup) -> list[str, dict]:
 	rowData = tr.find_all('td')
 
 	name = rowData[0].find('a').get('title')
-
-	try:
-		data['Icon'] = removeImageOptions(rowData[0].find('img').get('data-src'))
-	except:
-		data['Icon'] = 'Unknown'
-
+	data['Icon'] = getImage(rowData[0].find('img'))
 	data['Rarity'] = int(rowData[1].find('img').get('alt')[0])
 	data['Path'] = rowData[2].find('a').get('title')
 	data['Stats'] = getLightConeStats(rowData[3])

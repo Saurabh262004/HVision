@@ -1,22 +1,18 @@
 import time
 from bs4 import BeautifulSoup
-from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive, getTitleIconPair, getStatLines
+from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, getImage, parsePassive, getTitleIconPair, getStatLines
 
 def getAgentData(tr: BeautifulSoup) -> tuple[str, dict]:
 	data = {}
 	rowData = tr.find_all('td')
 
 	name = rowData[1].find('a').get_text(strip=True)
-
-	try:
-		data['Icon'] = removeImageOptions(rowData[0].find('img').get('data-src'))
-	except:
-		data['Icon'] = 'Unknown'
+	data['Icon'] = getImage(rowData[0].find('img'))
 
 	try:
 		rankSpan = rowData[2].find('span', class_='zzw-icon')
 		data['Rank'] = rankSpan.get('title').split(' ')[-1]
-		data['RankIcon'] = removeImageOptions(rowData[2].find('img').get('data-src'))
+		data['RankIcon'] = getImage(rowData[2].find('img'))
 	except:
 		data['Rank'] = 'N/A'
 		data['RankIcon'] = 'Unknown'
@@ -41,16 +37,12 @@ def getWEngineData(tr: BeautifulSoup) -> tuple[str, dict]:
 	rowData = tr.find_all('td')
 
 	name = rowData[1].find('a').get_text(strip=True)
-
-	try:
-		data['Icon'] = removeImageOptions(rowData[0].find('img').get('data-src'))
-	except:
-		data['Icon'] = 'Unknown'
+	data['Icon'] = getImage(rowData[0].find('img'))
 
 	try:
 		rankSpan = rowData[2].find('span', class_='zzw-icon')
 		data['Rank'] = rankSpan.get('title').split(' ')[-1]
-		data['RankIcon'] = removeImageOptions(rowData[2].find('img').get('data-src'))
+		data['RankIcon'] = getImage(rowData[2].find('img'))
 	except:
 		data['Rank'] = 'N/A'
 		data['RankIcon'] = 'Unknown'

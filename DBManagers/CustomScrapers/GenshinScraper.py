@@ -1,6 +1,6 @@
 import time
 from bs4 import BeautifulSoup
-from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, removeImageOptions, parsePassive, getTitleIconPair, safeAttr
+from DBManagers.CustomScrapers.Helpers import getFandomPageHTML, getImage, parsePassive, getTitleIconPair, safeAttr
 
 def getCharacterData(tr: BeautifulSoup) -> list[str, dict]:
 	data = {}
@@ -9,7 +9,7 @@ def getCharacterData(tr: BeautifulSoup) -> list[str, dict]:
 
 	name = rowData[0].find('a').get('title')
 
-	data['Icon'] = safeAttr(lambda: removeImageOptions(rowData[0].find('img').get('data-src')))
+	data['Icon'] = getImage(rowData[0].find('img'))
 	data['Rarity'] = safeAttr(lambda: int(rowData[2].find('img').get('alt')[0]), 'N/A')
 	data['Model'] = safeAttr(lambda: rowData[6].find('a').get_text(), 'N/A')
 	data['ReleaseDate'] = safeAttr(lambda: rowData[7].get('data-release'), 'N/A')
@@ -28,11 +28,7 @@ def getWeaponData(tr: BeautifulSoup) -> list[str, dict]:
 
 	name = rowData[0].find('a').get('title')
 
-	try:
-		data['Icon'] = removeImageOptions(rowData[0].find('img').get('data-src'))
-	except:
-		data['Icon'] = 'Unknown'
-
+	data['Icon'] = getImage(rowData[0].find('img'))
 	data['Rarity'] = safeAttr(lambda: int(rowData[2].find('img').get('alt')[0]))
 	data['BaseATK'] = safeAttr(lambda: rowData[3].get_text())
 	data['2ndStat'] = safeAttr(lambda: rowData[4].get_text())
