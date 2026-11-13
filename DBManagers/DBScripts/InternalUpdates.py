@@ -4,7 +4,7 @@ from DBManagers.DBScripts.DBProtocols import DBProtocols
 class InternalUpdates:
 	@staticmethod
 	def updateInternalDB():
-		DBProtocols.loadDB()
+		DBProtocols.refreshDB()
 		DBProtocols.dbEventClose('DBUpdate')
 
 	@staticmethod

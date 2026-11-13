@@ -6,6 +6,7 @@ import SharedAssets
 # implement error messages in the future
 def firstUpdate() -> bool | None:
 	loadDBSuccess = DBProtocols.loadDB()
+	DBProtocols.loadOldDB()
 
 	# can't proceed if we don't have the DB. User will have to wait till it's generated
 	if not loadDBSuccess:

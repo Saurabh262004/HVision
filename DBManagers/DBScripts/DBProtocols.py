@@ -143,9 +143,58 @@ class DBProtocols:
 		try:
 			with open(dbFileLocation, 'rb') as f:
 				SharedAssets.db = orjson.loads(f.read())
-				return True
 		except:
 			return False
+
+		return True
+
+	@staticmethod
+	def loadOldDB() -> bool:
+		DBProtocols.verifyConfig()
+
+		dbFileLocationOld = os.path.join(
+			SharedAssets.config['DBLocation'],
+			SharedAssets.config['OldDBFileName']
+		)
+
+		try:
+			with open(dbFileLocationOld, 'rb') as f:
+				SharedAssets.oldDB = orjson.loads(f.read())
+		except:
+			return False
+
+		return True
+
+	@staticmethod
+	def backupDB() -> bool:
+		dbDir = SharedAssets.config['DBLocation']
+
+		dbFileLocation = os.path.join(
+			dbDir,
+			SharedAssets.config['DBFileName']
+		)
+
+		if os.path.isfile(dbFileLocation):
+			try:
+				oldDB = {}
+				with open(dbFileLocation, 'rb') as f:
+					oldDB = orjson.loads(f.read())
+
+				dbFileLocationOld = os.path.join(
+					dbDir,
+					SharedAssets.config['OldDBFileName']
+				)
+
+				with open(dbFileLocationOld, 'wb') as f:
+					f.write(orjson.dumps(oldDB, option=orjson.OPT_INDENT_2))
+
+				return True
+
+			except Exception as e:
+				print(f'Error while opening old database:\n\n{e}\n\nit won\'t be backed up')
+				return False
+
+		return False
 
 	@staticmethod
 	def writeDB(db: dict = None) -> bool:
@@ -160,6 +209,8 @@ class DBProtocols:
 			dbDir,
 			SharedAssets.config['DBFileName']
 		)
+
+		DBProtocols.backupDB()
 
 		if not os.path.isdir(dbDir):
 			os.makedirs(dbDir)
@@ -207,15 +258,26 @@ class DBProtocols:
 			DBProtocols.writeDB(db)
 			DBProtocols.writeRaw(raw)
 
-			updateImageDB(
-				SharedAssets.config['ImageDBLocation'],
-				db['ImageCollectorManifest']
-			)
-
 			return True
-		except:
+
+		except Exception:
 			traceback.print_exc()
 			return False
+
+	@staticmethod
+	def refreshDB() -> bool:
+		if not DBProtocols.generateDB():
+			print('Fatal: Couldn\'t generate new Database')
+			return False
+
+		if not DBProtocols.loadDB():
+			print('Fatal: could not load database')
+			return False
+
+		DBProtocols.loadOldDB()
+		updateImageDB()
+
+		return True
 
 	@staticmethod
 	def getDBAge() -> int | None:
@@ -263,33 +325,26 @@ class DBProtocols:
 		if not validDB:
 			print('Error: No valid Database exists, generating new Database')
 
-			if not DBProtocols.generateDB():
-				print('Fatal: Couldn\'t generate new Database')
-
-				return False
-
-			if not DBProtocols.loadDB():
-				print('Fatal: could not load database')
+			if not DBProtocols.refreshDB():
 				return False
 
 			DBProtocols.dbEventOpen('DBUpdate')
+
 		else:
 			if not DBProtocols.loadDB():
 				print('Fatal: could not load database')
 				return False
 
+			DBProtocols.loadOldDB()
 			print('Info: Database loaded successfully')
 
 			if DBProtocols.dbIsOld():
 				print('Info: Database is old, Generating new Database')
 
-				if not DBProtocols.generateDB():
-					print('Fatal: Couldn\'t generate new Database')
-
+				if not DBProtocols.refreshDB():
 					return False
 
 				DBProtocols.dbEventOpen('DBUpdate')
-
 			else:
 				print('DB isn\'t old enough. It won\'t be updated')
 

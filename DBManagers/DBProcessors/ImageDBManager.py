@@ -2,43 +2,64 @@ import os
 from Utility import Sanitizer, Misc
 from Utility.Scrapers import ImageCollector
 
-def checkDBStatus(imageDBLocation: str, manifest: dict) -> dict:
+import SharedAssets
+
+def checkDBStatus(imageDBLocation: str, manifest: dict, cacheBusterOld: dict = None, cacheBusterNew: dict = None) -> dict:
 	if not os.path.exists(imageDBLocation):
 		os.makedirs(imageDBLocation)
 
 		return manifest
 
-	unavailableImages = {}
+	updateManifest = {}
 
+	# check for unavailable images
 	for imageName in manifest:
 		imagePath = os.path.join(imageDBLocation, Sanitizer.OSProofName(imageName))
 
 		if not os.path.exists(imagePath):
-			unavailableImages[imageName] = manifest[imageName]
+			updateManifest[imageName] = manifest[imageName]
 
-	return unavailableImages
+	if not (cacheBusterOld or cacheBusterNew):
+		return updateManifest
+
+	# check for updated images
+	for cbImage in cacheBusterNew:
+		cbOldVal = cacheBusterOld.get(cbImage, None)
+
+		if not (cacheBusterNew[cbImage] == cbOldVal):
+			updateManifest[cbImage] = manifest[cbImage]
+
+	return updateManifest
 
 def updateSingleImage(imageDBLocation: str, imageTitle: str, imageURL: str):
 	ImageCollector.collectImage(imageURL, imageDBLocation, imageTitle)
 
-def updateImageDB(imageDBLocation: str, manifest: dict) -> bool:
+def updateImageDB() -> bool:
 	startTime = Misc.timeMS()
 
-	manifest = checkDBStatus(imageDBLocation, manifest)
+	imageDBLocation = SharedAssets.config.get('ImageDBLocation', None) if SharedAssets.db else None
+	manifest = SharedAssets.db.get('ImageCollectorManifest', None) if SharedAssets.db else None
+	cacheBusterOld = SharedAssets.oldDB.get('CacheBusters', None) if SharedAssets.oldDB else None
+	cacheBusterNew = SharedAssets.db.get('CacheBusters', None) if SharedAssets.db else None
 
-	if len(manifest) == 0:
+	if not (imageDBLocation or manifest):
+		return False
+
+	updateManifest = checkDBStatus(imageDBLocation, manifest, cacheBusterOld, cacheBusterNew)
+
+	if len(updateManifest) == 0:
 		print('Image Database is already up to date')
 		return False
 
 	print('Updating Image DataBase...')
-	print('Expected time: ', len(manifest) * 2.5, ' seconds or more')
+	print('Expected time: ', len(updateManifest) * 2.5, ' seconds or more')
 
-	stallTime = ImageCollector.collectBatch(manifest, imageDBLocation)
+	stallTime = ImageCollector.collectBatch(updateManifest, imageDBLocation)
 
 	endTime = Misc.timeMS()
 
 	processingTime = endTime - (startTime - stallTime)
 
-	print(f'Done updating Image DataBase in {processingTime}ms. excluding {stallTime/1000}S of stall time')
+	print(f'Done updating Image DataBase in {processingTime}ms. excluding {stallTime/1000}s of stall time')
 
 	return True

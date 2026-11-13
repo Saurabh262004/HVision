@@ -10,6 +10,8 @@ dbStructure: dict = None
 
 db: dict = None
 
+oldDB: dict = None
+
 dbAssets: dict[str, pg.Surface] = {}
 
 args: argparse.Namespace = None

@@ -27,7 +27,7 @@ def main():
 		print('Force updating database')
 
 		from DBManagers.DBScripts.DBProtocols import DBProtocols
-		DBProtocols.generateDB()
+		DBProtocols.refreshDB()
 
 	if args.no_gui:
 		bootTUI()
