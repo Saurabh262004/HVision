@@ -308,17 +308,16 @@ class DBProtocols:
 
 		if not os.path.isdir(dbDir):
 			print('Error: Database location doesn\'t exist')
-
 			os.makedirs(dbDir)
-
 			validDB = False
+
 		else:
 			print('Info: Database location exists')
 
 			if not os.path.isfile(dbFileLocation):
 				print('Error: Database file doesn\'t exist')
-
 				validDB = False
+
 			else:
 				print('Info: Database file exists')
 
@@ -327,8 +326,6 @@ class DBProtocols:
 
 			if not DBProtocols.refreshDB():
 				return False
-
-			DBProtocols.dbEventOpen('DBUpdate')
 
 		else:
 			if not DBProtocols.loadDB():
@@ -345,6 +342,7 @@ class DBProtocols:
 					return False
 
 				DBProtocols.dbEventOpen('DBUpdate')
+
 			else:
 				print('DB isn\'t old enough. It won\'t be updated')
 
