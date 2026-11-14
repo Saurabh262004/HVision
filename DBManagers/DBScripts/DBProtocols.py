@@ -327,6 +327,8 @@ class DBProtocols:
 			if not DBProtocols.refreshDB():
 				return False
 
+			print('true')
+
 		else:
 			if not DBProtocols.loadDB():
 				print('Fatal: could not load database')
@@ -342,11 +344,11 @@ class DBProtocols:
 					return False
 
 				DBProtocols.dbEventOpen('DBUpdate')
+				print('true')
 
 			else:
 				print('DB isn\'t old enough. It won\'t be updated')
 
-		print('True')
 		return True
 
 	def verifyDBBackground():
