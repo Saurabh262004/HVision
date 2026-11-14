@@ -19,7 +19,7 @@ def checkDBStatus(imageDBLocation: str, manifest: dict, cacheBusterOld: dict = N
 		if not os.path.exists(imagePath):
 			updateManifest[imageName] = manifest[imageName]
 
-	if not (cacheBusterOld or cacheBusterNew):
+	if not (cacheBusterOld and cacheBusterNew):
 		return updateManifest
 
 	# check for updated images
