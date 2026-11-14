@@ -346,6 +346,7 @@ class DBProtocols:
 			else:
 				print('DB isn\'t old enough. It won\'t be updated')
 
+		print('True')
 		return True
 
 	def verifyDBBackground():
