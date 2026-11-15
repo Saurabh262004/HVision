@@ -1,6 +1,7 @@
 import os
 import time
 import orjson
+import requests
 import traceback
 from multiprocessing import Process
 from DBManagers.DBProcessors.DBMaker import makeDB
@@ -246,6 +247,19 @@ class DBProtocols:
 	@staticmethod
 	def generateDB() -> bool:
 		DBProtocols.verifyConfig()
+
+		try:
+			db = orjson.loads(requests.get('https://api.pgx.co.in/hvision/db').content)
+			raw = orjson.loads(requests.get('https://api.pgx.co.in/hvision/raw').content)
+
+			DBProtocols.writeDB(db)
+			DBProtocols.writeRaw(raw)
+
+			return True
+
+		except Exception:
+			traceback.print_exc()
+			print('Could not fetch database from server, building one locally.')
 
 		try:
 			result = makeDB()

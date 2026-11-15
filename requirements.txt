@@ -3,4 +3,5 @@ orjson
 pyperclip
 bs4
 tqdm
+requests
 cloudscraper
