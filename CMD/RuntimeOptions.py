@@ -23,10 +23,11 @@ def setupRuntimeOptions():
 	optionsDict['refreshDB'] = {'fn': DBProtocols.refreshDB, 'desc': 'Generates new database, loads them, refreshes images database.'}
 	optionsDict['verifyDB'] = {'fn': DBProtocols.verifyDB, 'desc': 'Verifies the database.'}
 	optionsDict['verifyDBBackground'] = {'fn': DBProtocols.verifyDBBackground, 'desc': 'Verifies the database in a separate thread.'}
-	optionsDict['loadDB'] = {'fn': DBProtocols.loadDB, 'desc': 'Loads the database file into `SharedAssets.db`'}
-	optionsDict['loadOldDB'] = {'fn': DBProtocols.loadOldDB, 'desc': 'Loads the old database file into `SharedAssets.oldDB`'}
-	optionsDict['updateImageDB'] = {'fn': ImageDBManager.updateImageDB, 'desc': 'Downloads new and updated images'}
-	optionsDict['setAsServer'] = {'fn': setAsServer, 'desc': 'Sets the current enviornment as the server'}
-	optionsDict['setAsClient'] = {'fn': setAsClient, 'desc': 'Sets the current enviornment as a client'}
+	optionsDict['loadDB'] = {'fn': DBProtocols.loadDB, 'desc': 'Loads the database file into `SharedAssets.db`.'}
+	optionsDict['loadOldDB'] = {'fn': DBProtocols.loadOldDB, 'desc': 'Loads the old database file into `SharedAssets.oldDB`.'}
+	optionsDict['updateImageDB'] = {'fn': ImageDBManager.updateImageDB, 'desc': 'Downloads new and updated images.'}
+	optionsDict['setAsServer'] = {'fn': setAsServer, 'desc': 'Sets the current enviornment as the server.'}
+	optionsDict['setAsClient'] = {'fn': setAsClient, 'desc': 'Sets the current enviornment as a client.'}
+	optionsDict['verifyConfig'] = {'fn': DBProtocols.verifyConfig, 'desc': 'Loads a proper working config.'}
 
 setupRuntimeOptions()

@@ -13,6 +13,7 @@ DEFAULT_CONFIG = {
 	"ImageDBLocation": "./Resources/Assets/GameAssets/",
 	"DBFileName": "DB.json",
 	"RawDBFileName": "Raw.json",
+	"OldDBFileName": "OldDB.json",
 	"MaxDBAge": 3600
 }
 
