@@ -294,6 +294,8 @@ class DBProtocols:
 
 	@staticmethod
 	def refreshDB() -> bool:
+		DBProtocols.verifyConfig()
+
 		if DBProtocols.dbEventCheck('server'):
 			if not DBProtocols.buildDB():
 				print('Fatal: Couldn\'t build new Database')
