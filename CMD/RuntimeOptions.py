@@ -11,6 +11,12 @@ def help():
 
 	print('')
 
+def setAsServer():
+	DBProtocols.dbEventOpen('server')
+
+def setAsClient():
+	DBProtocols.dbEventClose('server')
+
 def setupRuntimeOptions():
 	optionsDict['help'] = {'fn': help, 'desc': 'Print this output.'}
 	optionsDict['updateDB'] = {'fn': DBProtocols.generateDB, 'desc': 'Force update the database.'}
@@ -20,5 +26,7 @@ def setupRuntimeOptions():
 	optionsDict['loadDB'] = {'fn': DBProtocols.loadDB, 'desc': 'Loads the database file into `SharedAssets.db`'}
 	optionsDict['loadOldDB'] = {'fn': DBProtocols.loadOldDB, 'desc': 'Loads the old database file into `SharedAssets.oldDB`'}
 	optionsDict['updateImageDB'] = {'fn': ImageDBManager.updateImageDB, 'desc': 'Downloads new and updated images'}
+	optionsDict['setAsServer'] = {'fn': setAsServer, 'desc': 'Sets the current enviornment as the server'}
+	optionsDict['setAsClient'] = {'fn': setAsClient, 'desc': 'Sets the current enviornment as a client'}
 
 setupRuntimeOptions()

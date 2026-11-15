@@ -245,21 +245,21 @@ class DBProtocols:
 			return False
 
 	@staticmethod
-	def generateDB() -> bool:
+	def fetchDB() -> bool:
 		DBProtocols.verifyConfig()
 
 		try:
-			db = orjson.loads(requests.get('https://api.pgx.co.in/hvision/db').content)
-			raw = orjson.loads(requests.get('https://api.pgx.co.in/hvision/raw').content)
-
-			DBProtocols.writeDB(db)
-			DBProtocols.writeRaw(raw)
-
+			DBProtocols.writeDB(orjson.loads(requests.get('https://api.pgx.co.in/hvision/db').content))
+			DBProtocols.writeRaw(orjson.loads(requests.get('https://api.pgx.co.in/hvision/raw').content))
 			return True
 
 		except Exception:
 			traceback.print_exc()
-			print('Could not fetch database from server, building one locally.')
+			return False
+
+	@staticmethod
+	def buildDB() -> bool:
+		DBProtocols.verifyConfig()
 
 		try:
 			result = makeDB()
@@ -279,10 +279,30 @@ class DBProtocols:
 			return False
 
 	@staticmethod
+	def generateDB() -> bool:
+		if DBProtocols.fetchDB():
+			return True
+
+		print('Could not fetch database from server, building one locally.')
+
+		if DBProtocols.buildDB():
+			return True
+
+		print('Failed to build database locally.')
+
+		return False
+
+	@staticmethod
 	def refreshDB() -> bool:
-		if not DBProtocols.generateDB():
-			print('Fatal: Couldn\'t generate new Database')
-			return False
+		if DBProtocols.dbEventCheck('server'):
+			if not DBProtocols.buildDB():
+				print('Fatal: Couldn\'t build new Database')
+				return False
+
+		else:
+			if not DBProtocols.generateDB():
+				print('Fatal: Couldn\'t generate new Database')
+				return False
 
 		if not DBProtocols.loadDB():
 			print('Fatal: could not load database')
